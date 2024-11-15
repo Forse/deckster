@@ -7,6 +7,8 @@ import kotlinx.coroutines.runBlocking
 import no.forse.decksterlib.authentication.LoginModel
 import no.forse.decksterlib.chatroom.ChatRoomClient
 import org.junit.Test
+import java.net.HttpURLConnection
+import java.net.URL
 
 
 class DecksterServerTest {
@@ -22,13 +24,13 @@ class DecksterServerTest {
 
     @Test
     fun testChatRoom() = runBlocking {
-        val lib = DecksterServer("localhost:13992")
+        val lib = DecksterServer("192.168.1.183:13992")
 
         val chatGame = ChatRoomClient(lib)
-        val gameId = prop("gameId", "56588aaaf6b94ce89eb3246614976988")
+        val gameId = prop("gameId", "tåpelig vær")
         val user = LoginModel(
-            username = prop("userId", "defaultUser131"),
-            password = prop("password", "1234"),
+            username = prop("userId", "kjetil"),
+            password = prop("password", "123456"),
         )
         println("Attempting to join game as user '${user.username}', gameId '$gameId'")
         chatGame.login(user)
