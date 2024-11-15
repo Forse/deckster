@@ -20,6 +20,7 @@ public abstract class GameClient : IGameClient
     protected GameClient(IClientChannel channel)
     {
         Channel = channel;
+        
         channel.OnDisconnected += reason => Disconnected?.Invoke(reason);
         channel.StartReadNotifications<DecksterNotification>(OnNotification, DecksterJson.Options);
         Logger = Log.Factory.CreateLogger($"{GetType().Name} {PlayerData.Name}");

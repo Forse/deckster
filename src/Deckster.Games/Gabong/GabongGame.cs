@@ -193,12 +193,12 @@ public class GabongGame : GameObject
 
         if (!player.HasCard(card))
         {
-            return await PenalizePlayer(player, 1, $"NO! You don't have '{card}'");
+            return await PenalizePlayer(player, 1, $"NO! You don't have '{card}'", PlayerLostTurnReason.WrongPlay, PenaltyReason.WrongPlay);
         }
 
         if (CurrentPlayer != player && !card.Equals(TopOfPile))
         {
-            return await PenalizePlayer(player, 1, "NO! It is not your turn");
+            return await PenalizePlayer(player, 1, "NO! It is not your turn", PlayerLostTurnReason.WrongPlay, PenaltyReason.PlayOutOfTurn);
         }
 
         if (CurrentPlayer != player && card.Equals(TopOfPile))
@@ -208,17 +208,17 @@ public class GabongGame : GameObject
 
         if (!CanPut(card))
         {
-            return await PenalizePlayer(player, 1, $"NO! Cannot put '{card}' on '{TopOfPile}'");
+            return await PenalizePlayer(player, 1, $"NO! Cannot put '{card}' on '{TopOfPile}'", PlayerLostTurnReason.WrongPlay, PenaltyReason.WrongPlay);
         }
 
         if (card.Rank != 8 && request.NewSuit.HasValue)
         {
-            return await PenalizePlayer(player, 1, $"NO! Cannot change suit with a '{card}'");
+            return await PenalizePlayer(player, 1, $"NO! Cannot change suit with a '{card}'", PlayerLostTurnReason.WrongPlay, PenaltyReason.WrongPlay);
         }
 
         if (CardsToDraw > 0 && card.Rank != 2)
         {
-            return await PenalizePlayer(player, 1, $"NO! You have to draw {Math.Abs(CardsToDraw)} more cards");
+            return await PenalizePlayer(player, 1, $"NO! You have to draw {Math.Abs(CardsToDraw)} more cards", PlayerLostTurnReason.WrongPlay, PenaltyReason.UnpaidDebt);
         }
 
         player.CardsPlayed++;
@@ -309,14 +309,14 @@ public class GabongGame : GameObject
     }
 
     private async Task<PlayerViewOfGame> PenalizePlayer(GabongPlayer player, int amount, string message,
-        PlayerLostTurnReason reason = PlayerLostTurnReason.WrongPlay)
+        PlayerLostTurnReason reason, PenaltyReason penaltyReason)
     {
         var playerIndex = Players.IndexOf(player);
         for (var i = 0; i < amount; i++)
         {
             player.Cards.Add(StockPile.Pop());
             await PlayerDrewPenaltyCard.InvokeOrDefault(() => new PlayerDrewPenaltyCardNotification
-                { PlayerId = player.Id });
+                { PlayerId = player.Id, PenaltyReason = penaltyReason});
             player.Penalties++;
         }
 
@@ -417,7 +417,7 @@ public class GabongGame : GameObject
 
         if (CardsDrawn == 0)
         {
-            var errorResponse = await PenalizePlayer(player, 1, "You have to draw a card first");
+            var errorResponse = await PenalizePlayer(player, 1, "You have to draw a card first", PlayerLostTurnReason.WrongPlay, PenaltyReason.PassWithoutDrawing);
             return errorResponse;
         }
 
@@ -598,7 +598,7 @@ public class GabongGame : GameObject
         }
         else
         {
-            return await PenalizePlayer(player, 2, "NO! You don't have Gabong");
+            return await PenalizePlayer(player, 2, "NO! You don't have Gabong", PlayerLostTurnReason.WrongPlay, PenaltyReason.WrongGabong);
         }
     }
 
@@ -634,14 +634,14 @@ public class GabongGame : GameObject
                    ?? new PlayerViewOfGame("Round ended");
         }
 
-        return await PenalizePlayer(player, 2, "NO! You don't have bonga");
+        return await PenalizePlayer(player, 2, "NO! You don't have bonga", PlayerLostTurnReason.WrongPlay, PenaltyReason.WrongBonga);
     }
 
     public Task PenalizeSlowPlayer(PenalizePlayerForTakingTooLongRequest e)
     {
         if (State == GameState.Running && TryGetPlayer(e.PlayerId, out var player) && player.Id == CurrentPlayer.Id)
         {
-            return PenalizePlayer(player, 1, "You took too long to play", PlayerLostTurnReason.TookTooLong);
+            return PenalizePlayer(player, 1, "You took too long to play", PlayerLostTurnReason.TookTooLong, PenaltyReason.TookTooLong);
         }
 
         return Task.CompletedTask;

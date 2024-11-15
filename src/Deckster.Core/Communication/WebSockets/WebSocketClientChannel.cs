@@ -17,7 +17,7 @@ public class WebSocketClientChannel : IClientChannel
     private readonly CancellationTokenSource _cts = new();
     private readonly ILogger _logger;
     private readonly SemaphoreSlim _semaphore = new(1,1);
-    private readonly byte[] _actionBuffer = new byte[1024];
+    private readonly byte[] _actionBuffer = new byte[4096];
 
     private Task? _readTask;
     
