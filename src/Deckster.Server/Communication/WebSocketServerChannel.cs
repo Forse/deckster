@@ -55,7 +55,7 @@ public class WebSocketServerChannel : IServerChannel
     {
         try
         {
-            var buffer = new byte[4096];
+            var buffer = new byte[8192];
             while (!cancellationToken.IsCancellationRequested)
             {
                 var result = await _actionSocket.ReceiveAsync(buffer, cancellationToken);
