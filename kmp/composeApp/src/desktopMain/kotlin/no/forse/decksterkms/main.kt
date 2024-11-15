@@ -3,11 +3,11 @@ package no.forse.decksterkms
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.*
+import no.forse.decksterandroid.chatroom.*
 import no.forse.decksterandroid.login.*
 
 fun main() = application {
@@ -50,6 +50,16 @@ fun main() = application {
                         Text("chatroom")
                     }
                 }
+            }
+            composable("chatroom") {
+               /* val chatViewModel = viewModel(
+                    modelClass = ChatViewModel::class.java,
+                    factory = ChatViewModel.Factory()
+                )*/
+                val viewModel = ChatViewModel(ChatRepository)
+                Chat(id = null, viewModel = viewModel, onBackpressed = {
+                    navController.popBackStack()
+                })
             }
 
             composable("gameRoom") {

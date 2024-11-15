@@ -4,9 +4,9 @@ import kotlinx.coroutines.flow.Flow
 import no.forse.decksterlib.DecksterServer
 import no.forse.decksterlib.authentication.LoginModel
 import no.forse.decksterlib.chatroom.ChatRoomClient
-import no.forse.decksterlib.chatroom.GameState
 import no.forse.decksterlib.communication.ConnectedDecksterGame
 import no.forse.decksterlib.model.chatroom.ChatNotification
+import no.forse.decksterlib.model.controllers.GameVm
 
 object ChatRepository {
     private var connectedGame: ConnectedDecksterGame? = null
@@ -36,7 +36,7 @@ object ChatRepository {
         chatGame?.chatAsync(message)
     }
 
-    suspend fun getGameList(): List<GameState> {
+    suspend fun getGameList(): List<GameVm> {
       //  Log.d("DecksterRepository", "getGameList")
         return chatGame!!.getGameList()
     }

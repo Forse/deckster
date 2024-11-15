@@ -1,19 +1,17 @@
 package no.forse.decksterandroid.chatroom
 
 import BaseScreen
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import no.forse.decksterandroid.ChatRepository
 import no.forse.decksterandroid.gamebrowser.GameInfoCard
-import no.forse.decksterandroid.shared.theme.Typography
+import no.forse.decksterkms.ChatRepository
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun GameRoom(
@@ -22,7 +20,7 @@ fun GameRoom(
 ) {
     BaseScreen(topBarTitle = "Gaming Rooms") {
         LaunchedEffect(key1 = true) {
-            Log.d("ChatRoom", "LaunchedEffect")
+            //Log.d("ChatRoom", "LaunchedEffect")
             viewModel.getGameList()
         }
 
@@ -34,7 +32,7 @@ fun GameRoom(
                     contentPadding = PaddingValues(16.dp), verticalArrangement =
                     Arrangement.spacedBy(16.dp)
                 ) {
-                    item { Text("Chat Rooms", style = Typography.titleMedium) }
+                    item { Text("Chat Rooms") }
                     items(chatRoomUiState.games) { game ->
                         GameInfoCard(game, onJoinGameClicked = {
                             viewModel.join(game.name) {
@@ -42,14 +40,7 @@ fun GameRoom(
                             }
                         })
                     }
-                    item {
-                        Text(
-                            "CrazyEights and more coming soon...",
-                            style = Typography.titleMedium
-                        )
-                    }
                 }
-
             }
         }
     }
