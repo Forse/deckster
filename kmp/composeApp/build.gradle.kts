@@ -19,7 +19,7 @@ kotlin {
         }
     }
 
-    listOf(
+  /*  listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
@@ -28,10 +28,11 @@ kotlin {
             baseName = "ComposeApp"
             isStatic = true
         }
-    }
+    }*/
 
     jvm("desktop")
-
+    
+    /*
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         moduleName = "composeApp"
@@ -50,7 +51,7 @@ kotlin {
             }
         }
         binaries.executable()
-    }
+    }*/
 
     sourceSets {
         val desktopMain by getting
@@ -73,6 +74,7 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
+            implementation(project(":decksterlib"))
         }
     }
 }
