@@ -77,6 +77,8 @@ _ReSharper*/
 *.local.json
 *.orig
 
+nuget/
+
 # SPM
 .DS_Store
 /.build
