@@ -1,19 +1,14 @@
 package no.forse.decksterandroid.chatroom
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import androidx.lifecycle.*
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import no.forse.decksterandroid.ChatRepository
-import no.forse.decksterlib.chatroom.GameState
+import no.forse.decksterlib.model.controllers.GameVm
 import kotlin.concurrent.timer
 
 sealed interface ChatRoomUiState {
-    data class ChatRoom(val games: List<GameState>) :
+    data class ChatRoom(val games: List<GameVm>) :
         ChatRoomUiState
 }
 

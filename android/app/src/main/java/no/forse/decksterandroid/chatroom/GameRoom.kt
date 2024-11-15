@@ -3,22 +3,16 @@ package no.forse.decksterandroid.chatroom
 import BaseScreen
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.*
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import no.forse.decksterandroid.ChatRepository
+import no.forse.decksterandroid.gamebrowser.GameInfoCard
 import no.forse.decksterandroid.shared.theme.Typography
 
 @Composable
@@ -42,30 +36,11 @@ fun GameRoom(
                 ) {
                     item { Text("Chat Rooms", style = Typography.titleMedium) }
                     items(chatRoomUiState.games) { game ->
-                        Card {
-                            Column(modifier = Modifier.padding(16.dp)) {
-                                Text(
-                                    "Chat room id: ${game.name}"
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Text("state: ${game.state}")
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Text("players: ${
-                                    game.players.joinToString(", ") { it.name }
-                                }")
-                                Spacer(modifier = Modifier.height(8.dp))
-
-                                Row {
-                                    Button(onClick = {
-                                        viewModel.join(game.name) {
-                                            onEnter(game.name)
-                                        }
-                                    }) {
-                                        Text("Enter")
-                                    }
-                                }
+                        GameInfoCard(game, onJoinGameClicked = {
+                            viewModel.join(game.name) {
+                                onEnter(game.name)
                             }
-                        }
+                        })
                     }
                     item {
                         Text(
@@ -80,3 +55,11 @@ fun GameRoom(
     }
 }
 
+@Preview
+@Composable
+fun GameRoomsPreview() {
+    MaterialTheme {
+        val vm = ChatRoomsViewModel(ChatRepository)
+        GameRoom(vm, {})
+    }
+}
