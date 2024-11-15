@@ -1,0 +1,107 @@
+@model Deckster.Server.Controllers.GameVm
+
+<div x-data="vm" class="flex-container col">
+  
+  <h1>@Model.GameType</h1>
+  <h2 x-text="game.name"></h2>
+  <div style="margin-bottom: 1rem;">
+    <b>State: <span x-text="game.state"></span></b>
+  </div>
+  <div>
+  <button x-show="game.state=='Waiting'" x-on:click="addBot()">Add bot</button>
+  <button x-show="game.state=='Waiting'" x-on:click="start()">Start Game</button>
+  <button x-on:click="cancel()">Cancel</button>
+  </div>
+    
+  <table style="width: 100%;">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Points</th>
+      <th>Stats</th>
+    </tr>
+    </thead>
+    <tbody>
+    <template x-for="player in game.players">
+      <tr>
+        <td x-text="player.name"></td>
+        <td x-text="player.points"></td>
+        <td>
+          <ul class="no-bullets">
+            <template x-for="(value, key) in player.info">
+              <li><span x-text="value"></span> <span x-text="key"></span></li>
+            </template>
+          </ul>
+        </td>
+      </tr>
+    </template>
+    </tbody>
+  </table>
+</div>
+
+<script defer src="/content/alpine.min.js"></script>
+<script>
+  (function() {
+    
+    const vm = {
+      game: @Html.Raw(Json.Serialize(Model)),
+      refresh: async function () {
+        const response = await fetch(`${document.location.pathname}`, {
+          method: "GET",
+          headers: {
+            "Accept": "application/json"
+          }
+        });
+        switch (response.status) {
+          case 200: {
+            this.game = await response.json();
+            break;
+          }
+          case 404: {
+            window.location.href = "/";
+            break;
+          }
+        }
+      },
+      addBot: async function () {
+        await fetch(`${document.location.pathname}/bot`, {
+          method: "POST",
+          headers: {
+            "Accept": "application/json"
+          },
+        });
+        await this.refresh();
+      },
+      start: async function () {
+        await fetch(`${document.location.pathname}/start`, {
+          method: "POST",
+          headers: {
+            "Accept": "application/json"
+          },
+        });
+        await this.refresh();
+      },
+      cancel: async function () {
+        await fetch(`${document.location.pathname}`, {
+          method: "DELETE",
+          headers: {
+            "Accept": "application/json"
+          },
+        });
+        await this.refresh();
+      },
+      isWaiting() {
+        return this.game.state === "Waiting";
+      },
+      init: function () {
+        setInterval(this.refresh.bind(this), 3140);  
+      }
+    };
+    
+    document.addEventListener("alpine:init", () => {
+      Alpine.data("vm", () => vm);
+      vm.init();
+    });
+    
+  })();
+</script>

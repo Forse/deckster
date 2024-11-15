@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>default</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+      <PackageReference Include="NUnit" Version="4.2.2" />
+      <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Deckster.Client\Deckster.Client.csproj" />
+      <ProjectReference Include="..\Deckster.Core\Deckster.Core.csproj" />
+      <ProjectReference Include="..\Deckster.Games\Deckster.Games.csproj" />
+      <ProjectReference Include="..\Deckster.Server\Deckster.Server.csproj" />
+    </ItemGroup>
+
+</Project>

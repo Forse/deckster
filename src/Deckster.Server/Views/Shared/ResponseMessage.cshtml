@@ -1,0 +1,15 @@
+@using System.Net
+@model Deckster.Server.Controllers.ResponseMessage
+
+<div class="flex-container col">
+  @if (Context.Response.StatusCode != 200)
+  {
+    <h1>@Context.Response.StatusCode @((HttpStatusCode) Context.Response.StatusCode)</h1>
+  }
+  <div>
+    @Model.Message
+  </div>
+  <div style="margin-top: 2rem;">
+    <a href="/">Get outta here</a>
+  </div>
+</div>

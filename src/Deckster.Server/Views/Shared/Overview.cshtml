@@ -1,0 +1,94 @@
+@model Deckster.Server.Controllers.GameOverviewVm
+
+<h1>@Model.GameType games</h1>
+<div>
+  @Html.ActionLink("description", "GameDescription")
+</div>
+<div x-data="vm" class="flex-container col">
+  
+  <table>
+    <thead>
+    
+    </thead>
+    <tbody>
+    <template x-for="game in games">
+      <tr>
+        <td><a x-text="game.name" x-bind:href="url(game.name)"></a></td>
+        <td x-text="game.state"></td>
+        <td><button x-on:click="start(game.name)">Start</button></td>
+        <td><button x-on:click="cancel(game.name)">Cancel</button></td>
+      </tr>
+    </template>
+    </tbody>
+  </table>
+  <div>
+    <button x-on:click="create()" class="suggestive">Create</button>  
+  </div>
+  
+</div>
+<script defer src="/content/alpine.min.js"></script>
+<script>
+  (function() {
+    
+    const vm = {
+      games: @Html.Raw(Json.Serialize(Model.Games)),
+      create: async function(){
+        const response = await fetch(pathname(`create`), {
+          method: "POST",
+          headers: {
+            "Accept": "application/json"
+          }
+        });
+        await this.refresh();
+      }, 
+      refresh: async function () {
+        const response = await fetch(pathname(`games`), {
+          method: "GET",
+          headers: {
+            "Accept": "application/json"
+          }
+        });
+        switch (response.status) {
+          case 200: {
+            this.games = await response.json();
+          }
+        }
+      },
+      
+      start: async function(name) {
+        const response = await fetch(pathname(`games/${name}/start`), {
+          method: "POST",
+          headers: {
+            "Accept": "application/json"
+          }
+        });
+        await this.refresh();
+      },
+      cancel: async function(name) {
+        const response = await fetch(pathname(`games/${name}`), {
+          method: "DELETE",
+          headers: {
+            "Accept": "application/json"
+          }
+        });
+        await this.refresh();
+      },
+      url: function (name) {
+        return pathname(`games/${name}`);
+      }
+    };
+    
+    function pathname(path) {
+      const b = document.location.pathname.replace(/\/+$/, '');
+      return `${b}/${path}`;
+    }
+    
+    document.addEventListener("alpine:init", () => {
+      Alpine.data("vm", () => (vm));
+    });
+    
+    vm.refresh();
+    setInterval(vm.refresh, 5000);
+    
+  })();
+</script>

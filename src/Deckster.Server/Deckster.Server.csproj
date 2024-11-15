@@ -1,0 +1,58 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>default</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Deckster.Client\Deckster.Client.csproj" />
+      <ProjectReference Include="..\Deckster.Core\Deckster.Core.csproj" />
+      <ProjectReference Include="..\Deckster.CrazyEights.SampleClient\Deckster.CrazyEights.SampleClient.csproj" />
+      <ProjectReference Include="..\Deckster.Gabong.SampleClient\Deckster.Gabong.SampleClient.csproj" />
+      <ProjectReference Include="..\Deckster.Games\Deckster.Games.csproj" />
+      <ProjectReference Include="..\Deckster.Idiot.SampleClient\Deckster.Idiot.SampleClient.csproj" />
+      <ProjectReference Include="..\Deckster.Uno.SampleClient\Deckster.Uno.SampleClient.csproj" />
+      <ProjectReference Include="..\Deckster.Yaniv.SampleClient\Deckster.Yaniv.SampleClient.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Marten" Version="7.30.2" />
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.10" />
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Update="appsettings.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+        </Content>
+        <None Include="appsettings.local.json" Condition="Exists('appsettings.local.json')">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <Content Update="appsettings.local.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+          <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+        </Content>
+        <Content Update="appsettings.local.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+          <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Clients\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Games\Common\Fakes\testusers.txt" />
+      <EmbeddedResource Include="Games\Common\Fakes\testusers.txt" />
+      <None Remove="Games\Common\Fakes\nouns.txt" />
+      <EmbeddedResource Include="Games\Common\Fakes\nouns.txt" />
+      <None Remove="Games\Common\Fakes\adjectives.txt" />
+      <EmbeddedResource Include="Games\Common\Fakes\adjectives.txt" />
+    </ItemGroup>
+
+</Project>
