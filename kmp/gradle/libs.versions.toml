@@ -41,6 +41,7 @@ jackson-kotlin = { group = "com.fasterxml.jackson.module", name = "jackson-modul
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-jackson = { group = "com.squareup.retrofit2", name = "converter-jackson", version.ref = "retrofit" }
 retrofit-converter-scalars = { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "retrofit" }
+navigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version= "2.7.0-alpha07"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
