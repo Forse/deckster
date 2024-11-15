@@ -277,17 +277,36 @@ public class CrazyEightsGame : GameObject
     
     private async Task MoveToNextPlayerOrFinishAsync()
     {
-        if (GetState() == GameState.Finished)
+        var stillPlaying = Players.Where(p => p.IsStillPlaying()).ToArray();
+        switch (stillPlaying.Length)
         {
-            await GameEnded.InvokeOrDefault(new GameEndedNotification());
-            return;
+            case 0:
+                await GameEnded.InvokeOrDefault(() => new GameEndedNotification
+                {
+                    LoserId = default // ¯\_(ツ)_/¯
+                });
+                break;
+            case 1:
+                await GameEnded.InvokeOrDefault(() => new GameEndedNotification
+                {
+                    LoserId = stillPlaying[0].Id,
+                    LoserName = stillPlaying[0].Name,
+                    Players = Players.Select(p => new PlayerData
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        CardsInHand = p.Cards.Count
+                    }).ToList()
+                });
+                break;
+            default:
+                MoveToNextPlayer();
+                await ItsYourTurn.InvokeOrDefault(CurrentPlayer.Id, new ItsYourTurnNotification
+                {
+                    PlayerViewOfGame = GetPlayerViewOfGame(CurrentPlayer)
+                });
+            break;
         }
-        
-        MoveToNextPlayer();
-        await ItsYourTurn.InvokeOrDefault(CurrentPlayer.Id, new ItsYourTurnNotification
-        {
-            PlayerViewOfGame = GetPlayerViewOfGame(CurrentPlayer)
-        });
     }
 
     private void MoveToNextPlayer()
