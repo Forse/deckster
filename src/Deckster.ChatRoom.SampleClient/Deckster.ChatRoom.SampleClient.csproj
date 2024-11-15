@@ -13,4 +13,9 @@
       <ProjectReference Include="..\Deckster.Core\Deckster.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="phrases.txt" />
+      <EmbeddedResource Include="phrases.txt" />
+    </ItemGroup>
+
 </Project>

@@ -2441,6 +2441,8 @@ components:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - required:
+            - loserId
+            - loserName
             - players
           type: object
           properties:
@@ -2448,6 +2450,11 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/Common.PlayerData'
+            loserId:
+              type: string
+              format: uuid
+            loserName:
+              type: string
           additionalProperties: false
     CrazyEights.GameStartedNotification:
       allOf:

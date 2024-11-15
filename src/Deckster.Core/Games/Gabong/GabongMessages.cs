@@ -5,21 +5,26 @@ namespace Deckster.Core.Games.Gabong;
 
 public abstract class GabongGameNotification: DecksterNotification;
 
-public class PlayerPutCardNotification : GabongGameNotification
+public abstract class GabongPlayerNotification : GabongGameNotification
 {
     public Guid PlayerId { get; init; }
+    public bool IsFor(Guid playerId) => PlayerId == playerId;
+}
+
+public class PlayerPutCardNotification : GabongPlayerNotification
+{
     public Card Card { get; init; }
     
     public Suit? NewSuit { get; init; }
 }
 
-public class PlayerDrewCardNotification : GabongGameNotification
+public class PlayerDrewCardNotification : GabongPlayerNotification
 {
-    public Guid PlayerId { get; init; }
 }
-public class PlayerDrewPenaltyCardNotification : GabongGameNotification
+public class PlayerDrewPenaltyCardNotification : GabongPlayerNotification
 {
-    public Guid PlayerId { get; init; }
+    public PenaltyReason PenaltyReason { get; init; }
+    
 }
 
 public class GameStartedNotification : GabongGameNotification
@@ -42,9 +47,8 @@ public class RoundEndedNotification : GabongGameNotification
 {
     public List<PlayerData> Players { get; init; }
 }
-public class PlayerLostTheirTurnNotification : GabongGameNotification
+public class PlayerLostTheirTurnNotification : GabongPlayerNotification
 {
-    public Guid PlayerId { get; init; }
     public PlayerLostTurnReason LostTurnReason { get; set; }
 }
 
@@ -58,6 +62,17 @@ public enum PlayerLostTurnReason
     WrongPlay,
     TookTooLong,
     FinishedDrawingCardDebt
+}
+
+public enum PenaltyReason
+{
+    PlayOutOfTurn,
+    TookTooLong,
+    WrongPlay,
+    WrongGabong,
+    WrongBonga,
+    UnpaidDebt,
+    PassWithoutDrawing
 }
 
 public enum GabongPlay

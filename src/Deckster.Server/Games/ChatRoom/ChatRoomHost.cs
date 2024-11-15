@@ -1,10 +1,14 @@
 using System.Diagnostics.CodeAnalysis;
+using Deckster.ChatRoom.SampleClient;
+using Deckster.Client.Games.ChatRoom;
 using Deckster.Core.Games.ChatRoom;
+using Deckster.Core.Games.Common;
 using Deckster.Core.Protocol;
 using Deckster.Core.Serialization;
 using Deckster.Games;
 using Deckster.Server.Communication;
 using Deckster.Server.Data;
+using Deckster.Server.Games.Common.Fakes;
 
 namespace Deckster.Server.Games.ChatRoom;
 
@@ -16,6 +20,8 @@ public class ChatRoomHost : GameHost
     private readonly IEventQueue<Deckster.Games.ChatRoom.ChatRoom> _events;
     private readonly ChatRoomProjection _projection = new();
     private readonly Deckster.Games.ChatRoom.ChatRoom _chatRoom;
+
+    private readonly List<TronderBot> _bots = new();
 
     public ChatRoomHost(IRepo repo) : base(null)
     {
@@ -42,20 +48,34 @@ public class ChatRoomHost : GameHost
         switch (request)
         {
             case SendChatRequest message:
-                await _chatRoom.ChatAsync(message);
-                _events.Append(message);
-                await _events.FlushAsync();
+                try
+                {
+                    await _chatRoom.ChatAsync(message);
+                    _events.Append(message);
+                    await _events.FlushAsync();
+                }
+                catch (Exception e)
+                {
+                    
+                }
                 return;
         }
     }
 
     public override bool TryAddBot([MaybeNullWhen(true)] out string error)
     {
-        error = "Bots not supported";
-        return false;
+        var channel = new InMemoryChannel
+        {
+            Player = new PlayerData
+            {
+                Id = Guid.NewGuid(),
+                Name = TestUserNames.Random()
+            }
+        };
+        var bot = new TronderBot(new ChatRoomClient(channel));
+        _bots.Add(bot);
+        return TryAddPlayer(channel, out error);
     }
-
-
 
     protected override async void ChannelDisconnected(IServerChannel channel, DisconnectReason reason)
     {

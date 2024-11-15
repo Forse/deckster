@@ -1365,6 +1365,11 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/Common.PlayerData'
+            loserId:
+              type: string
+              format: uuid
+            loserName:
+              type: string
     CrazyEights.YouAreDoneNotification:
       type: object
       allOf:
