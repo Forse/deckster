@@ -100,8 +100,16 @@ public abstract class GameHost : IGameHost
         }
         foreach (var player in Players.Values.ToArray())
         {
-            await player.DisconnectAsync();
-            player.Dispose();
+            try
+            {
+                await player.DisconnectAsync();
+                player.Dispose();
+            }
+            catch (Exception e)
+            {
+                
+            }
+            
         }
         Players.Clear();
         FireEnded(gameId);

@@ -48,9 +48,16 @@ public class ChatRoomHost : GameHost
         switch (request)
         {
             case SendChatRequest message:
-                await _chatRoom.ChatAsync(message);
-                _events.Append(message);
-                await _events.FlushAsync();
+                try
+                {
+                    await _chatRoom.ChatAsync(message);
+                    _events.Append(message);
+                    await _events.FlushAsync();
+                }
+                catch (Exception e)
+                {
+                    
+                }
                 return;
         }
     }
