@@ -24,6 +24,16 @@ public static class AsyncQueryableExtensions
         return Task.FromResult(queryable.FirstOrDefault(predicate));
     }
 
+    public static Task<T> SingleAsync<T>(this IQueryable<T> queryable, Expression<Func<T, bool>> predicate,
+        CancellationToken cancellationToken = default)
+    {
+        if (queryable is IMartenQueryable<T> marten)
+        {
+            return Marten.QueryableExtensions.SingleAsync(marten, predicate, cancellationToken);
+        }
+        return Task.FromResult(queryable.Single(predicate));
+    }
+
     public static Task<IReadOnlyList<T>> ToListAsync<T>(this IQueryable<T> queryable, CancellationToken cancellationToken = default)
     {
         if (queryable is IMartenQueryable<T> marten)

@@ -82,6 +82,8 @@ public class HomeController : Controller
             };
             await _repo.SaveAsync(user);
         }
+        
+        user = await _repo.Query<DecksterUser>().SingleAsync(u => string.Equals(u.Name, input.Username, StringComparison.OrdinalIgnoreCase));
 
         if (input.Password != user.Password)
         {
