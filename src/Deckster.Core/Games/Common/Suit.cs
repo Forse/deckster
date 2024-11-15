@@ -14,10 +14,10 @@ public static class SuitExtensions
     {
         return suit switch
         {
-            Suit.Clubs => "♧",
-            Suit.Diamonds => "♢",
-            Suit.Hearts => "♥",
-            Suit.Spades => "♤",
+            Suit.Clubs => "C",
+            Suit.Diamonds => "D",
+            Suit.Hearts => "H",
+            Suit.Spades => "S",
             _ => throw new ArgumentOutOfRangeException(nameof(suit), suit, null)
         };
     }
