@@ -105,6 +105,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":decksterlib"))
+    implementation(project(":decksterlib"))
     debugImplementation(compose.uiTooling)
 }
 
