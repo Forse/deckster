@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <LangVersion>default</LangVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>1.2.9</Version>
+        <Version>1.2.10</Version>
         <Title>Deckster.Core</Title>
     </PropertyGroup>
 
