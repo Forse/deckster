@@ -22,6 +22,7 @@ public class CrazyEightsClient(IClientChannel channel) : GameClient(channel)
     public event Action<PlayerPutEightNotification>? PlayerPutEight;
     public event Action<GameEndedNotification>? GameEnded;
     public event Action<PlayerIsDoneNotification>? PlayerIsDone;
+    public event Action<DiscardPileShuffledNotification>? DiscardPileShuffled;
 
     public Task<PlayerViewOfGame> PutCardAsync(PutCardRequest request, CancellationToken cancellationToken = default)
     {
@@ -72,6 +73,9 @@ public class CrazyEightsClient(IClientChannel channel) : GameClient(channel)
                     return;
                 case PlayerIsDoneNotification m:
                     PlayerIsDone?.Invoke(m);
+                    return;
+                case DiscardPileShuffledNotification m:
+                    DiscardPileShuffled?.Invoke(m);
                     return;
                 default:
                     return;

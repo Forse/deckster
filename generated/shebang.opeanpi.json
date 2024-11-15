@@ -4048,6 +4048,17 @@
         },
         "additionalProperties": false
       },
+      "CrazyEights.DiscardPileShuffledNotification": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
       "CrazyEights.DrawCardRequest": {
         "allOf": [
           {
@@ -4608,6 +4619,7 @@
             "discriminator": {
               "propertyName": "type",
               "mapping": {
+                "Gabong.GabongPlayerNotification": "#/components/schemas/Gabong.GabongPlayerNotification",
                 "Gabong.PlayerPutCardNotification": "#/components/schemas/Gabong.PlayerPutCardNotification",
                 "Gabong.PlayerDrewCardNotification": "#/components/schemas/Gabong.PlayerDrewCardNotification",
                 "Gabong.PlayerDrewPenaltyCardNotification": "#/components/schemas/Gabong.PlayerDrewPenaltyCardNotification",
@@ -4708,6 +4720,35 @@
           }
         },
         "additionalProperties": false
+      },
+      "Gabong.GabongPlayerNotification": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Gabong.GabongGameNotification"
+          },
+          {
+            "required": [
+              "playerId"
+            ],
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            "additionalProperties": false,
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "Gabong.PlayerPutCardNotification": "#/components/schemas/Gabong.PlayerPutCardNotification",
+                "Gabong.PlayerDrewCardNotification": "#/components/schemas/Gabong.PlayerDrewCardNotification",
+                "Gabong.PlayerDrewPenaltyCardNotification": "#/components/schemas/Gabong.PlayerDrewPenaltyCardNotification",
+                "Gabong.PlayerLostTheirTurnNotification": "#/components/schemas/Gabong.PlayerLostTheirTurnNotification"
+              }
+            }
+          }
+        ]
       },
       "Gabong.GabongRequest": {
         "allOf": [
@@ -4833,6 +4874,18 @@
           }
         ]
       },
+      "Gabong.PenaltyReason": {
+        "enum": [
+          "PlayOutOfTurn",
+          "TookTooLong",
+          "WrongPlay",
+          "WrongGabong",
+          "WrongBonga",
+          "UnpaidDebt",
+          "PassWithoutDrawing"
+        ],
+        "type": "string"
+      },
       "Gabong.PlayBongaRequest": {
         "allOf": [
           {
@@ -4858,19 +4911,10 @@
       "Gabong.PlayerDrewCardNotification": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Gabong.GabongGameNotification"
+            "$ref": "#/components/schemas/Gabong.GabongPlayerNotification"
           },
           {
-            "required": [
-              "playerId"
-            ],
             "type": "object",
-            "properties": {
-              "playerId": {
-                "type": "string",
-                "format": "uuid"
-              }
-            },
             "additionalProperties": false
           }
         ]
@@ -4878,17 +4922,16 @@
       "Gabong.PlayerDrewPenaltyCardNotification": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Gabong.GabongGameNotification"
+            "$ref": "#/components/schemas/Gabong.GabongPlayerNotification"
           },
           {
             "required": [
-              "playerId"
+              "penaltyReason"
             ],
             "type": "object",
             "properties": {
-              "playerId": {
-                "type": "string",
-                "format": "uuid"
+              "penaltyReason": {
+                "$ref": "#/components/schemas/Gabong.PenaltyReason"
               }
             },
             "additionalProperties": false
@@ -4898,19 +4941,14 @@
       "Gabong.PlayerLostTheirTurnNotification": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Gabong.GabongGameNotification"
+            "$ref": "#/components/schemas/Gabong.GabongPlayerNotification"
           },
           {
             "required": [
-              "lostTurnReason",
-              "playerId"
+              "lostTurnReason"
             ],
             "type": "object",
             "properties": {
-              "playerId": {
-                "type": "string",
-                "format": "uuid"
-              },
               "lostTurnReason": {
                 "$ref": "#/components/schemas/Gabong.PlayerLostTurnReason"
               }
@@ -4931,19 +4969,14 @@
       "Gabong.PlayerPutCardNotification": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Gabong.GabongGameNotification"
+            "$ref": "#/components/schemas/Gabong.GabongPlayerNotification"
           },
           {
             "required": [
-              "card",
-              "playerId"
+              "card"
             ],
             "type": "object",
             "properties": {
-              "playerId": {
-                "type": "string",
-                "format": "uuid"
-              },
               "card": {
                 "$ref": "#/components/schemas/Common.Card"
               },
@@ -6096,6 +6129,7 @@
             "Idiot.GameEndedNotification": "#/components/schemas/Idiot.GameEndedNotification",
             "Idiot.ItsTimeToSwapCardsNotification": "#/components/schemas/Idiot.ItsTimeToSwapCardsNotification",
             "Gabong.GabongGameNotification": "#/components/schemas/Gabong.GabongGameNotification",
+            "Gabong.GabongPlayerNotification": "#/components/schemas/Gabong.GabongPlayerNotification",
             "Gabong.PlayerPutCardNotification": "#/components/schemas/Gabong.PlayerPutCardNotification",
             "Gabong.PlayerDrewCardNotification": "#/components/schemas/Gabong.PlayerDrewCardNotification",
             "Gabong.PlayerDrewPenaltyCardNotification": "#/components/schemas/Gabong.PlayerDrewPenaltyCardNotification",
@@ -6130,6 +6164,7 @@
             "CrazyEights.GameEndedNotification": "#/components/schemas/CrazyEights.GameEndedNotification",
             "CrazyEights.YouAreDoneNotification": "#/components/schemas/CrazyEights.YouAreDoneNotification",
             "CrazyEights.PlayerIsDoneNotification": "#/components/schemas/CrazyEights.PlayerIsDoneNotification",
+            "CrazyEights.DiscardPileShuffledNotification": "#/components/schemas/CrazyEights.DiscardPileShuffledNotification",
             "CrazyEights.PlayerViewOfGame": "#/components/schemas/CrazyEights.PlayerViewOfGame",
             "Common.EmptyResponse": "#/components/schemas/Common.EmptyResponse",
             "ChatRoom.SendChatRequest": "#/components/schemas/ChatRoom.SendChatRequest",
@@ -6181,6 +6216,7 @@
                 "Idiot.GameEndedNotification": "#/components/schemas/Idiot.GameEndedNotification",
                 "Idiot.ItsTimeToSwapCardsNotification": "#/components/schemas/Idiot.ItsTimeToSwapCardsNotification",
                 "Gabong.GabongGameNotification": "#/components/schemas/Gabong.GabongGameNotification",
+                "Gabong.GabongPlayerNotification": "#/components/schemas/Gabong.GabongPlayerNotification",
                 "Gabong.PlayerPutCardNotification": "#/components/schemas/Gabong.PlayerPutCardNotification",
                 "Gabong.PlayerDrewCardNotification": "#/components/schemas/Gabong.PlayerDrewCardNotification",
                 "Gabong.PlayerDrewPenaltyCardNotification": "#/components/schemas/Gabong.PlayerDrewPenaltyCardNotification",
@@ -6198,6 +6234,7 @@
                 "CrazyEights.GameEndedNotification": "#/components/schemas/CrazyEights.GameEndedNotification",
                 "CrazyEights.YouAreDoneNotification": "#/components/schemas/CrazyEights.YouAreDoneNotification",
                 "CrazyEights.PlayerIsDoneNotification": "#/components/schemas/CrazyEights.PlayerIsDoneNotification",
+                "CrazyEights.DiscardPileShuffledNotification": "#/components/schemas/CrazyEights.DiscardPileShuffledNotification",
                 "ChatRoom.ChatNotification": "#/components/schemas/ChatRoom.ChatNotification"
               }
             }

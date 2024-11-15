@@ -26,7 +26,11 @@ public class GabongGame : GameObject
     public const int MAX_CARDS_IN_HAND = 20;
     public const int MAX_MILLIS_PER_TURN = 5_000;
     public const int MAX_SECONDS_BEFORE_STARTING_ROUND = 60;
-    
+
+    private void InfoLog(string msg)
+    {
+        
+    }
 
     public Guid GabongMasterId { get; set; } = Guid.Empty;
 
@@ -320,6 +324,13 @@ public class GabongGame : GameObject
             player.Penalties++;
         }
 
+        while (CardsToDraw>0)
+        {
+            CardsToDraw--;
+            player.Cards.Add(StockPile.Pop());
+            await PlayerDrewCard.InvokeOrDefault(() => new PlayerDrewCardNotification(){ PlayerId = player.Id});
+        }
+        
         if (CurrentPlayer == player)
         {
             LastPlay = GabongPlay.TurnLost;

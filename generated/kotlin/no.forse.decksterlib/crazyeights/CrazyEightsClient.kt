@@ -10,6 +10,7 @@
  * PlayerPutEight: PlayerPutEightNotification
  * GameEnded: GameEndedNotification
  * PlayerIsDone: PlayerIsDoneNotification
+ * DiscardPileShuffled: DiscardPileShuffledNotification
  *
 */
 package no.forse.decksterlib.crazyeights
