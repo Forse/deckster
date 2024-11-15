@@ -10,15 +10,34 @@ public enum Suit
 
 public static class SuitExtensions
 {
+    public enum DisplayFormat
+    {
+        Saklig,
+        Windows
+    }
+    
     public static string Display(this Suit suit)
     {
-        return suit switch
+        var format = OperatingSystem.IsWindows() ? DisplayFormat.Windows : DisplayFormat.Saklig;
+        
+        return format switch
         {
-            Suit.Clubs => "C",
-            Suit.Diamonds => "D",
-            Suit.Hearts => "H",
-            Suit.Spades => "S",
-            _ => throw new ArgumentOutOfRangeException(nameof(suit), suit, null)
+            DisplayFormat.Saklig => suit switch
+            {
+                Suit.Clubs => "♣",
+                Suit.Hearts => "♥",
+                Suit.Spades => "♠",
+                Suit.Diamonds => "♦",
+                _ => throw new ArgumentOutOfRangeException(nameof(suit), suit, null)
+            },
+            _ => suit switch
+            {
+                Suit.Clubs => "c",
+                Suit.Hearts => "h",
+                Suit.Spades => "s",
+                Suit.Diamonds => "d",
+                _ => throw new ArgumentOutOfRangeException(nameof(suit), suit, null)
+            }
         };
     }
 }
