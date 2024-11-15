@@ -396,6 +396,7 @@ public class CrazyEightsGame : GameObject
     {
         return new OtherCrazyEightsPlayer
         {
+            PlayerId = player.Id,
             Name = player.Name,
             NumberOfCards = player.Cards.Count
         };
