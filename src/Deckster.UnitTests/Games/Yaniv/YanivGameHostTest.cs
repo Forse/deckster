@@ -20,7 +20,7 @@ public class YanivGameHostTest
             if (!host.TryAddBot(out var error))
             {
                 Assert.Fail(error);
-            }    
+            }
         }
         
         try

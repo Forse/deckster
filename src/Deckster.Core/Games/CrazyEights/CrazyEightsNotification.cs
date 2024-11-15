@@ -50,3 +50,5 @@ public class PlayerIsDoneNotification : DecksterNotification
 {
     public Guid PlayerId { get; init; }
 }
+
+public class DiscardPileShuffledNotification : DecksterNotification;
