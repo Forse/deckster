@@ -99,7 +99,7 @@ public class WebSocketClientChannel : IClientChannel
         var buffer = new byte[256];
         while (_actionSocket.State == WebSocketState.CloseSent)
         {
-            _logger.LogDebug("Waiting for close ack for action socket");
+            _logger.LogDebug("Waiting for close ack for action socket ({reason})", ClosingReasons.ClientDisconnected);
             _ = await _actionSocket.ReceiveAsync(buffer, default);
         }
         _logger.LogDebug("Action socket closed");
@@ -165,7 +165,7 @@ public class WebSocketClientChannel : IClientChannel
 
                             if (_actionSocket.State == WebSocketState.CloseSent)
                             {
-                                _logger.LogDebug("Waiting for close ack for action socket");
+                                _logger.LogDebug("Waiting for close ack for action socket ({reason})", result.CloseStatusDescription);
                                 _ = await _actionSocket.ReceiveAsync(buffer, default);
                             }
 

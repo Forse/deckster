@@ -94,10 +94,6 @@ public abstract class GameHost : IGameHost
     
     protected async Task EndAsync(Guid? gameId)
     {
-        if (!Cts.IsCancellationRequested)
-        {
-            await Cts.CancelAsync();    
-        }
         foreach (var player in Players.Values.ToArray())
         {
             try
@@ -110,6 +106,10 @@ public abstract class GameHost : IGameHost
                 
             }
             
+        }
+        if (!Cts.IsCancellationRequested)
+        {
+            await Cts.CancelAsync();    
         }
         Players.Clear();
         FireEnded(gameId);

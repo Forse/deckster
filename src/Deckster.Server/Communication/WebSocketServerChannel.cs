@@ -101,7 +101,15 @@ public class WebSocketServerChannel : IServerChannel
                 {
                     request.PlayerId = Player.Id;
                     Console.WriteLine($"Got request: {request.Pretty()}");
-                    handle(this, request);
+                    try
+                    {
+                        handle(this, request);
+                    }
+                    catch
+                    {
+                        // ¯\_(ツ)_/¯
+                    }
+                    
                 }
             }
         }
@@ -123,6 +131,48 @@ public class WebSocketServerChannel : IServerChannel
             {
                 _logger.LogError(e, "Error closing notification socket");
             }
+        }
+
+        return;
+        
+        switch (reason)
+        {
+            case ClosingReasons.ClientDisconnected:
+                if (_notificationSocket.State == WebSocketState.Open)
+                {
+                    try
+                    {
+                        await _notificationSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, reason, default);
+                    }
+                    catch (WebSocketException e)
+                    {
+                        _logger.LogError(e, "Error closing notification socket");
+                    }
+                }
+
+                break;
+            default:
+                if (_notificationSocket.State == WebSocketState.Open)
+                {
+                    await _notificationSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, ClosingReasons.ServerDisconnected, default);
+                }
+                
+                var buffer = new byte[512];
+
+                if (_actionSocket.State < WebSocketState.Closed)
+                {
+                    if (_actionSocket.State == WebSocketState.CloseReceived)
+                    {
+                        await _actionSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, ClosingReasons.ServerDisconnected, default);
+                    }
+                }
+
+                if (_notificationSocket.State == WebSocketState.CloseSent)
+                {
+                    _ = await _notificationSocket.ReceiveAsync(buffer, default);
+                }
+
+                break;
         }
     }
 
