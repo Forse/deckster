@@ -14,7 +14,7 @@ public class AsyncMessageQueue<TMessage>
         {
             if (_waitingLine.TryDequeue(out var waiting))
             {
-                waiting.SetResult(message);
+                waiting.TrySetResult(message);
                 return;
             }
             _messages.Enqueue(message);

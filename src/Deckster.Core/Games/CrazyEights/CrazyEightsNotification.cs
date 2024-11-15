@@ -39,7 +39,9 @@ public class GameStartedNotification : DecksterNotification
 
 public class GameEndedNotification : DecksterNotification
 {
-    public List<PlayerData> Players { get; init; } = [];
+    public List<PlayerData> Players { get; init; }
+    public Guid LoserId { get; set; }
+    public string LoserName { get; set; }
 }
 
 public class YouAreDoneNotification : DecksterNotification;
@@ -48,3 +50,5 @@ public class PlayerIsDoneNotification : DecksterNotification
 {
     public Guid PlayerId { get; init; }
 }
+
+public class DiscardPileShuffledNotification : DecksterNotification;

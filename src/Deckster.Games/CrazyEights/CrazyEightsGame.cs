@@ -15,6 +15,7 @@ public class CrazyEightsGame : GameObject
     public event NotifyAll<PlayerPutEightNotification>? PlayerPutEight;
     public event NotifyAll<GameEndedNotification>? GameEnded;
     public event NotifyAll<PlayerIsDoneNotification>? PlayerIsDone;
+    public event NotifyAll<DiscardPileShuffledNotification>? DiscardPileShuffled; 
     
     public int InitialCardsPerPlayer { get; set; } = 5;
     public int CurrentPlayerIndex { get; set; }
@@ -229,8 +230,12 @@ public class CrazyEightsGame : GameObject
             await RespondAsync(playerId, response);
             return response;
         }
+
+        if (ShufflePileIfNecessary())
+        {
+            await DiscardPileShuffled.InvokeOrDefault(() => new DiscardPileShuffledNotification());
+        }
         
-        ShufflePileIfNecessary();
         if (!StockPile.Any())
         {
             response = new CardResponse{ Error = "Stock pile is empty" };
@@ -277,17 +282,36 @@ public class CrazyEightsGame : GameObject
     
     private async Task MoveToNextPlayerOrFinishAsync()
     {
-        if (GetState() == GameState.Finished)
+        var stillPlaying = Players.Where(p => p.IsStillPlaying()).ToArray();
+        switch (stillPlaying.Length)
         {
-            await GameEnded.InvokeOrDefault(new GameEndedNotification());
-            return;
+            case 0:
+                await GameEnded.InvokeOrDefault(() => new GameEndedNotification
+                {
+                    LoserId = default // ¯\_(ツ)_/¯
+                });
+                break;
+            case 1:
+                await GameEnded.InvokeOrDefault(() => new GameEndedNotification
+                {
+                    LoserId = stillPlaying[0].Id,
+                    LoserName = stillPlaying[0].Name,
+                    Players = Players.Select(p => new PlayerData
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        CardsInHand = p.Cards.Count
+                    }).ToList()
+                });
+                break;
+            default:
+                MoveToNextPlayer();
+                await ItsYourTurn.InvokeOrDefault(CurrentPlayer.Id, new ItsYourTurnNotification
+                {
+                    PlayerViewOfGame = GetPlayerViewOfGame(CurrentPlayer)
+                });
+            break;
         }
-        
-        MoveToNextPlayer();
-        await ItsYourTurn.InvokeOrDefault(CurrentPlayer.Id, new ItsYourTurnNotification
-        {
-            PlayerViewOfGame = GetPlayerViewOfGame(CurrentPlayer)
-        });
     }
 
     private void MoveToNextPlayer()
@@ -348,16 +372,16 @@ public class CrazyEightsGame : GameObject
                card.Rank == 8;
     }
     
-    private void ShufflePileIfNecessary()
+    private bool ShufflePileIfNecessary()
     {
         if (StockPile.Any())
         {
-            return;
+            return false;
         }
         
         if (DiscardPile.Count < 2)
         {
-            return;
+            return false;
         }
 
         var topOfPile = DiscardPile.Pop();
@@ -365,12 +389,14 @@ public class CrazyEightsGame : GameObject
         DiscardPile.Clear();
         DiscardPile.Push(topOfPile);
         StockPile.PushRange(reshuffledCards);
+        return true;
     }
 
     private static OtherCrazyEightsPlayer ToOtherPlayer(CrazyEightsPlayer player)
     {
         return new OtherCrazyEightsPlayer
         {
+            PlayerId = player.Id,
             Name = player.Name,
             NumberOfCards = player.Cards.Count
         };

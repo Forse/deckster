@@ -4066,6 +4066,8 @@
           },
           {
             "required": [
+              "loserId",
+              "loserName",
               "players"
             ],
             "type": "object",
@@ -4075,6 +4077,13 @@
                 "items": {
                   "$ref": "#/components/schemas/Common.PlayerData"
                 }
+              },
+              "loserId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "loserName": {
+                "type": "string"
               }
             },
             "additionalProperties": false

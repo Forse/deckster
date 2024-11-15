@@ -8,7 +8,7 @@
     <b>State: <span x-text="game.state"></span></b>
   </div>
   <div>
-  <button x-show="game.state=='Waiting'" x-on:click="addBot()">Add bot</button>
+  <button x-on:click="addBot()">Add bot</button>
   <button x-show="game.state=='Waiting'" x-on:click="start()">Start Game</button>
   <button x-on:click="cancel()">Cancel</button>
   </div>

@@ -37,7 +37,10 @@ public class GabongPoorAi
 
     private void OnPlayerDrewPenaltyCard(PlayerDrewPenaltyCardNotification obj)
     {
-        _roundLog.Add($"==> {GetPlayer(obj.PlayerId)} Drew a penalty card");
+        if(obj.IsFor(_client.PlayerData.Id))
+        {
+            _roundLog.Add($"==> {GetPlayer(obj.PlayerId)} Drew a penalty card");
+        }
     }
 
     private void OnRoundStarted(RoundStartedNotification obj)
@@ -87,7 +90,11 @@ public class GabongPoorAi
             PlayerLostTurnReason.TookTooLong => "took too long",
             _ => "unknown"
         };
-        _roundLog.Add($"==> {GetPlayer(obj.PlayerId).Name} lost their turn since they {lostTurnReason}");
+        if(obj.IsFor(_client.PlayerData.Id))
+        {
+            _roundLog.Add($"==> {GetPlayer(obj.PlayerId).Name} lost their turn since they {lostTurnReason}");
+        }
+
     }
 
     private SlimGabongPlayer? GetPlayer(Guid playerId)
@@ -97,7 +104,10 @@ public class GabongPoorAi
 
     private void OnPlayerDrewCard(PlayerDrewCardNotification obj)
     {
-        _roundLog.Add($"==> {GetPlayer(obj.PlayerId).Name} Drew");
+        if(obj.IsFor(_client.PlayerData.Id))
+        {    
+            _roundLog.Add($"==> {GetPlayer(obj.PlayerId).Name} Drew");
+       }
     }
     
     private void OnPlayerPutCard(PlayerPutCardNotification evt)
@@ -112,7 +122,10 @@ public class GabongPoorAi
             _kingsPlayed++;
         }
         var newSuitText = evt.NewSuit == null ? "" : $" and changed suit to {evt.NewSuit}";
-        _roundLog.Add($"==> {GetPlayer(evt.PlayerId).Name} Played {evt.Card} {newSuitText}");
+        if(evt.IsFor(_client.PlayerData.Id))
+        {
+            _roundLog.Add($"==> {GetPlayer(evt.PlayerId).Name} Played {evt.Card} {newSuitText}");
+        }
     }
 
     private async Task ThinkAboutDoingSomething(PlayerViewOfGame? obj)
@@ -150,12 +163,17 @@ public class GabongPoorAi
                     ? viewOfGame.Cards.GroupBy(x => x.Suit).OrderByDescending(x => x.Count()).First().Key
                     : (Suit?)null;
                 _logger.LogInformation("Trying to play card {card}", cardToPlay.Value);
+                _view.Cards.Remove(cardToPlay.Value);
+                _view.TopOfPile = cardToPlay.Value;
+                _view.LastPlayMadeByPlayerId = _client.PlayerData.Id;
+                _view.LastPlay = GabongPlay.CardPlayed;
                 _view = await _client.PutCardAsync(new PutCardRequest { Card = cardToPlay.Value, NewSuit = newSuit });
                 
             }
             else
             {
-            
+                _view.LastPlayMadeByPlayerId = _client.PlayerData.Id;
+                _view.LastPlay = GabongPlay.TurnLost;
                 _view = await _client.DrawCardAsync(new DrawCardRequest());   
             }
         }
@@ -187,6 +205,7 @@ public class GabongPoorAi
     }
 
 
+  
     private bool IBelieveItsMyTurn(PlayerViewOfGame viewOfGame)
     {
         var direction = _kingsPlayed % 2 == 0 ? 1 : -1;
@@ -194,26 +213,17 @@ public class GabongPoorAi
         {
             return false;
         }
-        var myIndex = viewOfGame.PlayersOrder.IndexOf(_client.PlayerData.Id);
-        var lastplayer = viewOfGame.PlayersOrder.IndexOf(viewOfGame.LastPlayMadeByPlayerId);
-        if (viewOfGame.LastPlay == GabongPlay.RoundStarted && lastplayer == myIndex)
+        var delta = viewOfGame.TopOfPile.Rank == 3 ? 2 : 1;
+        if (viewOfGame.LastPlay == GabongPlay.RoundStarted)
         {
-            return true;
-        }
-        if(myIndex - lastplayer == direction)
-        {
-            return true;
-        }
-        if(direction == 1 && myIndex == 0 && lastplayer == (viewOfGame.PlayersOrder.Count - 1))
-        {
-            return true;
-        }
-        if(direction == -1 && lastplayer == 0 &&  myIndex == (viewOfGame.PlayersOrder.Count - 1))
-        {
-            return true;
+            delta = 0;
         }
 
-        return false;
+        var offset = direction * delta;
+        var myIndex = viewOfGame.PlayersOrder.IndexOf(_client.PlayerData.Id);
+        var lastplayerIndex = viewOfGame.PlayersOrder.IndexOf(viewOfGame.LastPlayMadeByPlayerId);
+        
+        return (viewOfGame.PlayersOrder.Count + lastplayerIndex + offset) % viewOfGame.PlayersOrder.Count == myIndex;
     }
 
     private Card? FindCardToPlay(PlayerViewOfGame viewOfGame)

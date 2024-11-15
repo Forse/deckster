@@ -94,14 +94,22 @@ public abstract class GameHost : IGameHost
     
     protected async Task EndAsync(Guid? gameId)
     {
+        foreach (var player in Players.Values.ToArray())
+        {
+            try
+            {
+                await player.DisconnectAsync();
+                player.Dispose();
+            }
+            catch (Exception e)
+            {
+                
+            }
+            
+        }
         if (!Cts.IsCancellationRequested)
         {
             await Cts.CancelAsync();    
-        }
-        foreach (var player in Players.Values.ToArray())
-        {
-            await player.DisconnectAsync();
-            player.Dispose();
         }
         Players.Clear();
         FireEnded(gameId);
