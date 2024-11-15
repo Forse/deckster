@@ -26,7 +26,7 @@ fun GameRoom(
 
         val chatRoomUiState = viewModel.uiState.collectAsState().value
 
-        when (chatRoomUiState) {
+         when (chatRoomUiState) {
             is ChatRoomUiState.ChatRoom -> {
                 LazyColumn(
                     contentPadding = PaddingValues(16.dp), verticalArrangement =
