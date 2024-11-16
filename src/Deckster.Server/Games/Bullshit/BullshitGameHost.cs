@@ -1,5 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
+using Deckster.Core.Games.Bullshit;
 using Deckster.Games.Bullshit;
+using Deckster.Server.Controllers;
 using Deckster.Server.Data;
 
 namespace Deckster.Server.Games.Bullshit;
@@ -47,4 +49,9 @@ public class BullshitProjection : GameProjection<BullshitGame>
         var game = Create(e);
         return (game, e);
     }
+
+    Task Apply(PutCardRequest @event, BullshitGame game) => game.PutCard(@event);
+    Task Apply(DrawCardRequest @event, BullshitGame game) => game.DrawCard(@event);
+    Task Pass(PassRequest @event, BullshitGame game) => game.Pass(@event);
+    Task CallBullshit(BullshitRequest @event, BullshitGame game) => game.CallBullshit(@event);
 }

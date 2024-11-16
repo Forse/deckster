@@ -73,6 +73,7 @@ public class ItsYourTurnNotification : DecksterNotification
 public class FalseBullshitCallNotification : DecksterNotification
 {
     public Guid PlayerId { get; init; }
+    public Guid AccusedPlayerId { get; init; }
     public int PunishmentCardCount { get; init; }
 }
 
@@ -107,6 +108,7 @@ public class BullshitBroadcastNotification : DecksterNotification
     public Guid PlayerId { get; init; }
     public Card ClaimedToBeCard { get; init; }
     public Card ActualCard { get; init; }
+    public int PunishmentCardCount { get; init; }
 }
 
 public class BullshitPlayerNotification : DecksterNotification

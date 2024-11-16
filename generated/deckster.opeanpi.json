@@ -3122,6 +3122,10 @@
                 "type": "string",
                 "format": "uuid"
               },
+              "accusedPlayerId": {
+                "type": "string",
+                "format": "uuid"
+              },
               "punishmentCardCount": {
                 "type": "integer",
                 "format": "int32"
@@ -3348,6 +3352,10 @@
                   }
                 },
                 "nullable": true
+              },
+              "punishmentCardCount": {
+                "type": "integer",
+                "format": "int32"
               }
             }
           }

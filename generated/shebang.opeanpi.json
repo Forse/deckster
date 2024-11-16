@@ -5270,7 +5270,8 @@
             "required": [
               "actualCard",
               "claimedToBeCard",
-              "playerId"
+              "playerId",
+              "punishmentCardCount"
             ],
             "type": "object",
             "properties": {
@@ -5283,6 +5284,10 @@
               },
               "actualCard": {
                 "$ref": "#/components/schemas/Common.Card"
+              },
+              "punishmentCardCount": {
+                "type": "integer",
+                "format": "int32"
               }
             },
             "additionalProperties": false
@@ -5498,12 +5503,17 @@
           },
           {
             "required": [
+              "accusedPlayerId",
               "playerId",
               "punishmentCardCount"
             ],
             "type": "object",
             "properties": {
               "playerId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "accusedPlayerId": {
                 "type": "string",
                 "format": "uuid"
               },

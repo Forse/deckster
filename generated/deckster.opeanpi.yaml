@@ -1909,6 +1909,9 @@ components:
             playerId:
               type: string
               format: uuid
+            accusedPlayerId:
+              type: string
+              format: uuid
             punishmentCardCount:
               type: integer
               format: int32
@@ -2049,6 +2052,9 @@ components:
                 suit:
                   type: string
               nullable: true
+            punishmentCardCount:
+              type: integer
+              format: int32
     Bullshit.BullshitPlayerNotification:
       type: object
       allOf:

@@ -3145,6 +3145,7 @@ components:
             - actualCard
             - claimedToBeCard
             - playerId
+            - punishmentCardCount
           type: object
           properties:
             playerId:
@@ -3154,6 +3155,9 @@ components:
               $ref: '#/components/schemas/Common.Card'
             actualCard:
               $ref: '#/components/schemas/Common.Card'
+            punishmentCardCount:
+              type: integer
+              format: int32
           additionalProperties: false
     Bullshit.BullshitGame:
       allOf:
@@ -3281,11 +3285,15 @@ components:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterNotification'
         - required:
+            - accusedPlayerId
             - playerId
             - punishmentCardCount
           type: object
           properties:
             playerId:
+              type: string
+              format: uuid
+            accusedPlayerId:
               type: string
               format: uuid
             punishmentCardCount:

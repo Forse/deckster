@@ -41,6 +41,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deckster.Idiot.SampleClient
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deckster.TexasHoldEm.SampleClient", "Deckster.TexasHoldEm.SampleClient\Deckster.TexasHoldEm.SampleClient.csproj", "{C69EE4FE-3BF2-41F7-A956-E3A270219DD9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deckster.Bullshit.SampleClient", "Deckster.Bullshit.SampleClient\Deckster.Bullshit.SampleClient.csproj", "{15FD6712-AFF7-42EC-BBAD-28E23B77107B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -103,6 +105,10 @@ Global
 		{C69EE4FE-3BF2-41F7-A956-E3A270219DD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C69EE4FE-3BF2-41F7-A956-E3A270219DD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C69EE4FE-3BF2-41F7-A956-E3A270219DD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15FD6712-AFF7-42EC-BBAD-28E23B77107B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15FD6712-AFF7-42EC-BBAD-28E23B77107B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15FD6712-AFF7-42EC-BBAD-28E23B77107B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15FD6712-AFF7-42EC-BBAD-28E23B77107B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -122,6 +128,7 @@ Global
 		{A01F5470-8C41-481D-8B68-677F6DEA205F} = {E66EE07A-1B20-4842-A77D-5A71F8FD3E0B}
 		{38F22734-F7CB-4376-BC86-6623F98F45D0} = {E66EE07A-1B20-4842-A77D-5A71F8FD3E0B}
 		{C69EE4FE-3BF2-41F7-A956-E3A270219DD9} = {E66EE07A-1B20-4842-A77D-5A71F8FD3E0B}
+		{15FD6712-AFF7-42EC-BBAD-28E23B77107B} = {E66EE07A-1B20-4842-A77D-5A71F8FD3E0B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AE622423-92CC-4E60-ADDA-E76DEFF6CB96}

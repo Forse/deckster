@@ -230,8 +230,9 @@ public class BullshitGame : GameObject
             return response;
         }
         
-        var bullshitter = Players.SingleOrDefault(p => p.Id == bullshit.PlayerId);
-        if (bullshitter == null)
+        var accused = Players.SingleOrDefault(p => p.Id == bullshit.PlayerId);
+        
+        if (accused == null)
         {
             // ¯\_(ツ)_/¯
             response = new BullshitResponse { Error = "There is no current potential bullshit" };
@@ -248,18 +249,21 @@ public class BullshitGame : GameObject
         {
             var card = DiscardPile.Pop();
 
-            await YourBullshitHasBeenCalled.InvokeOrDefault(bullshitter.Id, () => new BullshitPlayerNotification
+            var punishmentCards = StockPile.PopUpTo(3).ToArray();
+
+            await YourBullshitHasBeenCalled.InvokeOrDefault(accused.Id, () => new BullshitPlayerNotification
             {
                 CalledByPlayerId = player.Id,
                 Card = card,
-                PunishmentCards = StockPile.PopUpTo(3).ToArray(),
+                PunishmentCards = punishmentCards,
             });
 
             await PlayersBullshitHasBeenCalled.InvokeOrDefault(() => new BullshitBroadcastNotification
             {
-                PlayerId = bullshitter.Id,
+                PlayerId = accused.Id,
                 ClaimedToBeCard = bullshit.ClaimedToBeCard,
-                ActualCard = card
+                ActualCard = card,
+                PunishmentCardCount = punishmentCards.Length
             });
 
             response = new BullshitResponse();
@@ -276,6 +280,7 @@ public class BullshitGame : GameObject
             await PlayerAccusedFalseBullshit.InvokeOrDefault(() => new FalseBullshitCallNotification
             {
                 PlayerId = player.Id,
+                AccusedPlayerId = accused.Id,
                 PunishmentCardCount = response.PunishmentCards.Length
             });
 
