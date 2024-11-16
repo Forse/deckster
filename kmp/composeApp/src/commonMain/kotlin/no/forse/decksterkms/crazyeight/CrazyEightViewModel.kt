@@ -25,8 +25,8 @@ class CrazyEightViewModel(
     private fun List<Card>.getRank(rank: Int) = this.firstOrNull { it.rank == rank }
     private fun List<Card>.findEight() = this.firstOrNull { it.rank == 8 }
 
-    private fun determineCardToPut(topOfPile: Card, cards: List<Card>): Card? {
-        return cards.getSuit(topOfPile.suit)
+    private fun determineCardToPut(topOfPile: Card, currentSuit: Suit, cards: List<Card>): Card? {
+        return cards.getSuit(currentSuit)
             ?: cards.getRank(topOfPile.rank)
             ?: cards.findEight()
     }
@@ -44,7 +44,7 @@ class CrazyEightViewModel(
             crazyEightsClient.yourTurnFlow.collect { playerView ->
                 println("XXX my turn")
 
-                val cardToPut = determineCardToPut(playerView.topOfPile, playerView.cards)
+                val cardToPut = determineCardToPut(playerView.topOfPile, playerView.currentSuit, playerView.cards)
                 if (cardToPut != null) {
                     if (cardToPut.rank == 8) {
                         determineSuiteToRequest(playerView.cards)?.let { suit ->
