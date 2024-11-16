@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 fun GamesLobby(
     viewModel: GamesLobbyViewModel,
     onEnterGameName: (String) -> Unit,
+    onBotGameName: (String) -> Unit,
     onSpectateGameName: (String) -> Unit,
     onBackpressed: () -> Unit,
 ) {
@@ -40,10 +41,16 @@ fun GamesLobby(
                                 onEnterGameName(game.name)
 
                             },
+                            onBotGameName = {
+                                println("GamesLobby onbotGame")
+                                viewModel.stopListening()
+                                onBotGameName(game.name)
+                            },
                             onSpectateClicked = {
                                 viewModel.stopListening()
                                 onSpectateGameName(game.name)
                             }
+
                         )
                     }
                 }

@@ -3,7 +3,8 @@ package no.forse.decksterkms.crazyeight
 import no.forse.decksterlib.model.common.Card
 
 data class CrazyEightUiState(
-
     val playerHand: List<Card>,
-    val topOfPile: Card
+    val topOfPile: Card,
+    val isYourTurn: Boolean,
+    val topCardIsYours: Boolean,
 )

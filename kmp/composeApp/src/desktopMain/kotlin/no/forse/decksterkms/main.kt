@@ -61,6 +61,13 @@ fun main() = application {
                             "chat/${gameName}"
                         )
                     },
+                    onBotGameName = { gameName ->
+                        appState.gameNameToJoin = gameName
+                        appState.doSpectate = true
+                        navController.navigate(
+                            "chat/${gameName}"
+                        )
+                    },
                     onSpectateGameName = { gameName ->
                         appState.gameNameToJoin = gameName
                         appState.doSpectate = true
@@ -89,26 +96,39 @@ fun main() = application {
                 )
                 GamesLobby(gameRoomVm,
                     onEnterGameName = { gameName ->
-                        appState.gameNameToJoin = gameName
+                        println("main onPlyeer")
+                        appState.doSpectate = false
                         navController.navigate(
-                            "crazyeight/$gameName"
+                            "crazyeight/$gameName/false"
+                        )
+                    },
+                    onBotGameName = { gameName ->
+                        println("main onbot")
+                        appState.doSpectate = false
+                        navController.navigate(
+                            "crazyeight/$gameName/true"
                         )
                     },
                     onSpectateGameName = { gameName ->
-                        appState.gameNameToJoin = gameName
                         appState.doSpectate = true
                         navController.navigate(
-                            "crazyeight/${gameName}"
+                            "crazyeight/${gameName}/false"
                         )
                     },
                     onBackpressed = navController::popBackStack)
             }
 
-            composable("crazyeight/{gameName}") { backstack ->
+            composable("crazyeight/{gameName}/{asBot}") { backstack ->
                 val gameId = backstack.arguments?.getString("gameName")!!
+                val asBot = backstack.arguments?.getString("asBot") == "true"
                 val viewModel = viewModel(
                     modelClass = CrazyEightViewModel::class,
-                    factory = CrazyEightViewModel.Factory(gameId, appState.doSpectate, appState.loggedInDecksterServer!!)
+                    factory = CrazyEightViewModel.Factory(
+                        gameId,
+                        asBot,
+                        appState.doSpectate,
+                        appState.loggedInDecksterServer!!
+                    )
                 )
                 CrazyEightScreen(viewModel, onBackpressed = navController::popBackStack)
             }

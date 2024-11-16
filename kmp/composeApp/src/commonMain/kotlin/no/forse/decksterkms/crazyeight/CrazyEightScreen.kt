@@ -2,12 +2,14 @@ package no.forse.decksterkms.crazyeight
 
 import BaseScreen
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import decksterkms.composeapp.generated.resources.Res
 import decksterkms.composeapp.generated.resources.clubs_10_150
 import decksterkms.composeapp.generated.resources.clubs_2_150
@@ -70,11 +72,16 @@ fun CrazyEightScreen(viewModel: CrazyEightViewModel, onBackpressed: () -> Unit) 
     BaseScreen(topBarTitle = "Crazy Eights", onBackPressed = {
         viewModel.leave()
         onBackpressed.invoke()
-    }) {
+    },modifier = Modifier.padding(16.dp)) {
         LaunchedEffect(Unit) {
             viewModel.initialize()
         }
-        Text("You are")
+        Text("Game: ${viewModel.gameId} ")
+        if (viewModel.spectateMode) {
+            Text("SPECTATOR MODE")
+        } else {
+            Text("Player type: "  + if (viewModel.asbot) "Bot" else "Human"  )
+        }
 
         val state = viewModel.uiState.collectAsState().value
         CrazyEightContent(state)
@@ -85,10 +92,19 @@ fun CrazyEightScreen(viewModel: CrazyEightViewModel, onBackpressed: () -> Unit) 
 fun CrazyEightContent(crazyEightUiState: CrazyEightUiState) {
 
     Column {
+        if (crazyEightUiState.isYourTurn) {
+            Text("It's your turn!")
+        } else {
+            Text("Waiting for other player to make a move...")
+        }
+        Spacer(Modifier.padding(16.dp))
 
         // top of pile
         GameCardIcon(crazyEightUiState.topOfPile)
 
+        Spacer(Modifier.padding(8.dp))
+        Text("Your cards:", fontSize = 20.sp)
+        Spacer(Modifier.padding(8.dp))
         Row {
             // hand
             showHand(crazyEightUiState.playerHand)
