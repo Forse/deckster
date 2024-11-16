@@ -19,7 +19,7 @@ import no.forse.decksterlib.model.protocol.DecksterResponse
 import threadpoolScope
 
 abstract class GameClientBase(
-    protected val decksterServer: DecksterServer,
+    val decksterServer: DecksterServer,
     protected val gameName: String,
 ) {
     protected var game: DecksterGameInitiater? = null

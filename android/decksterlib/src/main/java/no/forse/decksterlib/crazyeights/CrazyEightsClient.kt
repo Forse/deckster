@@ -5,6 +5,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import no.forse.decksterlib.DecksterServer
+import no.forse.decksterlib.communication.ConnectedDecksterGame
+import no.forse.decksterlib.communication.DecksterGameInitiater
 import no.forse.decksterlib.game.GameClientBase
 import no.forse.decksterlib.model.common.Card
 import no.forse.decksterlib.model.common.EmptyResponse
@@ -42,6 +44,11 @@ class CrazyEightsClient(decksterServer: DecksterServer) :
 
     val crazyEightsNotifications: Flow<DecksterNotification>?
         get() = joinedGame?.notificationFlow
+
+    suspend fun joinGame(token: String, gameId: String): ConnectedDecksterGame {
+        game = DecksterGameInitiater(decksterServer, gameName, token)
+        return joinGame(gameId)
+    }
 
     override fun onGameLeft() {
         currentState = null
