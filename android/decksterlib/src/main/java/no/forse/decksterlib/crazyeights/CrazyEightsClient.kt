@@ -13,6 +13,7 @@ import no.forse.decksterlib.model.common.EmptyResponse
 import no.forse.decksterlib.model.common.Suit
 import no.forse.decksterlib.model.crazyeights.*
 import no.forse.decksterlib.model.protocol.DecksterNotification
+import no.forse.decksterlib.protocol.dtoType
 import no.forse.decksterlib.protocol.getType
 import threadpoolScope
 
@@ -70,22 +71,19 @@ class CrazyEightsClient(decksterServer: DecksterServer) :
 
     suspend fun passTurn(): EmptyResponse {
         val playerId = joinedGameOrThrow.userUuid
-        val passRequest = PassRequest("", playerId)
-        val typedMessage = PassRequest(passRequest.getType(), playerId)
+        val typedMessage = PassRequest(dtoType(PassRequest::class), playerId)
         return sendAndReceive<EmptyResponse>(typedMessage)
     }
 
     suspend fun drawCard(): CardResponse {
         val playerId = joinedGameOrThrow.userUuid
-        val passRequest = DrawCardRequest("", playerId)
-        val typedMessage = DrawCardRequest(passRequest.getType(), playerId)
+        val typedMessage = DrawCardRequest(dtoType(DrawCardRequest::class), playerId)
         return sendAndReceive<CardResponse>(typedMessage)
     }
 
     suspend fun putCard(card: Card): PlayerViewOfGame {
         val playerId = joinedGameOrThrow.userUuid
-        val passRequest = PutCardRequest("", playerId, card)
-        val typedMessage = PutCardRequest(passRequest.getType(), playerId, card)
+        val typedMessage = PutCardRequest(dtoType(PutCardRequest::class), playerId, card)
         return sendAndReceive<PlayerViewOfGame>(typedMessage).also {
             this.currentState = it
         }
@@ -93,8 +91,7 @@ class CrazyEightsClient(decksterServer: DecksterServer) :
 
     suspend fun putEight(card: Card, suit: Suit): PlayerViewOfGame {
         val playerId = joinedGameOrThrow.userUuid
-        val passRequest = PutEightRequest("", playerId, card, suit)
-        val typedMessage = PutEightRequest(passRequest.type, playerId, card, suit)
+        val typedMessage = PutEightRequest(dtoType(PutEightRequest::class), playerId, card, suit)
         return sendAndReceive<PlayerViewOfGame>(typedMessage).also {
             this.currentState = it
         }

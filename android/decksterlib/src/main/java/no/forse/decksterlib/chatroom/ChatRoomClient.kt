@@ -9,6 +9,7 @@ import no.forse.decksterlib.game.GameClientBase
 import no.forse.decksterlib.model.chatroom.*
 import no.forse.decksterlib.model.controllers.GameVm
 import no.forse.decksterlib.model.protocol.DecksterNotification
+import no.forse.decksterlib.protocol.dtoType
 import no.forse.decksterlib.protocol.getType
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
@@ -25,9 +26,8 @@ class ChatRoomClient(
         .create(ChatRoomApi::class.java)
 
     suspend fun chatAsync(message: String) {
-        val msg = SendChatRequest(type = "", message = message, playerId = joinedGameOrThrow.userUuid)
-        val typedMessage = msg.copy(type = msg.getType()) // todo better solution for this?
-        val response = sendAndReceive<ChatResponse>(typedMessage)
+        val msg = SendChatRequest(dtoType(SendChatRequest::class), message = message, playerId = joinedGameOrThrow.userUuid)
+        val response = sendAndReceive<ChatResponse>(msg)
         response.throwOnError()
     }
 
