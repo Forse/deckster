@@ -1,25 +1,23 @@
 package no.forse.decksterkms
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material.*
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavType
-import androidx.navigation.Navigator
-import androidx.navigation.compose.*
-import androidx.navigation.navArgument
-import no.forse.decksterandroid.chatroom.*
-import no.forse.decksterandroid.login.*
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import no.forse.decksterandroid.chatroom.Chat
+import no.forse.decksterandroid.chatroom.ChatRoomsViewModel
+import no.forse.decksterandroid.chatroom.ChatViewModel
+import no.forse.decksterandroid.chatroom.GameRoom
+import no.forse.decksterandroid.login.AppRepository
+import no.forse.decksterandroid.login.LoginScreen
+import no.forse.decksterandroid.login.LoginViewModel
 import no.forse.decksterkms.crazyeight.CrazyEightScreen
 import no.forse.decksterkms.crazyeight.CrazyEightViewModel
+import no.forse.decksterkms.gamebrowser.GameTypeSelector
 import no.forse.decksterlib.DecksterServer
-import no.forse.decksterlib.authentication.UserModel
 import no.forse.decksterlib.crazyeights.CrazyEightsClient
-import kotlin.reflect.typeOf
-
-data class GameListExtras(val userModel: UserModel) : Navigator.Extras
 
 fun main() = application {
     Window(
@@ -41,32 +39,18 @@ fun main() = application {
                     LoginViewModel(ChatRepository, AppRepository()),
                     onLoginSuccess = { decksterServer ->
                         lastDecksterServer = decksterServer
-                        navController.navigate(route = "gamelist")
+                        navController.navigate(route = "gameTypeSelect")
                     }
                 )
             }
-            composable("gamelist") {
-                Column {
-                    Button(onClick = {
-                        // TODO: this should really go to crazyeightLobby
-                        navController.navigate("crazyeight")
-                    }) {
-                        Text("Crazyeight")
-                    }
-                    Button(onClick = {
-                        navController.navigate("uno")
-                    }) {
-                        Text("uno")
-                    }
-                    Button(onClick = {
-                        navController.navigate("chatGameList")
-                    }) {
-                        Text("chatRoom")
-                    }
+
+            composable("gameTypeSelect") {
+                GameTypeSelector(onBackpressed = navController::popBackStack) { gameName ->
+                    navController.navigate(gameName)
                 }
             }
 
-            composable("chatGameList") {
+            composable("chatLobby") {
                 val chatRoomViewModel = viewModel(
                     modelClass = ChatRoomsViewModel::class,
                     factory = ChatRoomsViewModel.Factory()
@@ -75,7 +59,7 @@ fun main() = application {
                     navController.navigate(
                         "chat/$gameId"
                     )
-                })
+                }, onBackpressed = navController::popBackStack)
             }
 
             composable("chat/{gameId}") { backstack ->
@@ -99,6 +83,8 @@ fun main() = application {
                     navController.navigate(
                         "chat/$gameId"
                     )
+                }, onBackpressed = {
+                    navController.popBackStack()
                 })
             }
 
