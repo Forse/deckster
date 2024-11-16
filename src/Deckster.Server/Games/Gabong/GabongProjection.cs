@@ -9,6 +9,8 @@ public class GabongProjection : GameProjection<GabongGame>
     public GabongGame Create(GabongGameCreatedEvent created)
     {
         var game = GabongGame.Instantiate(created);
+        game.PickFirstGabongMaster();
+        game.NewRound();
         return game;
     }
     

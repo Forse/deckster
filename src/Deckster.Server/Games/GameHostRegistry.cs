@@ -83,7 +83,7 @@ public class GameHostRegistry
         return true;
     }
     
-    public async Task<bool> FinishJoinAsync(Guid connectionId, WebSocket eventSocket)
+    public async Task<bool> FinishJoinAsync(Guid connectionId, WebSocket eventSocket, bool joinAsPlayer)
     {
         if (!_connectingPlayers.TryRemove(connectionId, out var connecting))
         {
@@ -95,15 +95,31 @@ public class GameHostRegistry
         }
         
         var channel = new WebSocketServerChannel(connecting.Player, connecting.ActionSocket, eventSocket, connecting.TaskCompletionSource, _loggerFactory.CreateLogger<WebSocketServerChannel>());
-        if (!connecting.GameHost.TryAddPlayer(channel, out var error))
+        if (joinAsPlayer)
         {
-            await eventSocket.SendMessageAsync<ConnectMessage>(new ConnectFailureMessage
+            if (!connecting.GameHost.TryAddPlayer(channel, out var error))
             {
-                ErrorMessage = error
-            }, DecksterJson.Options);
-            await channel.DisconnectAsync();
-            channel.Dispose();
-            return false;
+                await eventSocket.SendMessageAsync<ConnectMessage>(new ConnectFailureMessage
+                {
+                    ErrorMessage = error
+                }, DecksterJson.Options);
+                await channel.DisconnectAsync();
+                channel.Dispose();
+                return false;
+            }
+        }
+        else
+        {
+            if (!connecting.GameHost.TryAddSpectator(channel, out var error))
+            {
+                await eventSocket.SendMessageAsync<ConnectMessage>(new ConnectFailureMessage
+                {
+                    ErrorMessage = error
+                }, DecksterJson.Options);
+                await channel.DisconnectAsync();
+                channel.Dispose();
+                return false;
+            }
         }
         
         await eventSocket.SendMessageAsync<ConnectMessage>(new ConnectSuccessMessage(), DecksterJson.Options);

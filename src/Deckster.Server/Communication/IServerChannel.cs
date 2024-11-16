@@ -7,7 +7,7 @@ namespace Deckster.Server.Communication;
 public interface IServerChannel : IDisposable
 {
     event Action<IServerChannel, DisconnectReason> Disconnected;
-    
+
     PlayerData Player { get; }
     ValueTask ReplyAsync<TResponse>(TResponse response, JsonSerializerOptions options, CancellationToken cancellationToken = default);
     ValueTask SendNotificationAsync<TNotification>(TNotification notification, JsonSerializerOptions options, CancellationToken cancellationToken = default);

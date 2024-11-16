@@ -2475,6 +2475,17 @@ components:
             playerViewOfGame:
               $ref: '#/components/schemas/CrazyEights.PlayerViewOfGame'
           additionalProperties: false
+    CrazyEights.ItsPlayersTurnNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
     CrazyEights.ItsYourTurnNotification:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterNotification'
@@ -2624,11 +2635,6 @@ components:
             newSuit:
               $ref: '#/components/schemas/Common.Suit'
           additionalProperties: false
-    CrazyEights.YouAreDoneNotification:
-      allOf:
-        - $ref: '#/components/schemas/Protocol.DecksterNotification'
-        - type: object
-          additionalProperties: false
     Data.DatabaseObject:
       required:
         - id
@@ -2648,6 +2654,7 @@ components:
           Games.GameObject: '#/components/schemas/Games.GameObject'
           Yaniv.YanivGame: '#/components/schemas/Yaniv.YanivGame'
           Uno.UnoGame: '#/components/schemas/Uno.UnoGame'
+          TexasHoldEm.TexasHoldEmGame: '#/components/schemas/TexasHoldEm.TexasHoldEmGame'
           Idiot.IdiotGame: '#/components/schemas/Idiot.IdiotGame'
           Gabong.GabongGame: '#/components/schemas/Gabong.GabongGame'
           CrazyEights.CrazyEightsGame: '#/components/schemas/CrazyEights.CrazyEightsGame'
@@ -2714,7 +2721,6 @@ components:
         - required:
             - cardsDrawn
             - cardsToDraw
-            - clockRunning
             - currentPlayer
             - currentSuit
             - deck
@@ -2728,6 +2734,9 @@ components:
             - topOfPile
           type: object
           properties:
+            lastPlayMadeByPlayerIndex:
+              type: integer
+              format: int32
             cardsToDraw:
               type: integer
               format: int32
@@ -2740,9 +2749,6 @@ components:
             gabongMasterId:
               type: string
               format: uuid
-            lastPlayMadeByPlayerIndex:
-              type: integer
-              format: int32
             isBetweenRounds:
               type: boolean
             deck:
@@ -2753,12 +2759,10 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/Common.Card'
-              readOnly: true
             discardPile:
               type: array
               items:
                 $ref: '#/components/schemas/Common.Card'
-              readOnly: true
             players:
               type: array
               items:
@@ -2771,9 +2775,6 @@ components:
               $ref: '#/components/schemas/Common.Suit'
             currentPlayer:
               $ref: '#/components/schemas/Gabong.GabongPlayer'
-            clockRunning:
-              type: boolean
-              readOnly: true
           additionalProperties: false
     Gabong.GabongGameNotification:
       allOf:
@@ -2886,6 +2887,7 @@ components:
           discriminator:
             propertyName: type
             mapping:
+              Gabong.PutCardRequest: '#/components/schemas/Gabong.PutCardRequest'
               Gabong.DrawCardRequest: '#/components/schemas/Gabong.DrawCardRequest'
               Gabong.PassRequest: '#/components/schemas/Gabong.PassRequest'
               Gabong.PlayGabongRequest: '#/components/schemas/Gabong.PlayGabongRequest'
@@ -3062,7 +3064,7 @@ components:
           additionalProperties: false
     Gabong.PutCardRequest:
       allOf:
-        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - $ref: '#/components/schemas/Gabong.GabongRequest'
         - required:
             - card
           type: object
@@ -3144,6 +3146,7 @@ components:
             mapping:
               Yaniv.YanivGame: '#/components/schemas/Yaniv.YanivGame'
               Uno.UnoGame: '#/components/schemas/Uno.UnoGame'
+              TexasHoldEm.TexasHoldEmGame: '#/components/schemas/TexasHoldEm.TexasHoldEmGame'
               Idiot.IdiotGame: '#/components/schemas/Idiot.IdiotGame'
               Gabong.GabongGame: '#/components/schemas/Gabong.GabongGame'
               CrazyEights.CrazyEightsGame: '#/components/schemas/CrazyEights.CrazyEightsGame'
@@ -3709,6 +3712,23 @@ components:
           Uno.GameEndedNotification: '#/components/schemas/Uno.GameEndedNotification'
           Uno.RoundStartedNotification: '#/components/schemas/Uno.RoundStartedNotification'
           Uno.RoundEndedNotification: '#/components/schemas/Uno.RoundEndedNotification'
+          TexasHoldEm.PlayerViewOfGame: '#/components/schemas/TexasHoldEm.PlayerViewOfGame'
+          TexasHoldEm.PlayerBettedNotification: '#/components/schemas/TexasHoldEm.PlayerBettedNotification'
+          TexasHoldEm.PlayerAllInNotification: '#/components/schemas/TexasHoldEm.PlayerAllInNotification'
+          TexasHoldEm.PlayerCheckedNotification: '#/components/schemas/TexasHoldEm.PlayerCheckedNotification'
+          TexasHoldEm.PlayerFoldedNotification: '#/components/schemas/TexasHoldEm.PlayerFoldedNotification'
+          TexasHoldEm.PlayerCalledNotification: '#/components/schemas/TexasHoldEm.PlayerCalledNotification'
+          TexasHoldEm.PlayerIsOutOfGameNotification: '#/components/schemas/TexasHoldEm.PlayerIsOutOfGameNotification'
+          TexasHoldEm.ItsYourTurnNotification: '#/components/schemas/TexasHoldEm.ItsYourTurnNotification'
+          TexasHoldEm.NewRoundStartedNotification: '#/components/schemas/TexasHoldEm.NewRoundStartedNotification'
+          TexasHoldEm.NewCardsRevealed: '#/components/schemas/TexasHoldEm.NewCardsRevealed'
+          TexasHoldEm.RoundEndedNotification: '#/components/schemas/TexasHoldEm.RoundEndedNotification'
+          TexasHoldEm.GameStartedNotification: '#/components/schemas/TexasHoldEm.GameStartedNotification'
+          TexasHoldEm.GameEndedNotification: '#/components/schemas/TexasHoldEm.GameEndedNotification'
+          TexasHoldEm.BetRequest: '#/components/schemas/TexasHoldEm.BetRequest'
+          TexasHoldEm.FoldRequest: '#/components/schemas/TexasHoldEm.FoldRequest'
+          TexasHoldEm.CheckRequest: '#/components/schemas/TexasHoldEm.CheckRequest'
+          TexasHoldEm.CallRequest: '#/components/schemas/TexasHoldEm.CallRequest'
           Idiot.IamReadyRequest: '#/components/schemas/Idiot.IamReadyRequest'
           Idiot.SwapCardsRequest: '#/components/schemas/Idiot.SwapCardsRequest'
           Idiot.PutCardsFromHandRequest: '#/components/schemas/Idiot.PutCardsFromHandRequest'
@@ -3749,8 +3769,8 @@ components:
           Gabong.GabongCardResponse: '#/components/schemas/Gabong.GabongCardResponse'
           Gabong.ActionResponse: '#/components/schemas/Gabong.ActionResponse'
           Gabong.PlayerViewOfGame: '#/components/schemas/Gabong.PlayerViewOfGame'
-          Gabong.PutCardRequest: '#/components/schemas/Gabong.PutCardRequest'
           Gabong.GabongRequest: '#/components/schemas/Gabong.GabongRequest'
+          Gabong.PutCardRequest: '#/components/schemas/Gabong.PutCardRequest'
           Gabong.DrawCardRequest: '#/components/schemas/Gabong.DrawCardRequest'
           Gabong.PassRequest: '#/components/schemas/Gabong.PassRequest'
           Gabong.PlayGabongRequest: '#/components/schemas/Gabong.PlayGabongRequest'
@@ -3765,9 +3785,9 @@ components:
           CrazyEights.PlayerDrewCardNotification: '#/components/schemas/CrazyEights.PlayerDrewCardNotification'
           CrazyEights.PlayerPassedNotification: '#/components/schemas/CrazyEights.PlayerPassedNotification'
           CrazyEights.ItsYourTurnNotification: '#/components/schemas/CrazyEights.ItsYourTurnNotification'
+          CrazyEights.ItsPlayersTurnNotification: '#/components/schemas/CrazyEights.ItsPlayersTurnNotification'
           CrazyEights.GameStartedNotification: '#/components/schemas/CrazyEights.GameStartedNotification'
           CrazyEights.GameEndedNotification: '#/components/schemas/CrazyEights.GameEndedNotification'
-          CrazyEights.YouAreDoneNotification: '#/components/schemas/CrazyEights.YouAreDoneNotification'
           CrazyEights.PlayerIsDoneNotification: '#/components/schemas/CrazyEights.PlayerIsDoneNotification'
           CrazyEights.DiscardPileShuffledNotification: '#/components/schemas/CrazyEights.DiscardPileShuffledNotification'
           CrazyEights.PlayerViewOfGame: '#/components/schemas/CrazyEights.PlayerViewOfGame'
@@ -3802,6 +3822,18 @@ components:
               Uno.GameEndedNotification: '#/components/schemas/Uno.GameEndedNotification'
               Uno.RoundStartedNotification: '#/components/schemas/Uno.RoundStartedNotification'
               Uno.RoundEndedNotification: '#/components/schemas/Uno.RoundEndedNotification'
+              TexasHoldEm.PlayerBettedNotification: '#/components/schemas/TexasHoldEm.PlayerBettedNotification'
+              TexasHoldEm.PlayerAllInNotification: '#/components/schemas/TexasHoldEm.PlayerAllInNotification'
+              TexasHoldEm.PlayerCheckedNotification: '#/components/schemas/TexasHoldEm.PlayerCheckedNotification'
+              TexasHoldEm.PlayerFoldedNotification: '#/components/schemas/TexasHoldEm.PlayerFoldedNotification'
+              TexasHoldEm.PlayerCalledNotification: '#/components/schemas/TexasHoldEm.PlayerCalledNotification'
+              TexasHoldEm.PlayerIsOutOfGameNotification: '#/components/schemas/TexasHoldEm.PlayerIsOutOfGameNotification'
+              TexasHoldEm.ItsYourTurnNotification: '#/components/schemas/TexasHoldEm.ItsYourTurnNotification'
+              TexasHoldEm.NewRoundStartedNotification: '#/components/schemas/TexasHoldEm.NewRoundStartedNotification'
+              TexasHoldEm.NewCardsRevealed: '#/components/schemas/TexasHoldEm.NewCardsRevealed'
+              TexasHoldEm.RoundEndedNotification: '#/components/schemas/TexasHoldEm.RoundEndedNotification'
+              TexasHoldEm.GameStartedNotification: '#/components/schemas/TexasHoldEm.GameStartedNotification'
+              TexasHoldEm.GameEndedNotification: '#/components/schemas/TexasHoldEm.GameEndedNotification'
               Idiot.PlayerSwappedCardsNotification: '#/components/schemas/Idiot.PlayerSwappedCardsNotification'
               Idiot.PlayerPutCardsNotification: '#/components/schemas/Idiot.PlayerPutCardsNotification'
               Idiot.PlayerIsReadyNotification: '#/components/schemas/Idiot.PlayerIsReadyNotification'
@@ -3829,9 +3861,9 @@ components:
               CrazyEights.PlayerDrewCardNotification: '#/components/schemas/CrazyEights.PlayerDrewCardNotification'
               CrazyEights.PlayerPassedNotification: '#/components/schemas/CrazyEights.PlayerPassedNotification'
               CrazyEights.ItsYourTurnNotification: '#/components/schemas/CrazyEights.ItsYourTurnNotification'
+              CrazyEights.ItsPlayersTurnNotification: '#/components/schemas/CrazyEights.ItsPlayersTurnNotification'
               CrazyEights.GameStartedNotification: '#/components/schemas/CrazyEights.GameStartedNotification'
               CrazyEights.GameEndedNotification: '#/components/schemas/CrazyEights.GameEndedNotification'
-              CrazyEights.YouAreDoneNotification: '#/components/schemas/CrazyEights.YouAreDoneNotification'
               CrazyEights.PlayerIsDoneNotification: '#/components/schemas/CrazyEights.PlayerIsDoneNotification'
               CrazyEights.DiscardPileShuffledNotification: '#/components/schemas/CrazyEights.DiscardPileShuffledNotification'
               ChatRoom.ChatNotification: '#/components/schemas/ChatRoom.ChatNotification'
@@ -3855,6 +3887,10 @@ components:
               Uno.PutWildRequest: '#/components/schemas/Uno.PutWildRequest'
               Uno.DrawCardRequest: '#/components/schemas/Uno.DrawCardRequest'
               Uno.PassRequest: '#/components/schemas/Uno.PassRequest'
+              TexasHoldEm.BetRequest: '#/components/schemas/TexasHoldEm.BetRequest'
+              TexasHoldEm.FoldRequest: '#/components/schemas/TexasHoldEm.FoldRequest'
+              TexasHoldEm.CheckRequest: '#/components/schemas/TexasHoldEm.CheckRequest'
+              TexasHoldEm.CallRequest: '#/components/schemas/TexasHoldEm.CallRequest'
               Idiot.IamReadyRequest: '#/components/schemas/Idiot.IamReadyRequest'
               Idiot.SwapCardsRequest: '#/components/schemas/Idiot.SwapCardsRequest'
               Idiot.PutCardsFromHandRequest: '#/components/schemas/Idiot.PutCardsFromHandRequest'
@@ -3865,8 +3901,8 @@ components:
               Idiot.PutChanceCardRequest: '#/components/schemas/Idiot.PutChanceCardRequest'
               Gabong.PenalizePlayerForTakingTooLongRequest: '#/components/schemas/Gabong.PenalizePlayerForTakingTooLongRequest'
               Gabong.PenalizePlayerForTooManyCardsRequest: '#/components/schemas/Gabong.PenalizePlayerForTooManyCardsRequest'
-              Gabong.PutCardRequest: '#/components/schemas/Gabong.PutCardRequest'
               Gabong.GabongRequest: '#/components/schemas/Gabong.GabongRequest'
+              Gabong.PutCardRequest: '#/components/schemas/Gabong.PutCardRequest'
               Gabong.DrawCardRequest: '#/components/schemas/Gabong.DrawCardRequest'
               Gabong.PassRequest: '#/components/schemas/Gabong.PassRequest'
               Gabong.PlayGabongRequest: '#/components/schemas/Gabong.PlayGabongRequest'
@@ -3896,6 +3932,7 @@ components:
               Yaniv.PutCardsResponse: '#/components/schemas/Yaniv.PutCardsResponse'
               Uno.UnoCardResponse: '#/components/schemas/Uno.UnoCardResponse'
               Uno.PlayerViewOfGame: '#/components/schemas/Uno.PlayerViewOfGame'
+              TexasHoldEm.PlayerViewOfGame: '#/components/schemas/TexasHoldEm.PlayerViewOfGame'
               Idiot.SwapCardsResponse: '#/components/schemas/Idiot.SwapCardsResponse'
               Idiot.PullInResponse: '#/components/schemas/Idiot.PullInResponse'
               Idiot.DrawCardsResponse: '#/components/schemas/Idiot.DrawCardsResponse'
@@ -3908,6 +3945,365 @@ components:
               CrazyEights.PlayerViewOfGame: '#/components/schemas/CrazyEights.PlayerViewOfGame'
               Common.EmptyResponse: '#/components/schemas/Common.EmptyResponse'
               ChatRoom.ChatResponse: '#/components/schemas/ChatRoom.ChatResponse'
+    TexasHoldEm.BetRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - required:
+            - bet
+          type: object
+          properties:
+            bet:
+              type: integer
+              format: int32
+          additionalProperties: false
+    TexasHoldEm.CallRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+          additionalProperties: false
+    TexasHoldEm.CheckRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+          additionalProperties: false
+    TexasHoldEm.FoldRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+          additionalProperties: false
+    TexasHoldEm.GameEndedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - players
+          type: object
+          properties:
+            players:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.PlayerData'
+          additionalProperties: false
+    TexasHoldEm.GameStartedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - gameId
+            - playerViewOfGame
+          type: object
+          properties:
+            gameId:
+              type: string
+              format: uuid
+            playerViewOfGame:
+              $ref: '#/components/schemas/TexasHoldEm.PlayerViewOfGame'
+          additionalProperties: false
+    TexasHoldEm.ItsYourTurnNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerViewOfGame
+          type: object
+          properties:
+            playerViewOfGame:
+              $ref: '#/components/schemas/TexasHoldEm.PlayerViewOfGame'
+          additionalProperties: false
+    TexasHoldEm.NewCardsRevealed:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - cards
+          type: object
+          properties:
+            cards:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.Card'
+          additionalProperties: false
+    TexasHoldEm.NewRoundStartedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - gameId
+            - playerViewOfGame
+          type: object
+          properties:
+            gameId:
+              type: string
+              format: uuid
+            playerViewOfGame:
+              $ref: '#/components/schemas/TexasHoldEm.PlayerViewOfGame'
+          additionalProperties: false
+    TexasHoldEm.OtherPokerPlayers:
+      required:
+        - currentBet
+        - hasChecked
+        - hasFolded
+        - isAllIn
+        - name
+        - playerId
+        - stackSize
+      type: object
+      properties:
+        playerId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        stackSize:
+          type: integer
+          format: int32
+        currentBet:
+          type: integer
+          format: int32
+        hasChecked:
+          type: boolean
+        isAllIn:
+          type: boolean
+        hasFolded:
+          type: boolean
+      additionalProperties: false
+    TexasHoldEm.PlayerAllInNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
+    TexasHoldEm.PlayerBettedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - betSize
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+            betSize:
+              type: integer
+              format: int32
+          additionalProperties: false
+    TexasHoldEm.PlayerCalledNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
+    TexasHoldEm.PlayerCheckedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
+    TexasHoldEm.PlayerFoldedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
+    TexasHoldEm.PlayerIsOutOfGameNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
+    TexasHoldEm.PlayerViewOfGame:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - required:
+            - bigBlind
+            - cards
+            - cardsOnTable
+            - currentBet
+            - nextRoundStartingPlayerId
+            - numberOfRoundsUntilBigBlindIncreases
+            - otherPlayers
+            - potSize
+            - stackSize
+          type: object
+          properties:
+            cards:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.Card'
+            cardsOnTable:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.Card'
+            stackSize:
+              type: integer
+              format: int32
+            currentBet:
+              type: integer
+              format: int32
+            potSize:
+              type: integer
+              format: int32
+            bigBlind:
+              type: integer
+              format: int32
+            numberOfRoundsUntilBigBlindIncreases:
+              type: integer
+              format: int32
+            otherPlayers:
+              type: array
+              items:
+                $ref: '#/components/schemas/TexasHoldEm.OtherPokerPlayers'
+            nextRoundStartingPlayerId:
+              type: string
+              format: uuid
+          additionalProperties: false
+    TexasHoldEm.RoundEndedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          additionalProperties: false
+    TexasHoldEm.TexasHoldEmGame:
+      allOf:
+        - $ref: '#/components/schemas/Games.GameObject'
+        - required:
+            - allCards
+            - cardsInPlay
+            - currentBigBlind
+            - currentPlayer
+            - currentPlayerIndex
+            - currentSmallBlind
+            - deck
+            - isStarted
+            - maxNumberOfHands
+            - numbersOfRoundsBeforeBlindDoubling
+            - players
+            - roundNumber
+            - startingBigBlind
+            - startingPlayerIndex
+            - startingStackSize
+          type: object
+          properties:
+            startingBigBlind:
+              type: integer
+              format: int32
+              readOnly: true
+            startingStackSize:
+              type: integer
+              format: int32
+              readOnly: true
+            numbersOfRoundsBeforeBlindDoubling:
+              type: integer
+              format: int32
+              readOnly: true
+            maxNumberOfHands:
+              type: integer
+              format: int32
+              readOnly: true
+            players:
+              type: array
+              items:
+                $ref: '#/components/schemas/TexasHoldEm.TexasHoldEmPlayer'
+            allCards:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.Card'
+            isStarted:
+              type: boolean
+              readOnly: true
+            startingPlayerIndex:
+              type: integer
+              format: int32
+            currentPlayerIndex:
+              type: integer
+              format: int32
+            deck:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.Card'
+              readOnly: true
+            cardsInPlay:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.Card'
+              readOnly: true
+            currentBigBlind:
+              type: integer
+              format: int32
+              readOnly: true
+            currentSmallBlind:
+              type: integer
+              format: int32
+              readOnly: true
+            roundNumber:
+              type: integer
+              format: int32
+              readOnly: true
+            currentPlayer:
+              $ref: '#/components/schemas/TexasHoldEm.TexasHoldEmPlayer'
+          additionalProperties: false
+    TexasHoldEm.TexasHoldEmPlayer:
+      required:
+        - cards
+        - currentRoundBet
+        - hasChecked
+        - hasFolded
+        - id
+        - isAllIn
+        - isEliminated
+        - name
+        - stackSize
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        cards:
+          type: array
+          items:
+            $ref: '#/components/schemas/Common.Card'
+        stackSize:
+          type: integer
+          format: int32
+        currentRoundBet:
+          type: integer
+          format: int32
+          readOnly: true
+        isAllIn:
+          type: boolean
+          readOnly: true
+        hasFolded:
+          type: boolean
+          readOnly: true
+        hasChecked:
+          type: boolean
+          readOnly: true
+        isEliminated:
+          type: boolean
+          readOnly: true
+      additionalProperties: false
     Uno.DrawCardRequest:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterRequest'

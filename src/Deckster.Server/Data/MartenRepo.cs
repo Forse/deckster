@@ -34,12 +34,19 @@ public class MartenRepo : IRepo, IDisposable, IAsyncDisposable
     public async Task<Historic<T>?> GetGameAsync<T>(Guid id, long version, CancellationToken cancellationToken = default) where T : GameObject
     {
         var game = await _session.Events.AggregateStreamAsync<T>(id, version, token: cancellationToken);
+        
         if (game == null)
         {
             return null;
         }
+        var state = await _session.Events.FetchStreamStateAsync(id, cancellationToken);
+        if (state == null)
+        {
+            return null;
+        }
+        
         var events = await _session.Events.FetchStreamAsync(id, version, token: cancellationToken);
-        return new Historic<T>(game, events.Select(e => e.Data).ToList());
+        return new Historic<T>(game, events.Select(e => e.Data).ToList(), state.Version);
     }
 
     public IEventQueue<T> StartEventStream<T>(Guid id, IEnumerable<object> startEvents) where T : GameObject
@@ -62,10 +69,12 @@ public class MartenRepo : IRepo, IDisposable, IAsyncDisposable
 public abstract class HistoricGame
 {
     public List<object> Events { get; }
+    public long LastVersion { get; }
     
-    public HistoricGame(List<object> events)
+    public HistoricGame(List<object> events, long lastVersion)
     {
         Events = events;
+        LastVersion = lastVersion;
     }
 
     public abstract GameObject GetGame();
@@ -75,7 +84,8 @@ public class Historic<TGame> : HistoricGame where TGame : GameObject
 {
     public TGame Game { get; }
     
-    public Historic(TGame game, List<object> events) : base(events)
+    
+    public Historic(TGame game, List<object> events, long lastVersion) : base(events, lastVersion)
     {
         Game = game;
     }
