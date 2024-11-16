@@ -15,9 +15,9 @@
 package no.forse.decksterlib.gabong
 
 interface GabongClient {
-    suspend fun putCard(request: PutCardRequest): PlayerViewOfGame
     suspend fun drawCard(request: DrawCardRequest): PlayerViewOfGame
-    suspend fun pass(request: PassRequest): PlayerViewOfGame
     suspend fun playGabong(request: PlayGabongRequest): PlayerViewOfGame
     suspend fun playBonga(request: PlayBongaRequest): PlayerViewOfGame
+    suspend fun pass(request: PassRequest): PlayerViewOfGame
+    suspend fun putCard(request: PutCardRequest): PlayerViewOfGame
 }

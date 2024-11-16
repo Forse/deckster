@@ -48,8 +48,8 @@ public class CrazyEightsGameTest
     }
 
     [Test]
-    [TestCase(1, Suit.Clubs, "You don't have 'A♧'")]
-    [TestCase(12, Suit.Clubs, "Cannot put 'Q♧' on '4♤'")]
+    [TestCase(1, Suit.Clubs, "You don't have 'A♣'")]
+    [TestCase(12, Suit.Clubs, "Cannot put 'Q♣' on '4♠'")]
     public async Task PutCard_Fails(int rank, Suit suit, string errorMessage)
     {
         var game = SetUpGame(g =>
@@ -62,6 +62,7 @@ public class CrazyEightsGameTest
             
             g.DiscardPile.Push(cards.Steal(4, Suit.Spades));
         });
+        game.CurrentPlayerIndex = 0;
         var player = game.Players[0];
         var card = new Card(rank, suit);
         
@@ -73,11 +74,11 @@ public class CrazyEightsGameTest
     public async Task DrawCard_Fails_AfterThreeAttempts()
     {
         var game = CreateGame();
-        var player = game.Players[0];
+        var player = game.CurrentPlayer;
 
         for (var ii = 0; ii < 3; ii++)
         {
-            await game.DrawCard(new DrawCardRequest{ PlayerId = player.Id });
+            Asserts.Success(await game.DrawCard(new DrawCardRequest{ PlayerId = player.Id }));
         }
         
         var result = await game.DrawCard(new DrawCardRequest{ PlayerId = player.Id });
@@ -88,7 +89,7 @@ public class CrazyEightsGameTest
     public async Task Pass_SucceedsAlways()
     {
         var game = CreateGame();
-        var player = game.Players[0];
+        var player = game.CurrentPlayer;
         var result = await game.Pass(new PassRequest{ PlayerId = player.Id });
         Asserts.Success(result);
     }
@@ -115,6 +116,7 @@ public class CrazyEightsGameTest
             
             g.DiscardPile.Push(cards.Steal(10, Suit.Clubs));
         });
+        game.CurrentPlayerIndex = 0;
         var player = game.CurrentPlayer;
         var eight = new Card(8, Suit.Spades);
         Asserts.Success(await game.PutEight(new PutEightRequest{ PlayerId = player.Id, Card = eight, NewSuit = newSuit }));
@@ -130,6 +132,7 @@ public class CrazyEightsGameTest
     public async Task PutEight_Fails_WhenNotEight()
     {
         var game = CreateGame();
+        game.CurrentPlayerIndex = 0;
         var player = game.Players[0];
         var notEight = player.Cards[0];
         var result = await game.PutEight(new PutEightRequest{ PlayerId = player.Id, Card = notEight, NewSuit = Suit.Clubs });

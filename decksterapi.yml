@@ -2475,6 +2475,17 @@ components:
             playerViewOfGame:
               $ref: '#/components/schemas/CrazyEights.PlayerViewOfGame'
           additionalProperties: false
+    CrazyEights.ItsPlayersTurnNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
     CrazyEights.ItsYourTurnNotification:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterNotification'
@@ -2624,11 +2635,6 @@ components:
             newSuit:
               $ref: '#/components/schemas/Common.Suit'
           additionalProperties: false
-    CrazyEights.YouAreDoneNotification:
-      allOf:
-        - $ref: '#/components/schemas/Protocol.DecksterNotification'
-        - type: object
-          additionalProperties: false
     Data.DatabaseObject:
       required:
         - id
@@ -2714,7 +2720,6 @@ components:
         - required:
             - cardsDrawn
             - cardsToDraw
-            - clockRunning
             - currentPlayer
             - currentSuit
             - deck
@@ -2728,6 +2733,9 @@ components:
             - topOfPile
           type: object
           properties:
+            lastPlayMadeByPlayerIndex:
+              type: integer
+              format: int32
             cardsToDraw:
               type: integer
               format: int32
@@ -2740,9 +2748,6 @@ components:
             gabongMasterId:
               type: string
               format: uuid
-            lastPlayMadeByPlayerIndex:
-              type: integer
-              format: int32
             isBetweenRounds:
               type: boolean
             deck:
@@ -2753,12 +2758,10 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/Common.Card'
-              readOnly: true
             discardPile:
               type: array
               items:
                 $ref: '#/components/schemas/Common.Card'
-              readOnly: true
             players:
               type: array
               items:
@@ -2771,9 +2774,6 @@ components:
               $ref: '#/components/schemas/Common.Suit'
             currentPlayer:
               $ref: '#/components/schemas/Gabong.GabongPlayer'
-            clockRunning:
-              type: boolean
-              readOnly: true
           additionalProperties: false
     Gabong.GabongGameNotification:
       allOf:
@@ -2886,6 +2886,7 @@ components:
           discriminator:
             propertyName: type
             mapping:
+              Gabong.PutCardRequest: '#/components/schemas/Gabong.PutCardRequest'
               Gabong.DrawCardRequest: '#/components/schemas/Gabong.DrawCardRequest'
               Gabong.PassRequest: '#/components/schemas/Gabong.PassRequest'
               Gabong.PlayGabongRequest: '#/components/schemas/Gabong.PlayGabongRequest'
@@ -3062,7 +3063,7 @@ components:
           additionalProperties: false
     Gabong.PutCardRequest:
       allOf:
-        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - $ref: '#/components/schemas/Gabong.GabongRequest'
         - required:
             - card
           type: object
@@ -3749,8 +3750,8 @@ components:
           Gabong.GabongCardResponse: '#/components/schemas/Gabong.GabongCardResponse'
           Gabong.ActionResponse: '#/components/schemas/Gabong.ActionResponse'
           Gabong.PlayerViewOfGame: '#/components/schemas/Gabong.PlayerViewOfGame'
-          Gabong.PutCardRequest: '#/components/schemas/Gabong.PutCardRequest'
           Gabong.GabongRequest: '#/components/schemas/Gabong.GabongRequest'
+          Gabong.PutCardRequest: '#/components/schemas/Gabong.PutCardRequest'
           Gabong.DrawCardRequest: '#/components/schemas/Gabong.DrawCardRequest'
           Gabong.PassRequest: '#/components/schemas/Gabong.PassRequest'
           Gabong.PlayGabongRequest: '#/components/schemas/Gabong.PlayGabongRequest'
@@ -3765,9 +3766,9 @@ components:
           CrazyEights.PlayerDrewCardNotification: '#/components/schemas/CrazyEights.PlayerDrewCardNotification'
           CrazyEights.PlayerPassedNotification: '#/components/schemas/CrazyEights.PlayerPassedNotification'
           CrazyEights.ItsYourTurnNotification: '#/components/schemas/CrazyEights.ItsYourTurnNotification'
+          CrazyEights.ItsPlayersTurnNotification: '#/components/schemas/CrazyEights.ItsPlayersTurnNotification'
           CrazyEights.GameStartedNotification: '#/components/schemas/CrazyEights.GameStartedNotification'
           CrazyEights.GameEndedNotification: '#/components/schemas/CrazyEights.GameEndedNotification'
-          CrazyEights.YouAreDoneNotification: '#/components/schemas/CrazyEights.YouAreDoneNotification'
           CrazyEights.PlayerIsDoneNotification: '#/components/schemas/CrazyEights.PlayerIsDoneNotification'
           CrazyEights.DiscardPileShuffledNotification: '#/components/schemas/CrazyEights.DiscardPileShuffledNotification'
           CrazyEights.PlayerViewOfGame: '#/components/schemas/CrazyEights.PlayerViewOfGame'
@@ -3829,9 +3830,9 @@ components:
               CrazyEights.PlayerDrewCardNotification: '#/components/schemas/CrazyEights.PlayerDrewCardNotification'
               CrazyEights.PlayerPassedNotification: '#/components/schemas/CrazyEights.PlayerPassedNotification'
               CrazyEights.ItsYourTurnNotification: '#/components/schemas/CrazyEights.ItsYourTurnNotification'
+              CrazyEights.ItsPlayersTurnNotification: '#/components/schemas/CrazyEights.ItsPlayersTurnNotification'
               CrazyEights.GameStartedNotification: '#/components/schemas/CrazyEights.GameStartedNotification'
               CrazyEights.GameEndedNotification: '#/components/schemas/CrazyEights.GameEndedNotification'
-              CrazyEights.YouAreDoneNotification: '#/components/schemas/CrazyEights.YouAreDoneNotification'
               CrazyEights.PlayerIsDoneNotification: '#/components/schemas/CrazyEights.PlayerIsDoneNotification'
               CrazyEights.DiscardPileShuffledNotification: '#/components/schemas/CrazyEights.DiscardPileShuffledNotification'
               ChatRoom.ChatNotification: '#/components/schemas/ChatRoom.ChatNotification'
@@ -3865,8 +3866,8 @@ components:
               Idiot.PutChanceCardRequest: '#/components/schemas/Idiot.PutChanceCardRequest'
               Gabong.PenalizePlayerForTakingTooLongRequest: '#/components/schemas/Gabong.PenalizePlayerForTakingTooLongRequest'
               Gabong.PenalizePlayerForTooManyCardsRequest: '#/components/schemas/Gabong.PenalizePlayerForTooManyCardsRequest'
-              Gabong.PutCardRequest: '#/components/schemas/Gabong.PutCardRequest'
               Gabong.GabongRequest: '#/components/schemas/Gabong.GabongRequest'
+              Gabong.PutCardRequest: '#/components/schemas/Gabong.PutCardRequest'
               Gabong.DrawCardRequest: '#/components/schemas/Gabong.DrawCardRequest'
               Gabong.PassRequest: '#/components/schemas/Gabong.PassRequest'
               Gabong.PlayGabongRequest: '#/components/schemas/Gabong.PlayGabongRequest'

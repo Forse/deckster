@@ -77,7 +77,6 @@
             "Gabong.PenalizePlayerForTakingTooLongRequest": "#/components/schemas/Gabong.PenalizePlayerForTakingTooLongRequest",
             "Gabong.PenalizePlayerForTooManyCardsRequest": "#/components/schemas/Gabong.PenalizePlayerForTooManyCardsRequest",
             "Gabong.ActionResponse": "#/components/schemas/Gabong.ActionResponse",
-            "Gabong.PutCardRequest": "#/components/schemas/Gabong.PutCardRequest",
             "CrazyEights.PutCardRequest": "#/components/schemas/CrazyEights.PutCardRequest",
             "CrazyEights.PutEightRequest": "#/components/schemas/CrazyEights.PutEightRequest",
             "CrazyEights.DrawCardRequest": "#/components/schemas/CrazyEights.DrawCardRequest",
@@ -89,9 +88,9 @@
             "CrazyEights.PlayerPassedNotification": "#/components/schemas/CrazyEights.PlayerPassedNotification",
             "CrazyEights.ItsYourTurnNotification": "#/components/schemas/CrazyEights.ItsYourTurnNotification",
             "CrazyEights.PlayerViewOfGame": "#/components/schemas/CrazyEights.PlayerViewOfGame",
+            "CrazyEights.ItsPlayersTurnNotification": "#/components/schemas/CrazyEights.ItsPlayersTurnNotification",
             "CrazyEights.GameStartedNotification": "#/components/schemas/CrazyEights.GameStartedNotification",
             "CrazyEights.GameEndedNotification": "#/components/schemas/CrazyEights.GameEndedNotification",
-            "CrazyEights.YouAreDoneNotification": "#/components/schemas/CrazyEights.YouAreDoneNotification",
             "CrazyEights.PlayerIsDoneNotification": "#/components/schemas/CrazyEights.PlayerIsDoneNotification",
             "CrazyEights.DiscardPileShuffledNotification": "#/components/schemas/CrazyEights.DiscardPileShuffledNotification",
             "Common.EmptyResponse": "#/components/schemas/Common.EmptyResponse",
@@ -107,6 +106,7 @@
             "Gabong.PlayerViewOfGame": "#/components/schemas/Gabong.PlayerViewOfGame",
             "Gabong.RoundEndedNotification": "#/components/schemas/Gabong.RoundEndedNotification",
             "Gabong.GabongCardResponse": "#/components/schemas/Gabong.GabongCardResponse",
+            "Gabong.PutCardRequest": "#/components/schemas/Gabong.PutCardRequest",
             "Gabong.DrawCardRequest": "#/components/schemas/Gabong.DrawCardRequest",
             "Gabong.PassRequest": "#/components/schemas/Gabong.PassRequest",
             "Gabong.PlayGabongRequest": "#/components/schemas/Gabong.PlayGabongRequest",
@@ -154,12 +154,12 @@
             "Idiot.PutChanceCardRequest": "#/components/schemas/Idiot.PutChanceCardRequest",
             "Gabong.PenalizePlayerForTakingTooLongRequest": "#/components/schemas/Gabong.PenalizePlayerForTakingTooLongRequest",
             "Gabong.PenalizePlayerForTooManyCardsRequest": "#/components/schemas/Gabong.PenalizePlayerForTooManyCardsRequest",
-            "Gabong.PutCardRequest": "#/components/schemas/Gabong.PutCardRequest",
             "CrazyEights.PutCardRequest": "#/components/schemas/CrazyEights.PutCardRequest",
             "CrazyEights.PutEightRequest": "#/components/schemas/CrazyEights.PutEightRequest",
             "CrazyEights.DrawCardRequest": "#/components/schemas/CrazyEights.DrawCardRequest",
             "CrazyEights.PassRequest": "#/components/schemas/CrazyEights.PassRequest",
             "ChatRoom.SendChatRequest": "#/components/schemas/ChatRoom.SendChatRequest",
+            "Gabong.PutCardRequest": "#/components/schemas/Gabong.PutCardRequest",
             "Gabong.DrawCardRequest": "#/components/schemas/Gabong.DrawCardRequest",
             "Gabong.PassRequest": "#/components/schemas/Gabong.PassRequest",
             "Gabong.PlayGabongRequest": "#/components/schemas/Gabong.PlayGabongRequest",
@@ -214,9 +214,9 @@
             "CrazyEights.PlayerDrewCardNotification": "#/components/schemas/CrazyEights.PlayerDrewCardNotification",
             "CrazyEights.PlayerPassedNotification": "#/components/schemas/CrazyEights.PlayerPassedNotification",
             "CrazyEights.ItsYourTurnNotification": "#/components/schemas/CrazyEights.ItsYourTurnNotification",
+            "CrazyEights.ItsPlayersTurnNotification": "#/components/schemas/CrazyEights.ItsPlayersTurnNotification",
             "CrazyEights.GameStartedNotification": "#/components/schemas/CrazyEights.GameStartedNotification",
             "CrazyEights.GameEndedNotification": "#/components/schemas/CrazyEights.GameEndedNotification",
-            "CrazyEights.YouAreDoneNotification": "#/components/schemas/CrazyEights.YouAreDoneNotification",
             "CrazyEights.PlayerIsDoneNotification": "#/components/schemas/CrazyEights.PlayerIsDoneNotification",
             "CrazyEights.DiscardPileShuffledNotification": "#/components/schemas/CrazyEights.DiscardPileShuffledNotification",
             "ChatRoom.ChatNotification": "#/components/schemas/ChatRoom.ChatNotification",
@@ -365,6 +365,7 @@
         "discriminator": {
           "propertyName": "type",
           "mapping": {
+            "Gabong.PutCardRequest": "#/components/schemas/Gabong.PutCardRequest",
             "Gabong.DrawCardRequest": "#/components/schemas/Gabong.DrawCardRequest",
             "Gabong.PassRequest": "#/components/schemas/Gabong.PassRequest",
             "Gabong.PlayGabongRequest": "#/components/schemas/Gabong.PlayGabongRequest",
@@ -1825,34 +1826,6 @@
           }
         ]
       },
-      "Gabong.PutCardRequest": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterRequest"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "card": {
-                "type": "object",
-                "properties": {
-                  "rank": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
-                  "suit": {
-                    "type": "string"
-                  }
-                }
-              },
-              "newSuit": {
-                "type": "string"
-              }
-            }
-          }
-        ]
-      },
       "CrazyEights.PutCardRequest": {
         "type": "object",
         "allOf": [
@@ -2173,6 +2146,23 @@
           }
         }
       },
+      "CrazyEights.ItsPlayersTurnNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
+        ]
+      },
       "CrazyEights.GameStartedNotification": {
         "type": "object",
         "allOf": [
@@ -2261,17 +2251,6 @@
                 "type": "string"
               }
             }
-          }
-        ]
-      },
-      "CrazyEights.YouAreDoneNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterNotification"
-          },
-          {
-            "type": "object"
           }
         ]
       },
@@ -2676,6 +2655,34 @@
                     "type": "string"
                   }
                 }
+              }
+            }
+          }
+        ]
+      },
+      "Gabong.PutCardRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Gabong.GabongRequest"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "card": {
+                "type": "object",
+                "properties": {
+                  "rank": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "suit": {
+                    "type": "string"
+                  }
+                }
+              },
+              "newSuit": {
+                "type": "string"
               }
             }
           }
