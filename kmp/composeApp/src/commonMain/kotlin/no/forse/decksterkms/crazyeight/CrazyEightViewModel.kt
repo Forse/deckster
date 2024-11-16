@@ -12,6 +12,7 @@ import no.forse.decksterlib.DecksterServer
 import no.forse.decksterlib.crazyeights.CrazyEightsClient
 import no.forse.decksterlib.model.common.Card
 import no.forse.decksterlib.model.common.Suit
+import no.forse.decksterlib.model.crazyeights.PlayerViewOfGame
 import threadpoolScope
 import kotlin.reflect.KClass
 
@@ -67,17 +68,30 @@ class CrazyEightViewModel(
                     }
                 } else {
                     println("XXX will draw card")
-                    val drawnCard = crazyEightsClient.drawCard()
+                    val drawnCard = drawCard(3, playerView)
                     println("XXX drawn Card $drawnCard")
-                    if (drawnCard.card.suit == playerView.currentSuit || drawnCard.card.rank == playerView.topOfPile.rank) {
+                    if (drawnCard != null) {
                         println("XXX will put $drawnCard")
-                        crazyEightsClient.putCard(drawnCard.card)
+                        crazyEightsClient.putCard(drawnCard)
                     } else {
                         println("XXX will pass turn")
                         crazyEightsClient.passTurn()
                     }
                 }
             }
+        }
+    }
+
+    private suspend fun drawCard(numberOfCardsToDraw: Int, playerView: PlayerViewOfGame): Card? {
+        if (numberOfCardsToDraw == 0) {
+            return null
+        }
+
+        val drawnCard = crazyEightsClient.drawCard()
+        return if (drawnCard.card.suit == playerView.currentSuit || drawnCard.card.rank == playerView.topOfPile.rank) {
+            drawnCard.card
+        } else {
+            drawCard(numberOfCardsToDraw - 1, playerView)
         }
     }
 
