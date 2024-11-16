@@ -12,6 +12,8 @@ import no.forse.decksterlib.DecksterServer
 import no.forse.decksterlib.crazyeights.CrazyEightsClient
 import no.forse.decksterlib.model.common.Card
 import no.forse.decksterlib.model.common.Suit
+import no.forse.decksterlib.model.crazyeights.PlayerPutCardNotification
+import no.forse.decksterlib.model.crazyeights.PlayerPutEightNotification
 import no.forse.decksterlib.model.crazyeights.PlayerViewOfGame
 import threadpoolScope
 import kotlin.reflect.KClass
@@ -51,17 +53,20 @@ class CrazyEightViewModel(
 
         threadpoolScope.launch {
             crazyEightsClient.crazyEightsNotifications?.collect {
-                println(it.type)
+                when(it) {
+                    is PlayerPutCardNotification, is PlayerPutEightNotification -> _uiState.emit(CrazyEightUiState(crazyEightsClient.currentState!!.cards, crazyEightsClient.currentState!!.topOfPile))
+                }
             }
         }
 
         threadpoolScope.launch {
+
             crazyEightsClient.yourTurnFlow.collect { playerView ->
                 println("XXX my turn")
 
+                // show initial state
                 _uiState.emit(CrazyEightUiState(playerView.cards, playerView.topOfPile))
-
-                delay(3000)
+                delay(2000)
 
                 val cardToPut = determineCardToPut(playerView.topOfPile, playerView.currentSuit, playerView.cards)
                 if (cardToPut != null) {
@@ -86,6 +91,10 @@ class CrazyEightViewModel(
                         crazyEightsClient.passTurn()
                     }
                 }
+
+                // new state, while waiting for
+                _uiState.emit(CrazyEightUiState(playerView.cards, playerView.topOfPile))
+
             }
         }
     }
