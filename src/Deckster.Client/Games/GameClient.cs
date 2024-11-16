@@ -1,6 +1,7 @@
 using Deckster.Client.Logging;
 using Deckster.Core.Communication;
 using Deckster.Core.Games.Common;
+using Deckster.Core.Games.Gabong;
 using Deckster.Core.Protocol;
 using Deckster.Core.Serialization;
 using Microsoft.Extensions.Logging;
@@ -34,9 +35,12 @@ public abstract class GameClient : IGameClient
         var response = await Channel.SendAsync<DecksterResponse>(request, DecksterJson.Options, cancellationToken);
         //Logger.LogTrace($"Got response {response.Pretty()}");
         
-        if (response is {HasError: true} && throwOnError)
+        if (response is {HasError: true})
         {
-            throw new OhNoesException(response.Error);
+            if (throwOnError)
+            {
+                throw new OhNoesException(response.Error);
+            }
         }
         return response switch
         {

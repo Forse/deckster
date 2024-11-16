@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 fun GamesLobby(
     viewModel: GamesLobbyViewModel,
     onEnterGameName: (String) -> Unit,
+    onSpectateGameName: (String) -> Unit,
     onBackpressed: () -> Unit,
 ) {
     BaseScreen(topBarTitle = "Gaming Rooms", onBackPressed = {
@@ -33,11 +34,17 @@ fun GamesLobby(
                 ) {
                     item { Text("Chat Rooms") }
                     items(chatRoomUiState.games) { game ->
-                        GameInfoCard(game, onJoinGameClicked = {
-                            viewModel.join(game.name) {
+                        GameInfoCard(game,
+                            onJoinGameClicked = {
+                                viewModel.stopListening()
                                 onEnterGameName(game.name)
+
+                            },
+                            onSpectateClicked = {
+                                viewModel.stopListening()
+                                onSpectateGameName(game.name)
                             }
-                        })
+                        )
                     }
                 }
             }

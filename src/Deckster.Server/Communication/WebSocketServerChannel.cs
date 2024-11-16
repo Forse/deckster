@@ -47,7 +47,7 @@ public class WebSocketServerChannel : IServerChannel
     public ValueTask SendNotificationAsync<TNotification>(TNotification notification, JsonSerializerOptions options, CancellationToken cancellationToken = default)
     {
         var bytes = JsonSerializer.SerializeToUtf8Bytes(notification, options);
-        Console.WriteLine($"Post {bytes.Length} bytes to {Player.Name}");
+        //Console.WriteLine($"Post {bytes.Length} bytes to {Player.Name}");
         return _notificationSocket.SendAsync(bytes, WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, cancellationToken);
     }
     
@@ -59,7 +59,7 @@ public class WebSocketServerChannel : IServerChannel
             while (!cancellationToken.IsCancellationRequested)
             {
                 var result = await _actionSocket.ReceiveAsync(buffer, cancellationToken);
-                Console.WriteLine($"Got messageType: '{result.MessageType}'");
+                // Console.WriteLine($"Got messageType: '{result.MessageType}'");
 
                 switch (result.MessageType)
                 {
@@ -89,7 +89,8 @@ public class WebSocketServerChannel : IServerChannel
                         return;
                 }
             
-                var request = JsonSerializer.Deserialize<TRequest>(new ArraySegment<byte>(buffer, 0, result.Count), options);
+                var stringbuffer = Encoding.UTF8.GetString(new ArraySegment<byte>(buffer, 0, result.Count));
+                var request = JsonSerializer.Deserialize<TRequest>(stringbuffer, options);
                 
                 if (request == null)
                 {
@@ -100,7 +101,7 @@ public class WebSocketServerChannel : IServerChannel
                 else
                 {
                     request.PlayerId = Player.Id;
-                    Console.WriteLine($"Got request: {request.Pretty()}");
+                    // Console.WriteLine($"Got request: {request.Pretty()}");
                     try
                     {
                         handle(this, request);

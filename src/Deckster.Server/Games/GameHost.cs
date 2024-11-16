@@ -25,6 +25,7 @@ public abstract class GameHost : IGameHost
     private readonly TaskCompletionSource<Guid?> _tcs = new();
     
     protected readonly ConcurrentDictionary<Guid, IServerChannel> Players = new();
+    protected readonly ConcurrentDictionary<Guid, IServerChannel> Spectators = new();
     protected readonly CancellationTokenSource Cts = new();
 
     protected readonly JsonSerializerOptions JsonOptions = DecksterJson.Options;
@@ -56,10 +57,30 @@ public abstract class GameHost : IGameHost
         error = default;
         return true;
     }
+    
+    public bool TryAddSpectator(IServerChannel channel, [MaybeNullWhen(true)] out string error)
+    {
+        if (!Spectators.TryAdd(channel.Player.Id, channel))
+        {
+            error = "Could not add spectator";
+            return false;
+        }
+
+        channel.StartReading<DecksterRequest>(RequestFromSpectatorReceived, JsonOptions, Cts.Token);
+        channel.Disconnected += ChannelDisconnected;
+
+        error = default;
+        return true;
+    }
 
     public abstract Task NotifySelfAsync(DecksterRequest notification);
     
     protected abstract void RequestReceived(IServerChannel channel, DecksterRequest request);
+
+    protected virtual void RequestFromSpectatorReceived(IServerChannel channel, DecksterRequest request)
+    {
+        //ignore
+    }
     protected abstract void ChannelDisconnected(IServerChannel channel, DisconnectReason readon);
     
     public abstract bool TryAddBot([MaybeNullWhen(true)] out string error);

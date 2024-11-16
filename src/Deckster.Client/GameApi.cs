@@ -31,7 +31,12 @@ public class GameApi<TClient>
     
     public async Task<TClient> JoinAsync(string gameName, CancellationToken cancellationToken = default)
     {
-        var channel = await WebSocketClientChannel.ConnectAsync(_baseUri, gameName, _token, Log.Factory, cancellationToken);
+        var channel = await WebSocketClientChannel.ConnectAsPlayerAsync(_baseUri, gameName, _token, Log.Factory, cancellationToken);
+        return _createClient(channel);
+    }  
+    public async Task<TClient> SpectateAsync(string gameName, CancellationToken cancellationToken = default)
+    {
+        var channel = await WebSocketClientChannel.ConnectAsSpectatorAsync(_baseUri, gameName, _token, Log.Factory, cancellationToken);
         return _createClient(channel);
     }
 

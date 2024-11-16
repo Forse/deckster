@@ -27,18 +27,8 @@ class GamesLobbyViewModel(
     val uiState: StateFlow<GamesLobbyUiState> = _uiState.asStateFlow()
 
 
-    fun join(gameId: String, onDone: () -> Unit) = viewModelScope.launch {
-        try {
-            //val server = decksterServer ?: throw IllegalStateException("Server is null")
-           // val token = server.accessToken ?: throw IllegalStateException("Token is null. Have you logged in?")
-           // val gameIniter = DecksterGameInitiater(server, gameName, token)
-
-         //   val connectedGame = gameIniter.join(gameId)
-            gamePollTimer?.cancel()
-            onDone()
-        } catch (ex: Exception) {
-            println("Error joining game $gameId for $gameName : $ex")
-        }
+    fun stopListening()  {
+        gamePollTimer?.cancel()
     }
 
     var gamePollTimer: Timer? = null

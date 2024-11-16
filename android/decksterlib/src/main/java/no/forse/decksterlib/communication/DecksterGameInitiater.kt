@@ -42,6 +42,14 @@ class DecksterGameInitiater(
         }
     }
 
+    suspend fun spectate(gameId: String): ConnectedDecksterGame {
+        val request = decksterServer.getRequest("$name/spectate/$gameId", token)
+        val connection = decksterServer.connectWebSocket(request)
+        return suspendCancellableCoroutine<ConnectedDecksterGame> { cont ->
+            handleConnectionMessages(connection, cont)
+        }
+    }
+
     private fun handleConnectionMessages(connection: WebSocketConnection, cont: Continuation<ConnectedDecksterGame>) {
         handshakeJob = threadpoolScope.launch {
             connection.messageFlowOneReplay.collect { strMsg ->

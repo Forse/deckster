@@ -13,6 +13,7 @@ public interface IGameHost : ICommunication
     GameState State { get; }
     Task StartAsync();
     bool TryAddPlayer(IServerChannel channel, [MaybeNullWhen(true)] out string error);
+    bool TryAddSpectator(IServerChannel channel, [MaybeNullWhen(true)] out string error);
     bool TryAddBot([MaybeNullWhen(true)] out string error);
     Task EndAsync();
     List<PlayerData> GetPlayers();

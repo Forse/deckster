@@ -23,7 +23,7 @@ class CrazyEightsClientTest {
         println("Game created")
 
         println("Joining game ${gameInfo.id}")
-        crazyEightsClient.joinGame(gameInfo.id!!)
+        crazyEightsClient.join(gameInfo.id!!)
         println("Game joined")
 
 
@@ -45,11 +45,11 @@ class CrazyEightsClientTest {
         val gameInfo = crazyEightsClient1.createGame()
 
         println("mkohm joining")
-        crazyEightsClient1.joinGame(gameInfo.id!!)
+        crazyEightsClient1.join(gameInfo.id!!)
         println("mkohm joined")
 
         println("mkohm2 joining")
-        crazyEightsClient2.joinGame(gameInfo.id!!)
+        crazyEightsClient2.join(gameInfo.id!!)
         println("mkohm2 joined")
 
         println("mkohm starting game")
@@ -77,7 +77,7 @@ class CrazyEightsClientTest {
         println("Roger logged in")
 
         val gameInfo = crazyEightsClient1.createGame()
-        crazyEightsClient1.joinGame("0b7041d4db60442cb21e6f98b11a9f48")
+        crazyEightsClient1.join("0b7041d4db60442cb21e6f98b11a9f48")
         println("Waiting for game to start...")
         val state = crazyEightsClient1.gameStarted.await()
         val myCards = state.cards

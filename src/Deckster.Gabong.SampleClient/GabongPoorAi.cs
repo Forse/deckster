@@ -58,7 +58,7 @@ public class GabongPoorAi
             while (!_tcs.Task.IsCompleted)
             {
                 await ThinkAboutDoingSomething(_view);
-                await Task.Delay(10+new Random().Next(50));
+                await Task.Delay(100+new Random().Next(50));
             }
         });
     }
@@ -130,6 +130,9 @@ public class GabongPoorAi
 
     private async Task ThinkAboutDoingSomething(PlayerViewOfGame? obj)
     {
+        try
+        {
+            
         if (!_weArePlaying)
         {
             return;
@@ -143,6 +146,10 @@ public class GabongPoorAi
             _roundLog.Add($"i believe it's my turn. Top: {_view.TopOfPile} ({_view.CurrentSuit}). I have: {string.Join(", ", _view.Cards)}");
             await DoSomePlay(obj);
         }
+        }catch(Exception e)
+        {
+            _logger.LogError(e, "Argh");
+        }
     }
 
     private async Task DoSomePlay(PlayerViewOfGame viewOfGame)
@@ -150,6 +157,7 @@ public class GabongPoorAi
         try{
             if (viewOfGame.CardDebtToDraw > 0)
             {
+                viewOfGame.CardDebtToDraw--;
                 var result = await _client.DrawCardAsync(new DrawCardRequest());
                 UpdateView(result);
                 return;
@@ -172,9 +180,15 @@ public class GabongPoorAi
             }
             else
             {
-                _view.LastPlayMadeByPlayerId = _client.PlayerData.Id;
-                _view.LastPlay = GabongPlay.TurnLost;
                 _view = await _client.DrawCardAsync(new DrawCardRequest());   
+                
+                var cardToPlayAfterDraw = FindCardToPlay(viewOfGame);
+                if (cardToPlayAfterDraw == null)
+                {
+                    _view.LastPlayMadeByPlayerId = _client.PlayerData.Id;
+                    _view.LastPlay = GabongPlay.TurnLost;
+                    await _client.PassAsync(new PassRequest()); 
+                }//else next iteration will have something to do
             }
         }
         catch (Exception e)

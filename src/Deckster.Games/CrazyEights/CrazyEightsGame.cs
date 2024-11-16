@@ -10,6 +10,7 @@ public class CrazyEightsGame : GameObject
     public event NotifyPlayer<GameStartedNotification>? GameStarted;
     public event NotifyAll<PlayerDrewCardNotification>? PlayerDrewCard;
     public event NotifyPlayer<ItsYourTurnNotification>? ItsYourTurn;
+    public event NotifyAll<ItsPlayersTurnNotification>? ItsPlayersTurn;
     public event NotifyAll<PlayerPassedNotification>? PlayerPassed;
     public event NotifyAll<PlayerPutCardNotification>? PlayerPutCard;
     public event NotifyAll<PlayerPutEightNotification>? PlayerPutEight;
@@ -47,6 +48,7 @@ public class CrazyEightsGame : GameObject
     /// All the players
     /// </summary>
     public List<CrazyEightsPlayer> Players { get; init; } = [];
+    public List<CrazyEightsSpectator> Spectators { get; init; } = [];
 
     public Suit? NewSuit { get; set; }
     public Card TopOfPile => DiscardPile.Peek();
@@ -81,7 +83,6 @@ public class CrazyEightsGame : GameObject
             player.Cards.Clear();
         }
         
-        CurrentPlayerIndex = 0;
         DonePlayers.Clear();
         StockPile.Clear();
         StockPile.PushRange(Deck);
@@ -96,6 +97,7 @@ public class CrazyEightsGame : GameObject
         DiscardPile.Clear();
         DiscardPile.Push(StockPile.Pop());
         DonePlayers.Clear();
+        CurrentPlayerIndex = new Random(Seed).Next(0, Players.Count);
     }
 
     public async Task<PlayerViewOfGame> PutCard(PutCardRequest request)
@@ -310,6 +312,10 @@ public class CrazyEightsGame : GameObject
                 {
                     PlayerViewOfGame = GetPlayerViewOfGame(CurrentPlayer)
                 });
+                await ItsPlayersTurn.InvokeOrDefault(() => new ItsPlayersTurnNotification
+                {
+                    PlayerId = CurrentPlayer.Id
+                });
             break;
         }
     }
@@ -413,9 +419,23 @@ public class CrazyEightsGame : GameObject
             });
         }
 
-        await ItsYourTurn.InvokeOrDefault(CurrentPlayer.Id, () => new ItsYourTurnNotification
+        var current = CurrentPlayer;
+        await ItsYourTurn.InvokeOrDefault(current.Id, () => new ItsYourTurnNotification
         {
-            PlayerViewOfGame = GetPlayerViewOfGame(CurrentPlayer)
+            PlayerViewOfGame = GetPlayerViewOfGame(current)
         });
+        await ItsPlayersTurn.InvokeOrDefault(() => new ItsPlayersTurnNotification {PlayerId = current.Id});
     }
+}
+
+public class CrazyEightsSpectator
+{
+    public Guid Id { get; init; }
+    public string Name { get; init; } = "";
+
+    public static readonly CrazyEightsSpectator Null = new()
+    {
+        Id = Guid.Parse("6D31A8DA-5766-458A-B113-8D0444BBEDBD"),
+        Name = "PST"
+    };
 }

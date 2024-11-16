@@ -7,8 +7,6 @@ import kotlinx.coroutines.runBlocking
 import no.forse.decksterlib.authentication.LoginModel
 import no.forse.decksterlib.chatroom.ChatRoomClient
 import org.junit.Test
-import java.net.HttpURLConnection
-import java.net.URL
 
 
 class DecksterServerTest {
@@ -36,7 +34,7 @@ class DecksterServerTest {
         chatGame.login(user)
 
         println ("Joining game START...")
-        chatGame.joinGame(gameId)
+        chatGame.join(gameId)
         println ("Joining game DONE...")
         chatGame.chatAsync(message = "hi there " + (Math.random() * 1000).toInt())
 

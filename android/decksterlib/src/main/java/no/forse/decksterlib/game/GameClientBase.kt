@@ -30,6 +30,7 @@ abstract class GameClientBase(
         get() = joinedGame ?: throw IllegalStateException("Game is not joined")
 
     protected var notifFlowJob: Job? = null
+    protected var isSpectateMode = false
 
     suspend fun createGame(): GameInfo {
         game ?: throw IllegalStateException("You need to login first")
@@ -38,19 +39,34 @@ abstract class GameClientBase(
 
     suspend fun startGame(gameId: String) = decksterServer.startGame(gameId, gameName)
 
-    suspend fun joinGame(gameId: String): ConnectedDecksterGame {
+    suspend fun join(gameId: String): ConnectedDecksterGame {
         val loggedInGame = game ?: throw IllegalStateException("You need to login first")
         return loggedInGame.join(gameId).also {
-            println ("-------- LIZTN START")
+            println("-------- LIZTN START")
+            joinedGame = it
+            isSpectateMode = false
+            listenToBusinessNotifications()
+            onGameJoined()
+        }
+    }
+
+    suspend fun spectate(gameId: String): ConnectedDecksterGame {
+        val loggedInGame = game ?: throw IllegalStateException("You need to login first")
+        return loggedInGame.spectate(gameId).also {
+            println("--- Spectate mode connected")
+            isSpectateMode = true
             joinedGame = it
             listenToBusinessNotifications()
             onGameJoined()
         }
     }
 
-    suspend fun joinGame(token: String, gameId: String): ConnectedDecksterGame {
+    protected fun guardNotSpectateMode() {
+        if (isSpectateMode) throw IllegalStateException("Can't do actions while in spectator mode")
+    }
+
+    fun prepareLoggedInGamme(token: String) {
         game = DecksterGameInitiater(decksterServer, gameName, token)
-        return joinGame(gameId)
     }
 
     private fun listenToBusinessNotifications() {

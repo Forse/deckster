@@ -53,19 +53,29 @@ fun main() = application {
                     modelClass = GamesLobbyViewModel::class,
                     factory = GamesLobbyViewModel.Factory("chatroom", appState.loggedInDecksterServer!!)
                 )
-                GamesLobby(gameRoomVm, onEnterGameName = { gameName ->
-                    appState.gameNameToJoin = gameName
-                    navController.navigate(
-                        "chat/${gameName}"
-                    )
-                }, onBackpressed = navController::popBackStack)
+                GamesLobby(gameRoomVm,
+                    onEnterGameName = { gameName ->
+                        appState.gameNameToJoin = gameName
+                        appState.doSpectate = false
+                        navController.navigate(
+                            "chat/${gameName}"
+                        )
+                    },
+                    onSpectateGameName = { gameName ->
+                        appState.gameNameToJoin = gameName
+                        appState.doSpectate = true
+                        navController.navigate(
+                            "chat/${gameName}"
+                        )
+                    },
+                onBackpressed = navController::popBackStack)
             }
 
             composable("chat/{gameId}") { backstack ->
-                val gameId = backstack.arguments?.getString("gameId")
+                val gameId = backstack.arguments?.getString("gameId")!!
                 val chatViewModel = viewModel(
                     modelClass = ChatViewModel::class,
-                    factory = ChatViewModel.Factory(appState.gameNameToJoin!!, appState.loggedInDecksterServer!!)
+                    factory = ChatViewModel.Factory(gameId, appState.loggedInDecksterServer!!)
                 )
                 Chat(viewModel = chatViewModel, onBackpressed = {
                     navController.popBackStack()
@@ -77,19 +87,28 @@ fun main() = application {
                     modelClass = GamesLobbyViewModel::class,
                     factory = GamesLobbyViewModel.Factory("crazyeights", appState.loggedInDecksterServer!!)
                 )
-                GamesLobby(gameRoomVm, onEnterGameName = { gameName ->
-                    appState.gameNameToJoin = gameName
-                    navController.navigate(
-                        "crazyeight/$gameName"
-                    )
-                }, onBackpressed = navController::popBackStack)
+                GamesLobby(gameRoomVm,
+                    onEnterGameName = { gameName ->
+                        appState.gameNameToJoin = gameName
+                        navController.navigate(
+                            "crazyeight/$gameName"
+                        )
+                    },
+                    onSpectateGameName = { gameName ->
+                        appState.gameNameToJoin = gameName
+                        appState.doSpectate = true
+                        navController.navigate(
+                            "crazyeight/${gameName}"
+                        )
+                    },
+                    onBackpressed = navController::popBackStack)
             }
 
             composable("crazyeight/{gameName}") { backstack ->
                 val gameId = backstack.arguments?.getString("gameName")!!
                 val viewModel = viewModel(
                     modelClass = CrazyEightViewModel::class,
-                    factory = CrazyEightViewModel.Factory(gameId, appState.loggedInDecksterServer!!)
+                    factory = CrazyEightViewModel.Factory(gameId, appState.doSpectate, appState.loggedInDecksterServer!!)
                 )
                 CrazyEightScreen(viewModel)
             }
