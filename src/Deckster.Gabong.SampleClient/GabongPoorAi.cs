@@ -58,7 +58,7 @@ public class GabongPoorAi
             while (!_tcs.Task.IsCompleted)
             {
                 await ThinkAboutDoingSomething(_view);
-                await Task.Delay(10+new Random().Next(50));
+                await Task.Delay(100+new Random().Next(50));
             }
         });
     }
@@ -150,6 +150,7 @@ public class GabongPoorAi
         try{
             if (viewOfGame.CardDebtToDraw > 0)
             {
+                
                 var result = await _client.DrawCardAsync(new DrawCardRequest());
                 UpdateView(result);
                 return;
@@ -175,6 +176,12 @@ public class GabongPoorAi
                 _view.LastPlayMadeByPlayerId = _client.PlayerData.Id;
                 _view.LastPlay = GabongPlay.TurnLost;
                 _view = await _client.DrawCardAsync(new DrawCardRequest());   
+                
+                var cardToPlayAfterDraw = FindCardToPlay(viewOfGame);
+                if (cardToPlayAfterDraw == null)
+                {
+                    await _client.PassAsync(new PassRequest()); 
+                }//else next iteration will have something to do
             }
         }
         catch (Exception e)

@@ -89,7 +89,8 @@ public class WebSocketServerChannel : IServerChannel
                         return;
                 }
             
-                var request = JsonSerializer.Deserialize<TRequest>(new ArraySegment<byte>(buffer, 0, result.Count), options);
+                var stringbuffer = Encoding.UTF8.GetString(new ArraySegment<byte>(buffer, 0, result.Count));
+                var request = JsonSerializer.Deserialize<TRequest>(stringbuffer, options);
                 
                 if (request == null)
                 {
