@@ -48,7 +48,8 @@ fun main() = application {
             composable("gamelist") {
                 Column {
                     Button(onClick = {
-                        navController.navigate("crazyeightLobby")
+                        // TODO: this should really go to crazyeightLobby
+                        navController.navigate("crazyeight")
                     }) {
                         Text("Crazyeight")
                     }
