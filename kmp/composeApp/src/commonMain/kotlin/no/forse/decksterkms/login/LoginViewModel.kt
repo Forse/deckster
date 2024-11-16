@@ -5,12 +5,15 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import no.forse.decksterkms.ChatRepository
+import no.forse.decksterlib.DecksterServer
+import no.forse.decksterlib.authentication.LoginModel
+import no.forse.decksterlib.authentication.UserModel
 
 sealed interface LoginUiState {
     data class Initial(val details: LoginDetails) : LoginUiState
     object Loading : LoginUiState
     data class Error(val details: LoginDetails) : LoginUiState
-    object Success : LoginUiState
+    data class Success(val decksterServer: DecksterServer) : LoginUiState
 }
 
 class LoginViewModel(
@@ -31,12 +34,13 @@ class LoginViewModel(
             LoginUiState.Loading
         }
 
+
         try {
-            appRepository.saveLoginDetails(serverIp, username, password)
-            chatRepository.login(serverIp, username, password)
+            val server = DecksterServer("$serverIp")
+            val userModel = server.login(LoginModel(username, password))
 
             _uiState.update { currentState ->
-                LoginUiState.Success
+                LoginUiState.Success(server)
             }
 
         } catch (e: Exception) {

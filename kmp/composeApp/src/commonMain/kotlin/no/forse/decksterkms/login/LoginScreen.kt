@@ -17,11 +17,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import no.forse.decksterlib.DecksterServer
+import no.forse.decksterlib.authentication.UserModel
+import org.jetbrains.skia.paragraph.DecorationStyle
 
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel,
-    onLoginSuccess: () -> Unit
+    onLoginSuccess: (decksterServer: DecksterServer) -> Unit
 ) {
     val loginState = viewModel.uiState.collectAsState().value
 
@@ -44,10 +47,9 @@ fun LoginScreen(
             }
         }
 
-        LoginUiState.Success -> {
+        is LoginUiState.Success -> {
             LaunchedEffect(key1 = Unit) {
-
-                onLoginSuccess.invoke()
+                onLoginSuccess.invoke(loginState.decksterServer)
             }
         }
     }
