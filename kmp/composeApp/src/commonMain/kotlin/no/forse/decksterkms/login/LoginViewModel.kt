@@ -4,10 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import no.forse.decksterkms.ChatRepository
 import no.forse.decksterlib.DecksterServer
 import no.forse.decksterlib.authentication.LoginModel
-import no.forse.decksterlib.authentication.UserModel
 
 sealed interface LoginUiState {
     data class Initial(val details: LoginDetails) : LoginUiState
@@ -17,7 +15,6 @@ sealed interface LoginUiState {
 }
 
 class LoginViewModel(
-    private val chatRepository: ChatRepository,
     private val appRepository: AppRepository
 ) : ViewModel() {
 

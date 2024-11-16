@@ -1,4 +1,4 @@
-package no.forse.decksterandroid.chatroom
+package no.forse.decksterandroid.gamebrowser
 
 import BaseScreen
 import androidx.compose.foundation.layout.Arrangement
@@ -8,12 +8,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.unit.dp
-import no.forse.decksterandroid.gamebrowser.GameInfoCard
 
 @Composable
 fun GamesLobby(
     viewModel: GamesLobbyViewModel,
-    onEnter: (String) -> Unit,
+    onEnterGameName: (String) -> Unit,
     onBackpressed: () -> Unit,
 ) {
     BaseScreen(topBarTitle = "Gaming Rooms", onBackPressed = {
@@ -36,7 +35,7 @@ fun GamesLobby(
                     items(chatRoomUiState.games) { game ->
                         GameInfoCard(game, onJoinGameClicked = {
                             viewModel.join(game.name) {
-                                onEnter(game.name)
+                                onEnterGameName(game.name)
                             }
                         })
                     }
