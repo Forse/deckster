@@ -19,7 +19,9 @@ public class CrazyEightsProjection : GameProjection<CrazyEightsGame>
             Id = Guid.NewGuid(),
             Name = host.Name,
             Players = host.GetPlayers(),
-            Deck = Decks.Standard().KnuthShuffle(new Random().Next(0, int.MaxValue))
+            Deck = Decks.Standard().KnuthShuffle(new Random().Next(0, int.MaxValue)),
+            InitialSeed = new Random().Next(0, int.MaxValue),
+            StartedTime = DateTimeOffset.UtcNow
         };
         var game = Create(startEvent);
         return (game, startEvent);

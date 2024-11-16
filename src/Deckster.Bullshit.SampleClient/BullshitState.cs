@@ -5,7 +5,7 @@ namespace Deckster.Bullshit.SampleClient;
 public class BullshitState
 {
     public List<Card> Cards { get; set; }
-    public Card? ClaimedToBeTopOfPile { get; set; }
+    public Card? ClaimedToBeTopOfPile => DiscardPile.Any() ? DiscardPile.Last() : null;
     
     public Dictionary<Guid, OtherPlayer> OtherPlayers { get; set; }
     public int StockPileCount { get; set; }

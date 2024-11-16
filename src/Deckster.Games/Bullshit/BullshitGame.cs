@@ -25,9 +25,9 @@ public class BullshitGame : GameObject
     public event NotifyAll<FalseBullshitCallNotification>? PlayerAccusedFalseBullshit; 
     
     private const int InitialCardCount = 5;
-    public List<Card> Deck { get; init; }
-    public List<Card> StockPile { get; init; }
-    public List<Card> DiscardPile { get; init; }
+    public List<Card> Deck { get; init; } = [];
+    public List<Card> StockPile { get; init; } = [];
+    public List<Card> DiscardPile { get; init; } = [];
 
     public List<BullshitPlayer> Players { get; init; } = [];
     public List<BullshitPlayer> DonePlayers { get; init; } = [];
@@ -68,13 +68,6 @@ public class BullshitGame : GameObject
         if (!TryGetCurrentPlayer(request.PlayerId, out var player))
         {
             response = new EmptyResponse("It is not your turn");
-            await RespondAsync(player.Id, response);
-            return response;
-        }
-
-        if (!player.Cards.Any())
-        {
-            response = new EmptyResponse("You don't have any cards. Weird.");
             await RespondAsync(player.Id, response);
             return response;
         }
@@ -142,7 +135,7 @@ public class BullshitGame : GameObject
         if (!TryGetCurrentPlayer(request.PlayerId, out var player))
         {
             response = new CardResponse{Error = "It is not your turn"};
-            await RespondAsync(player.Id, response);
+            await RespondAsync(request.PlayerId, response);
             return response;
         }
         

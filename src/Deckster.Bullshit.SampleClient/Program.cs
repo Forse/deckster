@@ -1,8 +1,9 @@
-﻿using Deckster.Bullshit.SampleClient;
-using Deckster.Client;
+﻿using Deckster.Client;
 using Deckster.Client.Games.Bullshit;
 using Deckster.Client.Logging;
 using Microsoft.Extensions.Logging;
+
+namespace Deckster.Bullshit.SampleClient;
 
 class Program
 {
@@ -37,7 +38,7 @@ class Program
             await using var game = await client.JoinAsync(gameName, cts.Token);
 
             logger.LogInformation("Using ai");
-            var ai = new BullshitPoorAi(game);
+            var ai = new BullshitPoorAi(game, Log.Factory.CreateLogger("Kamuf Larsen"));
             logger.LogInformation("Starting game");
             await client.StartGameAsync(gameName, cts.Token);
             logger.LogInformation("Playing game");

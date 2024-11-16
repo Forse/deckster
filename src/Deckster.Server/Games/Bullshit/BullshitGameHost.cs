@@ -27,7 +27,7 @@ public class BullshitGameHost : StandardGameHost<BullshitGame>
                 Name = TestUserNames.Random()
             }
         };
-        var bot = new BullshitPoorAi(new BullshitClient(channel));
+        var bot = new BullshitPoorAi(new BullshitClient(channel), LoggerFactory.CreateLogger(channel.Player.Name));
         _bots.Add(bot);
         return TryAddPlayer(channel, out error);
     }
