@@ -27,6 +27,7 @@
       <Folder Include="Games\ChatRoom\" />
       <Folder Include="Games\CrazyEights\" />
       <Folder Include="Games\Idiot\" />
+      <Folder Include="Games\TexasHoldEm\" />
       <Folder Include="Games\Uno\" />
     </ItemGroup>
 
