@@ -16,7 +16,7 @@ fun GameTypeSelector(onBackpressed: () -> Unit, onGameSelected: (String) -> Unit
         onBackpressed.invoke()
     }) {
         Column(modifier = Modifier.padding(32.dp)) {
-            Button(onClick = { onGameSelected("crazyeight") }) {
+            Button(onClick = { onGameSelected("crazyeightLobby") }) {
                 Text("Crazy Eight")
             }
             Button(onClick = { onGameSelected("uno") }) {

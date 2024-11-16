@@ -80,14 +80,17 @@ fun main() = application {
                 GamesLobby(gameRoomVm, onEnterGameName = { gameName ->
                     appState.gameNameToJoin = gameName
                     navController.navigate(
-                        "crazyeight/{gameName}"
+                        "crazyeight/$gameName"
                     )
                 }, onBackpressed = navController::popBackStack)
             }
 
             composable("crazyeight/{gameName}") { backstack ->
-                val gameId = backstack.arguments?.getString("gameId")
-                val viewModel = CrazyEightViewModel(CrazyEightsClient(appState.loggedInDecksterServer!!))
+                val gameId = backstack.arguments?.getString("gameName")!!
+                val viewModel = viewModel(
+                    modelClass = CrazyEightViewModel::class,
+                    factory = CrazyEightViewModel.Factory(gameId, appState.loggedInDecksterServer!!)
+                )
                 CrazyEightScreen(viewModel)
             }
         }

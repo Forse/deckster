@@ -1,21 +1,27 @@
 package no.forse.decksterkms.crazyeight
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.CreationExtras
 import kotlinx.coroutines.launch
+import no.forse.decksterandroid.chatroom.ChatViewModel
+import no.forse.decksterlib.DecksterServer
 import no.forse.decksterlib.crazyeights.CrazyEightsClient
 import no.forse.decksterlib.model.common.Card
 import no.forse.decksterlib.model.common.Suit
 import threadpoolScope
+import kotlin.reflect.KClass
 
-class CrazyEightViewModel(private val crazyEightsClient: CrazyEightsClient){
+class CrazyEightViewModel(
+    private val gameId: String,
+    server: DecksterServer,
+) : ViewModel() {
+    private val crazyEightsClient = CrazyEightsClient(server)
 
     // 1. create game in browser add a bot
     // 2. join game in the compose app
     // 3. start game in browser
 
-
-    private companion object {
-        const val GAME_ID = "ubeslutsom flatulens"
-    }
 
     private fun List<Card>.getSuit(suit: Suit) = this.firstOrNull { it.suit == suit }
     private fun List<Card>.getRank(rank: Int) = this.firstOrNull { it.rank == rank }
@@ -28,7 +34,7 @@ class CrazyEightViewModel(private val crazyEightsClient: CrazyEightsClient){
     }
 
     suspend fun initialize() {
-        crazyEightsClient.joinGame(crazyEightsClient.decksterServer.accessToken!!, GAME_ID)
+        crazyEightsClient.joinGame(crazyEightsClient.decksterServer.accessToken!!, gameId)
 
         threadpoolScope.launch {
             crazyEightsClient.yourTurnFlow.collect { playerView ->
@@ -65,4 +71,10 @@ class CrazyEightViewModel(private val crazyEightsClient: CrazyEightsClient){
         val count = cards.filter { it.suit == suit }.size
         Pair(suit, count)
     }.maxByOrNull { it.second }?.first
+
+    class Factory(private val gameId: String, private val server: DecksterServer) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: KClass<T>, extras: CreationExtras): T {
+            return CrazyEightViewModel(gameId, server) as T
+        }
+    }
 }
