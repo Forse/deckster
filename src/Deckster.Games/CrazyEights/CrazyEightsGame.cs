@@ -418,9 +418,11 @@ public class CrazyEightsGame : GameObject
             });
         }
 
-        await ItsYourTurn.InvokeOrDefault(CurrentPlayer.Id, () => new ItsYourTurnNotification
+        var current = CurrentPlayer;
+        await ItsYourTurn.InvokeOrDefault(current.Id, () => new ItsYourTurnNotification
         {
-            PlayerViewOfGame = GetPlayerViewOfGame(CurrentPlayer)
+            PlayerViewOfGame = GetPlayerViewOfGame(current)
         });
+        await ItsPlayersTurn.InvokeOrDefault(() => new ItsPlayersTurnNotification {PlayerId = current.Id});
     }
 }
