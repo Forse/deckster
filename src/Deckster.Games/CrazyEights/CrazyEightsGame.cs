@@ -10,6 +10,7 @@ public class CrazyEightsGame : GameObject
     public event NotifyPlayer<GameStartedNotification>? GameStarted;
     public event NotifyAll<PlayerDrewCardNotification>? PlayerDrewCard;
     public event NotifyPlayer<ItsYourTurnNotification>? ItsYourTurn;
+    public event NotifyAll<ItsPlayersTurnNotification>? ItsPlayersTurn;
     public event NotifyAll<PlayerPassedNotification>? PlayerPassed;
     public event NotifyAll<PlayerPutCardNotification>? PlayerPutCard;
     public event NotifyAll<PlayerPutEightNotification>? PlayerPutEight;
@@ -311,6 +312,10 @@ public class CrazyEightsGame : GameObject
                 {
                     PlayerViewOfGame = GetPlayerViewOfGame(CurrentPlayer)
                 });
+                await ItsPlayersTurn.InvokeOrDefault(() => new ItsPlayersTurnNotification
+                {
+                    PlayerId = CurrentPlayer.Id
+                });
             break;
         }
     }
@@ -414,10 +419,12 @@ public class CrazyEightsGame : GameObject
             });
         }
 
-        await ItsYourTurn.InvokeOrDefault(CurrentPlayer.Id, () => new ItsYourTurnNotification
+        var current = CurrentPlayer;
+        await ItsYourTurn.InvokeOrDefault(current.Id, () => new ItsYourTurnNotification
         {
-            PlayerViewOfGame = GetPlayerViewOfGame(CurrentPlayer)
+            PlayerViewOfGame = GetPlayerViewOfGame(current)
         });
+        await ItsPlayersTurn.InvokeOrDefault(() => new ItsPlayersTurnNotification {PlayerId = current.Id});
     }
 }
 

@@ -31,6 +31,11 @@ public class ItsYourTurnNotification : DecksterNotification
     public PlayerViewOfGame PlayerViewOfGame { get; init; } = new();
 }
 
+public class ItsPlayersTurnNotification : DecksterNotification
+{
+    public Guid PlayerId { get; init; }
+}
+
 public class GameStartedNotification : DecksterNotification
 {
     public Guid GameId { get; init; }
@@ -43,8 +48,6 @@ public class GameEndedNotification : DecksterNotification
     public Guid LoserId { get; set; }
     public string LoserName { get; set; }
 }
-
-public class YouAreDoneNotification : DecksterNotification;
 
 public class PlayerIsDoneNotification : DecksterNotification
 {

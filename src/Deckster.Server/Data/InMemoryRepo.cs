@@ -58,7 +58,7 @@ public class InMemoryRepo : IRepo
         }
         if (EventThings.TryGetValue(id, out var q) && q is InMemoryEventQueue<T> queue)
         {
-            return new Historic<T>(game, queue.Events);
+            return new Historic<T>(game, queue.Events, queue.Events.Count);
         }
 
         return null;

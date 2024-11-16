@@ -50,6 +50,23 @@
             "Uno.GameEndedNotification": "#/components/schemas/Uno.GameEndedNotification",
             "Uno.RoundStartedNotification": "#/components/schemas/Uno.RoundStartedNotification",
             "Uno.RoundEndedNotification": "#/components/schemas/Uno.RoundEndedNotification",
+            "TexasHoldEm.PlayerViewOfGame": "#/components/schemas/TexasHoldEm.PlayerViewOfGame",
+            "TexasHoldEm.PlayerBettedNotification": "#/components/schemas/TexasHoldEm.PlayerBettedNotification",
+            "TexasHoldEm.PlayerAllInNotification": "#/components/schemas/TexasHoldEm.PlayerAllInNotification",
+            "TexasHoldEm.PlayerCheckedNotification": "#/components/schemas/TexasHoldEm.PlayerCheckedNotification",
+            "TexasHoldEm.PlayerFoldedNotification": "#/components/schemas/TexasHoldEm.PlayerFoldedNotification",
+            "TexasHoldEm.PlayerCalledNotification": "#/components/schemas/TexasHoldEm.PlayerCalledNotification",
+            "TexasHoldEm.PlayerIsOutOfGameNotification": "#/components/schemas/TexasHoldEm.PlayerIsOutOfGameNotification",
+            "TexasHoldEm.ItsYourTurnNotification": "#/components/schemas/TexasHoldEm.ItsYourTurnNotification",
+            "TexasHoldEm.NewRoundStartedNotification": "#/components/schemas/TexasHoldEm.NewRoundStartedNotification",
+            "TexasHoldEm.NewCardsRevealed": "#/components/schemas/TexasHoldEm.NewCardsRevealed",
+            "TexasHoldEm.RoundEndedNotification": "#/components/schemas/TexasHoldEm.RoundEndedNotification",
+            "TexasHoldEm.GameStartedNotification": "#/components/schemas/TexasHoldEm.GameStartedNotification",
+            "TexasHoldEm.GameEndedNotification": "#/components/schemas/TexasHoldEm.GameEndedNotification",
+            "TexasHoldEm.BetRequest": "#/components/schemas/TexasHoldEm.BetRequest",
+            "TexasHoldEm.FoldRequest": "#/components/schemas/TexasHoldEm.FoldRequest",
+            "TexasHoldEm.CheckRequest": "#/components/schemas/TexasHoldEm.CheckRequest",
+            "TexasHoldEm.CallRequest": "#/components/schemas/TexasHoldEm.CallRequest",
             "Idiot.IamReadyRequest": "#/components/schemas/Idiot.IamReadyRequest",
             "Idiot.SwapCardsRequest": "#/components/schemas/Idiot.SwapCardsRequest",
             "Idiot.PutCardsFromHandRequest": "#/components/schemas/Idiot.PutCardsFromHandRequest",
@@ -77,7 +94,6 @@
             "Gabong.PenalizePlayerForTakingTooLongRequest": "#/components/schemas/Gabong.PenalizePlayerForTakingTooLongRequest",
             "Gabong.PenalizePlayerForTooManyCardsRequest": "#/components/schemas/Gabong.PenalizePlayerForTooManyCardsRequest",
             "Gabong.ActionResponse": "#/components/schemas/Gabong.ActionResponse",
-            "Gabong.PutCardRequest": "#/components/schemas/Gabong.PutCardRequest",
             "CrazyEights.PutCardRequest": "#/components/schemas/CrazyEights.PutCardRequest",
             "CrazyEights.PutEightRequest": "#/components/schemas/CrazyEights.PutEightRequest",
             "CrazyEights.DrawCardRequest": "#/components/schemas/CrazyEights.DrawCardRequest",
@@ -89,9 +105,9 @@
             "CrazyEights.PlayerPassedNotification": "#/components/schemas/CrazyEights.PlayerPassedNotification",
             "CrazyEights.ItsYourTurnNotification": "#/components/schemas/CrazyEights.ItsYourTurnNotification",
             "CrazyEights.PlayerViewOfGame": "#/components/schemas/CrazyEights.PlayerViewOfGame",
+            "CrazyEights.ItsPlayersTurnNotification": "#/components/schemas/CrazyEights.ItsPlayersTurnNotification",
             "CrazyEights.GameStartedNotification": "#/components/schemas/CrazyEights.GameStartedNotification",
             "CrazyEights.GameEndedNotification": "#/components/schemas/CrazyEights.GameEndedNotification",
-            "CrazyEights.YouAreDoneNotification": "#/components/schemas/CrazyEights.YouAreDoneNotification",
             "CrazyEights.PlayerIsDoneNotification": "#/components/schemas/CrazyEights.PlayerIsDoneNotification",
             "CrazyEights.DiscardPileShuffledNotification": "#/components/schemas/CrazyEights.DiscardPileShuffledNotification",
             "Common.EmptyResponse": "#/components/schemas/Common.EmptyResponse",
@@ -107,6 +123,7 @@
             "Gabong.PlayerViewOfGame": "#/components/schemas/Gabong.PlayerViewOfGame",
             "Gabong.RoundEndedNotification": "#/components/schemas/Gabong.RoundEndedNotification",
             "Gabong.GabongCardResponse": "#/components/schemas/Gabong.GabongCardResponse",
+            "Gabong.PutCardRequest": "#/components/schemas/Gabong.PutCardRequest",
             "Gabong.DrawCardRequest": "#/components/schemas/Gabong.DrawCardRequest",
             "Gabong.PassRequest": "#/components/schemas/Gabong.PassRequest",
             "Gabong.PlayGabongRequest": "#/components/schemas/Gabong.PlayGabongRequest",
@@ -144,6 +161,10 @@
             "Uno.PutWildRequest": "#/components/schemas/Uno.PutWildRequest",
             "Uno.DrawCardRequest": "#/components/schemas/Uno.DrawCardRequest",
             "Uno.PassRequest": "#/components/schemas/Uno.PassRequest",
+            "TexasHoldEm.BetRequest": "#/components/schemas/TexasHoldEm.BetRequest",
+            "TexasHoldEm.FoldRequest": "#/components/schemas/TexasHoldEm.FoldRequest",
+            "TexasHoldEm.CheckRequest": "#/components/schemas/TexasHoldEm.CheckRequest",
+            "TexasHoldEm.CallRequest": "#/components/schemas/TexasHoldEm.CallRequest",
             "Idiot.IamReadyRequest": "#/components/schemas/Idiot.IamReadyRequest",
             "Idiot.SwapCardsRequest": "#/components/schemas/Idiot.SwapCardsRequest",
             "Idiot.PutCardsFromHandRequest": "#/components/schemas/Idiot.PutCardsFromHandRequest",
@@ -154,12 +175,12 @@
             "Idiot.PutChanceCardRequest": "#/components/schemas/Idiot.PutChanceCardRequest",
             "Gabong.PenalizePlayerForTakingTooLongRequest": "#/components/schemas/Gabong.PenalizePlayerForTakingTooLongRequest",
             "Gabong.PenalizePlayerForTooManyCardsRequest": "#/components/schemas/Gabong.PenalizePlayerForTooManyCardsRequest",
-            "Gabong.PutCardRequest": "#/components/schemas/Gabong.PutCardRequest",
             "CrazyEights.PutCardRequest": "#/components/schemas/CrazyEights.PutCardRequest",
             "CrazyEights.PutEightRequest": "#/components/schemas/CrazyEights.PutEightRequest",
             "CrazyEights.DrawCardRequest": "#/components/schemas/CrazyEights.DrawCardRequest",
             "CrazyEights.PassRequest": "#/components/schemas/CrazyEights.PassRequest",
             "ChatRoom.SendChatRequest": "#/components/schemas/ChatRoom.SendChatRequest",
+            "Gabong.PutCardRequest": "#/components/schemas/Gabong.PutCardRequest",
             "Gabong.DrawCardRequest": "#/components/schemas/Gabong.DrawCardRequest",
             "Gabong.PassRequest": "#/components/schemas/Gabong.PassRequest",
             "Gabong.PlayGabongRequest": "#/components/schemas/Gabong.PlayGabongRequest",
@@ -197,6 +218,18 @@
             "Uno.GameEndedNotification": "#/components/schemas/Uno.GameEndedNotification",
             "Uno.RoundStartedNotification": "#/components/schemas/Uno.RoundStartedNotification",
             "Uno.RoundEndedNotification": "#/components/schemas/Uno.RoundEndedNotification",
+            "TexasHoldEm.PlayerBettedNotification": "#/components/schemas/TexasHoldEm.PlayerBettedNotification",
+            "TexasHoldEm.PlayerAllInNotification": "#/components/schemas/TexasHoldEm.PlayerAllInNotification",
+            "TexasHoldEm.PlayerCheckedNotification": "#/components/schemas/TexasHoldEm.PlayerCheckedNotification",
+            "TexasHoldEm.PlayerFoldedNotification": "#/components/schemas/TexasHoldEm.PlayerFoldedNotification",
+            "TexasHoldEm.PlayerCalledNotification": "#/components/schemas/TexasHoldEm.PlayerCalledNotification",
+            "TexasHoldEm.PlayerIsOutOfGameNotification": "#/components/schemas/TexasHoldEm.PlayerIsOutOfGameNotification",
+            "TexasHoldEm.ItsYourTurnNotification": "#/components/schemas/TexasHoldEm.ItsYourTurnNotification",
+            "TexasHoldEm.NewRoundStartedNotification": "#/components/schemas/TexasHoldEm.NewRoundStartedNotification",
+            "TexasHoldEm.NewCardsRevealed": "#/components/schemas/TexasHoldEm.NewCardsRevealed",
+            "TexasHoldEm.RoundEndedNotification": "#/components/schemas/TexasHoldEm.RoundEndedNotification",
+            "TexasHoldEm.GameStartedNotification": "#/components/schemas/TexasHoldEm.GameStartedNotification",
+            "TexasHoldEm.GameEndedNotification": "#/components/schemas/TexasHoldEm.GameEndedNotification",
             "Idiot.PlayerSwappedCardsNotification": "#/components/schemas/Idiot.PlayerSwappedCardsNotification",
             "Idiot.PlayerPutCardsNotification": "#/components/schemas/Idiot.PlayerPutCardsNotification",
             "Idiot.PlayerIsReadyNotification": "#/components/schemas/Idiot.PlayerIsReadyNotification",
@@ -214,9 +247,9 @@
             "CrazyEights.PlayerDrewCardNotification": "#/components/schemas/CrazyEights.PlayerDrewCardNotification",
             "CrazyEights.PlayerPassedNotification": "#/components/schemas/CrazyEights.PlayerPassedNotification",
             "CrazyEights.ItsYourTurnNotification": "#/components/schemas/CrazyEights.ItsYourTurnNotification",
+            "CrazyEights.ItsPlayersTurnNotification": "#/components/schemas/CrazyEights.ItsPlayersTurnNotification",
             "CrazyEights.GameStartedNotification": "#/components/schemas/CrazyEights.GameStartedNotification",
             "CrazyEights.GameEndedNotification": "#/components/schemas/CrazyEights.GameEndedNotification",
-            "CrazyEights.YouAreDoneNotification": "#/components/schemas/CrazyEights.YouAreDoneNotification",
             "CrazyEights.PlayerIsDoneNotification": "#/components/schemas/CrazyEights.PlayerIsDoneNotification",
             "CrazyEights.DiscardPileShuffledNotification": "#/components/schemas/CrazyEights.DiscardPileShuffledNotification",
             "ChatRoom.ChatNotification": "#/components/schemas/ChatRoom.ChatNotification",
@@ -256,6 +289,7 @@
             "Yaniv.PutCardsResponse": "#/components/schemas/Yaniv.PutCardsResponse",
             "Uno.UnoCardResponse": "#/components/schemas/Uno.UnoCardResponse",
             "Uno.PlayerViewOfGame": "#/components/schemas/Uno.PlayerViewOfGame",
+            "TexasHoldEm.PlayerViewOfGame": "#/components/schemas/TexasHoldEm.PlayerViewOfGame",
             "Idiot.SwapCardsResponse": "#/components/schemas/Idiot.SwapCardsResponse",
             "Idiot.PullInResponse": "#/components/schemas/Idiot.PullInResponse",
             "Idiot.DrawCardsResponse": "#/components/schemas/Idiot.DrawCardsResponse",
@@ -365,6 +399,7 @@
         "discriminator": {
           "propertyName": "type",
           "mapping": {
+            "Gabong.PutCardRequest": "#/components/schemas/Gabong.PutCardRequest",
             "Gabong.DrawCardRequest": "#/components/schemas/Gabong.DrawCardRequest",
             "Gabong.PassRequest": "#/components/schemas/Gabong.PassRequest",
             "Gabong.PlayGabongRequest": "#/components/schemas/Gabong.PlayGabongRequest",
@@ -1219,6 +1254,507 @@
           }
         ]
       },
+      "TexasHoldEm.PlayerViewOfGame": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "cards": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              },
+              "cardsOnTable": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              },
+              "stackSize": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "currentBet": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "potSize": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "bigBlind": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "numberOfRoundsUntilBigBlindIncreases": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "otherPlayers": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TexasHoldEm.OtherPokerPlayers"
+                }
+              },
+              "nextRoundStartingPlayerId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
+        ]
+      },
+      "TexasHoldEm.OtherPokerPlayers": {
+        "type": "object",
+        "properties": {
+          "playerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "stackSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currentBet": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hasChecked": {
+            "type": "boolean"
+          },
+          "isAllIn": {
+            "type": "boolean"
+          },
+          "hasFolded": {
+            "type": "boolean"
+          }
+        }
+      },
+      "TexasHoldEm.PlayerBettedNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "betSize": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ]
+      },
+      "TexasHoldEm.PlayerAllInNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
+        ]
+      },
+      "TexasHoldEm.PlayerCheckedNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
+        ]
+      },
+      "TexasHoldEm.PlayerFoldedNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
+        ]
+      },
+      "TexasHoldEm.PlayerCalledNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
+        ]
+      },
+      "TexasHoldEm.PlayerIsOutOfGameNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
+        ]
+      },
+      "TexasHoldEm.ItsYourTurnNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerViewOfGame": {
+                "type": "object",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Protocol.DecksterResponse"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "cards": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Common.Card"
+                        }
+                      },
+                      "cardsOnTable": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Common.Card"
+                        }
+                      },
+                      "stackSize": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "currentBet": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "potSize": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "bigBlind": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "numberOfRoundsUntilBigBlindIncreases": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "otherPlayers": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/TexasHoldEm.OtherPokerPlayers"
+                        }
+                      },
+                      "nextRoundStartingPlayerId": {
+                        "type": "string",
+                        "format": "uuid"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "TexasHoldEm.NewRoundStartedNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "gameId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "playerViewOfGame": {
+                "type": "object",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Protocol.DecksterResponse"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "cards": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Common.Card"
+                        }
+                      },
+                      "cardsOnTable": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Common.Card"
+                        }
+                      },
+                      "stackSize": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "currentBet": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "potSize": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "bigBlind": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "numberOfRoundsUntilBigBlindIncreases": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "otherPlayers": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/TexasHoldEm.OtherPokerPlayers"
+                        }
+                      },
+                      "nextRoundStartingPlayerId": {
+                        "type": "string",
+                        "format": "uuid"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "TexasHoldEm.NewCardsRevealed": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "cards": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.Card"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "TexasHoldEm.RoundEndedNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "TexasHoldEm.GameStartedNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "gameId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "playerViewOfGame": {
+                "type": "object",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Protocol.DecksterResponse"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "cards": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Common.Card"
+                        }
+                      },
+                      "cardsOnTable": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Common.Card"
+                        }
+                      },
+                      "stackSize": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "currentBet": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "potSize": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "bigBlind": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "numberOfRoundsUntilBigBlindIncreases": {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      "otherPlayers": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/TexasHoldEm.OtherPokerPlayers"
+                        }
+                      },
+                      "nextRoundStartingPlayerId": {
+                        "type": "string",
+                        "format": "uuid"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "TexasHoldEm.GameEndedNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "players": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Common.PlayerData"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "TexasHoldEm.BetRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "bet": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ]
+      },
+      "TexasHoldEm.FoldRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "TexasHoldEm.CheckRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "TexasHoldEm.CallRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterRequest"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
       "Idiot.IamReadyRequest": {
         "type": "object",
         "allOf": [
@@ -1825,34 +2361,6 @@
           }
         ]
       },
-      "Gabong.PutCardRequest": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterRequest"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "card": {
-                "type": "object",
-                "properties": {
-                  "rank": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
-                  "suit": {
-                    "type": "string"
-                  }
-                }
-              },
-              "newSuit": {
-                "type": "string"
-              }
-            }
-          }
-        ]
-      },
       "CrazyEights.PutCardRequest": {
         "type": "object",
         "allOf": [
@@ -2173,6 +2681,23 @@
           }
         }
       },
+      "CrazyEights.ItsPlayersTurnNotification": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Protocol.DecksterNotification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "playerId": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
+        ]
+      },
       "CrazyEights.GameStartedNotification": {
         "type": "object",
         "allOf": [
@@ -2261,17 +2786,6 @@
                 "type": "string"
               }
             }
-          }
-        ]
-      },
-      "CrazyEights.YouAreDoneNotification": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Protocol.DecksterNotification"
-          },
-          {
-            "type": "object"
           }
         ]
       },
@@ -2676,6 +3190,34 @@
                     "type": "string"
                   }
                 }
+              }
+            }
+          }
+        ]
+      },
+      "Gabong.PutCardRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Gabong.GabongRequest"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "card": {
+                "type": "object",
+                "properties": {
+                  "rank": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "suit": {
+                    "type": "string"
+                  }
+                }
+              },
+              "newSuit": {
+                "type": "string"
               }
             }
           }

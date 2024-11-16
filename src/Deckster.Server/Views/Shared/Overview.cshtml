@@ -2,6 +2,9 @@
 
 <h1>@Model.GameType games</h1>
 <div>
+  @Html.ActionLink("previous games", "PreviousGames")
+</div>
+<div>
   @Html.ActionLink("description", "GameDescription")
 </div>
 <div x-data="vm" class="flex-container col">

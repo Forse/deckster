@@ -17,6 +17,7 @@ public class CrazyEightsClient(IClientChannel channel) : GameClient(channel)
     public event Action<GameStartedNotification>? GameStarted;
     public event Action<PlayerDrewCardNotification>? PlayerDrewCard;
     public event Action<ItsYourTurnNotification>? ItsYourTurn;
+    public event Action<ItsPlayersTurnNotification>? ItsPlayersTurn;
     public event Action<PlayerPassedNotification>? PlayerPassed;
     public event Action<PlayerPutCardNotification>? PlayerPutCard;
     public event Action<PlayerPutEightNotification>? PlayerPutEight;
@@ -58,6 +59,9 @@ public class CrazyEightsClient(IClientChannel channel) : GameClient(channel)
                     return;
                 case ItsYourTurnNotification m:
                     ItsYourTurn?.Invoke(m);
+                    return;
+                case ItsPlayersTurnNotification m:
+                    ItsPlayersTurn?.Invoke(m);
                     return;
                 case PlayerPassedNotification m:
                     PlayerPassed?.Invoke(m);

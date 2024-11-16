@@ -5,6 +5,7 @@
  * GameStarted: GameStartedNotification
  * PlayerDrewCard: PlayerDrewCardNotification
  * ItsYourTurn: ItsYourTurnNotification
+ * ItsPlayersTurn: ItsPlayersTurnNotification
  * PlayerPassed: PlayerPassedNotification
  * PlayerPutCard: PlayerPutCardNotification
  * PlayerPutEight: PlayerPutEightNotification

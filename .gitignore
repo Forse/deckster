@@ -39,6 +39,13 @@ bld/
 TestResult.xml
 nunit-*.xml
 
+# NCrunch
+_NCrunch_*
+.*crunch*.local.xml
+nCrunchTemp_*
+*.ncrunc*/
+*.ncrunchproject
+*.ncrunchsolution
 
 # .NET Core
 project.lock.json

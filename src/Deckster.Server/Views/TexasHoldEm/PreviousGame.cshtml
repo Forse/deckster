@@ -8,17 +8,6 @@
   @game.Name
 </h1>
 
-<div>
-  @if (Model.GetGame().Version > 1)
-  {
-    @Html.ActionLink("<--", "PreviousGame", new {Model.GetGame().Id, version = Model.GetGame().Version -1})
-  }
-  @if (Model.GetGame().Version < Model.LastVersion)
-  {
-    @Html.ActionLink("-->", "PreviousGame", new {Model.GetGame().Id, version = Model.GetGame().Version +1})
-  }
-</div>
-
 <table>
   <tr>
     <td>Id</td>
