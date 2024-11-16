@@ -46,7 +46,9 @@ class CrazyEightViewModel(
                 println("XXX my turn")
                 delay(5000)
 
-                val cardToPut = determineCardToPut(playerView.topOfPile, playerView.currentSuit, playerView.cards)
+                var cardToPut: Card?  = null
+
+                cardToPut = determineCardToPut(playerView.topOfPile, playerView.currentSuit, playerView.cards)
                 if (cardToPut != null) {
                     if (cardToPut.rank == 8) {
                         determineSuiteToRequest(playerView.cards)?.let { suit ->
