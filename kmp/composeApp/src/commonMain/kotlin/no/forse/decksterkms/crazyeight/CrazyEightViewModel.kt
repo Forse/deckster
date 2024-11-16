@@ -58,11 +58,12 @@ class CrazyEightViewModel(
         threadpoolScope.launch {
             crazyEightsClient.yourTurnFlow.collect { playerView ->
                 println("XXX my turn")
-                delay(5000)
 
-                var cardToPut: Card?  = null
+                _uiState.emit(CrazyEightUiState(playerView.cards, playerView.topOfPile))
 
-                cardToPut = determineCardToPut(playerView.topOfPile, playerView.currentSuit, playerView.cards)
+                delay(3000)
+
+                val cardToPut = determineCardToPut(playerView.topOfPile, playerView.currentSuit, playerView.cards)
                 if (cardToPut != null) {
                     if (cardToPut.rank == 8) {
                         determineSuiteToRequest(playerView.cards)?.let { suit ->
