@@ -21,6 +21,7 @@ components:
           Gabong.GabongGameNotification: '#/components/schemas/Gabong.GabongGameNotification'
           Gabong.GabongResponse: '#/components/schemas/Gabong.GabongResponse'
           Gabong.GabongRequest: '#/components/schemas/Gabong.GabongRequest'
+          Gabong.GabongPlayerNotification: '#/components/schemas/Gabong.GabongPlayerNotification'
           Yaniv.PutCardsRequest: '#/components/schemas/Yaniv.PutCardsRequest'
           Yaniv.CallYanivRequest: '#/components/schemas/Yaniv.CallYanivRequest'
           Yaniv.PutCardsResponse: '#/components/schemas/Yaniv.PutCardsResponse'
@@ -88,6 +89,7 @@ components:
           CrazyEights.GameEndedNotification: '#/components/schemas/CrazyEights.GameEndedNotification'
           CrazyEights.YouAreDoneNotification: '#/components/schemas/CrazyEights.YouAreDoneNotification'
           CrazyEights.PlayerIsDoneNotification: '#/components/schemas/CrazyEights.PlayerIsDoneNotification'
+          CrazyEights.DiscardPileShuffledNotification: '#/components/schemas/CrazyEights.DiscardPileShuffledNotification'
           Common.EmptyResponse: '#/components/schemas/Common.EmptyResponse'
           ChatRoom.SendChatRequest: '#/components/schemas/ChatRoom.SendChatRequest'
           ChatRoom.ChatNotification: '#/components/schemas/ChatRoom.ChatNotification'
@@ -95,20 +97,20 @@ components:
           Handshake.HelloSuccessMessage: '#/components/schemas/Handshake.HelloSuccessMessage'
           Handshake.ConnectSuccessMessage: '#/components/schemas/Handshake.ConnectSuccessMessage'
           Handshake.ConnectFailureMessage: '#/components/schemas/Handshake.ConnectFailureMessage'
-          Gabong.PlayerPutCardNotification: '#/components/schemas/Gabong.PlayerPutCardNotification'
-          Gabong.PlayerDrewCardNotification: '#/components/schemas/Gabong.PlayerDrewCardNotification'
-          Gabong.PlayerDrewPenaltyCardNotification: '#/components/schemas/Gabong.PlayerDrewPenaltyCardNotification'
           Gabong.GameStartedNotification: '#/components/schemas/Gabong.GameStartedNotification'
           Gabong.GameEndedNotification: '#/components/schemas/Gabong.GameEndedNotification'
           Gabong.RoundStartedNotification: '#/components/schemas/Gabong.RoundStartedNotification'
           Gabong.PlayerViewOfGame: '#/components/schemas/Gabong.PlayerViewOfGame'
           Gabong.RoundEndedNotification: '#/components/schemas/Gabong.RoundEndedNotification'
-          Gabong.PlayerLostTheirTurnNotification: '#/components/schemas/Gabong.PlayerLostTheirTurnNotification'
           Gabong.GabongCardResponse: '#/components/schemas/Gabong.GabongCardResponse'
           Gabong.DrawCardRequest: '#/components/schemas/Gabong.DrawCardRequest'
           Gabong.PassRequest: '#/components/schemas/Gabong.PassRequest'
           Gabong.PlayGabongRequest: '#/components/schemas/Gabong.PlayGabongRequest'
           Gabong.PlayBongaRequest: '#/components/schemas/Gabong.PlayBongaRequest'
+          Gabong.PlayerPutCardNotification: '#/components/schemas/Gabong.PlayerPutCardNotification'
+          Gabong.PlayerDrewCardNotification: '#/components/schemas/Gabong.PlayerDrewCardNotification'
+          Gabong.PlayerDrewPenaltyCardNotification: '#/components/schemas/Gabong.PlayerDrewPenaltyCardNotification'
+          Gabong.PlayerLostTheirTurnNotification: '#/components/schemas/Gabong.PlayerLostTheirTurnNotification'
     Protocol.DecksterRequest:
       type: object
       allOf:
@@ -157,6 +159,7 @@ components:
         propertyName: type
         mapping:
           Gabong.GabongGameNotification: '#/components/schemas/Gabong.GabongGameNotification'
+          Gabong.GabongPlayerNotification: '#/components/schemas/Gabong.GabongPlayerNotification'
           Yaniv.PlayerPutCardsNotification: '#/components/schemas/Yaniv.PlayerPutCardsNotification'
           Yaniv.RoundStartedNotification: '#/components/schemas/Yaniv.RoundStartedNotification'
           Yaniv.ItsYourTurnNotification: '#/components/schemas/Yaniv.ItsYourTurnNotification'
@@ -193,14 +196,15 @@ components:
           CrazyEights.GameEndedNotification: '#/components/schemas/CrazyEights.GameEndedNotification'
           CrazyEights.YouAreDoneNotification: '#/components/schemas/CrazyEights.YouAreDoneNotification'
           CrazyEights.PlayerIsDoneNotification: '#/components/schemas/CrazyEights.PlayerIsDoneNotification'
+          CrazyEights.DiscardPileShuffledNotification: '#/components/schemas/CrazyEights.DiscardPileShuffledNotification'
           ChatRoom.ChatNotification: '#/components/schemas/ChatRoom.ChatNotification'
-          Gabong.PlayerPutCardNotification: '#/components/schemas/Gabong.PlayerPutCardNotification'
-          Gabong.PlayerDrewCardNotification: '#/components/schemas/Gabong.PlayerDrewCardNotification'
-          Gabong.PlayerDrewPenaltyCardNotification: '#/components/schemas/Gabong.PlayerDrewPenaltyCardNotification'
           Gabong.GameStartedNotification: '#/components/schemas/Gabong.GameStartedNotification'
           Gabong.GameEndedNotification: '#/components/schemas/Gabong.GameEndedNotification'
           Gabong.RoundStartedNotification: '#/components/schemas/Gabong.RoundStartedNotification'
           Gabong.RoundEndedNotification: '#/components/schemas/Gabong.RoundEndedNotification'
+          Gabong.PlayerPutCardNotification: '#/components/schemas/Gabong.PlayerPutCardNotification'
+          Gabong.PlayerDrewCardNotification: '#/components/schemas/Gabong.PlayerDrewCardNotification'
+          Gabong.PlayerDrewPenaltyCardNotification: '#/components/schemas/Gabong.PlayerDrewPenaltyCardNotification'
           Gabong.PlayerLostTheirTurnNotification: '#/components/schemas/Gabong.PlayerLostTheirTurnNotification'
     Protocol.DecksterResponse:
       type: object
@@ -249,13 +253,14 @@ components:
       discriminator:
         propertyName: type
         mapping:
-          Gabong.PlayerPutCardNotification: '#/components/schemas/Gabong.PlayerPutCardNotification'
-          Gabong.PlayerDrewCardNotification: '#/components/schemas/Gabong.PlayerDrewCardNotification'
-          Gabong.PlayerDrewPenaltyCardNotification: '#/components/schemas/Gabong.PlayerDrewPenaltyCardNotification'
+          Gabong.GabongPlayerNotification: '#/components/schemas/Gabong.GabongPlayerNotification'
           Gabong.GameStartedNotification: '#/components/schemas/Gabong.GameStartedNotification'
           Gabong.GameEndedNotification: '#/components/schemas/Gabong.GameEndedNotification'
           Gabong.RoundStartedNotification: '#/components/schemas/Gabong.RoundStartedNotification'
           Gabong.RoundEndedNotification: '#/components/schemas/Gabong.RoundEndedNotification'
+          Gabong.PlayerPutCardNotification: '#/components/schemas/Gabong.PlayerPutCardNotification'
+          Gabong.PlayerDrewCardNotification: '#/components/schemas/Gabong.PlayerDrewCardNotification'
+          Gabong.PlayerDrewPenaltyCardNotification: '#/components/schemas/Gabong.PlayerDrewPenaltyCardNotification'
           Gabong.PlayerLostTheirTurnNotification: '#/components/schemas/Gabong.PlayerLostTheirTurnNotification'
     Gabong.GabongResponse:
       type: object
@@ -292,6 +297,22 @@ components:
           Gabong.PassRequest: '#/components/schemas/Gabong.PassRequest'
           Gabong.PlayGabongRequest: '#/components/schemas/Gabong.PlayGabongRequest'
           Gabong.PlayBongaRequest: '#/components/schemas/Gabong.PlayBongaRequest'
+    Gabong.GabongPlayerNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Gabong.GabongGameNotification'
+        - type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+      discriminator:
+        propertyName: type
+        mapping:
+          Gabong.PlayerPutCardNotification: '#/components/schemas/Gabong.PlayerPutCardNotification'
+          Gabong.PlayerDrewCardNotification: '#/components/schemas/Gabong.PlayerDrewCardNotification'
+          Gabong.PlayerDrewPenaltyCardNotification: '#/components/schemas/Gabong.PlayerDrewPenaltyCardNotification'
+          Gabong.PlayerLostTheirTurnNotification: '#/components/schemas/Gabong.PlayerLostTheirTurnNotification'
     Yaniv.PutCardsRequest:
       type: object
       allOf:
@@ -1384,6 +1405,11 @@ components:
             playerId:
               type: string
               format: uuid
+    CrazyEights.DiscardPileShuffledNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
     Common.EmptyResponse:
       type: object
       allOf:
@@ -1452,43 +1478,6 @@ components:
           properties:
             errorMessage:
               type: string
-    Gabong.PlayerPutCardNotification:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/Gabong.GabongGameNotification'
-        - type: object
-          properties:
-            playerId:
-              type: string
-              format: uuid
-            card:
-              type: object
-              properties:
-                rank:
-                  type: integer
-                  format: int32
-                suit:
-                  type: string
-            newSuit:
-              type: string
-    Gabong.PlayerDrewCardNotification:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/Gabong.GabongGameNotification'
-        - type: object
-          properties:
-            playerId:
-              type: string
-              format: uuid
-    Gabong.PlayerDrewPenaltyCardNotification:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/Gabong.GabongGameNotification'
-        - type: object
-          properties:
-            playerId:
-              type: string
-              format: uuid
     Gabong.GameStartedNotification:
       type: object
       allOf:
@@ -1628,17 +1617,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/Common.PlayerData'
-    Gabong.PlayerLostTheirTurnNotification:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/Gabong.GabongGameNotification'
-        - type: object
-          properties:
-            playerId:
-              type: string
-              format: uuid
-            lostTurnReason:
-              type: string
     Gabong.GabongCardResponse:
       type: object
       allOf:
@@ -1673,3 +1651,40 @@ components:
       allOf:
         - $ref: '#/components/schemas/Gabong.GabongRequest'
         - type: object
+    Gabong.PlayerPutCardNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Gabong.GabongPlayerNotification'
+        - type: object
+          properties:
+            card:
+              type: object
+              properties:
+                rank:
+                  type: integer
+                  format: int32
+                suit:
+                  type: string
+            newSuit:
+              type: string
+    Gabong.PlayerDrewCardNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Gabong.GabongPlayerNotification'
+        - type: object
+    Gabong.PlayerDrewPenaltyCardNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Gabong.GabongPlayerNotification'
+        - type: object
+          properties:
+            penaltyReason:
+              type: string
+    Gabong.PlayerLostTheirTurnNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Gabong.GabongPlayerNotification'
+        - type: object
+          properties:
+            lostTurnReason:
+              type: string

@@ -81,7 +81,6 @@ public class CrazyEightsGame : GameObject
             player.Cards.Clear();
         }
         
-        CurrentPlayerIndex = 0;
         DonePlayers.Clear();
         StockPile.Clear();
         StockPile.PushRange(Deck);
@@ -96,6 +95,7 @@ public class CrazyEightsGame : GameObject
         DiscardPile.Clear();
         DiscardPile.Push(StockPile.Pop());
         DonePlayers.Clear();
+        CurrentPlayerIndex = new Random(Seed).Next(0, Players.Count);
     }
 
     public async Task<PlayerViewOfGame> PutCard(PutCardRequest request)

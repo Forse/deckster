@@ -6,9 +6,8 @@ import no.forse.decksterlib.DecksterServer
 import no.forse.decksterlib.communication.MessageSerializer
 import no.forse.decksterlib.communication.throwOnError
 import no.forse.decksterlib.game.GameClientBase
-import no.forse.decksterlib.model.chatroom.ChatNotification
-import no.forse.decksterlib.model.chatroom.ChatResponse
-import no.forse.decksterlib.model.chatroom.SendChatRequest
+import no.forse.decksterlib.model.chatroom.*
+import no.forse.decksterlib.model.controllers.GameVm
 import no.forse.decksterlib.model.protocol.DecksterNotification
 import no.forse.decksterlib.protocol.getType
 import retrofit2.Retrofit
@@ -32,7 +31,7 @@ class ChatRoomClient(
         response.throwOnError()
     }
 
-    suspend fun getGameList(): List<GameState> = api.getGames()
+    suspend fun getGameList(): List<GameVm> = api.getGames()
 
     val playerSaid: Flow<ChatNotification>?
         get() = joinedGame?.notificationFlow?.map { it as ChatNotification }

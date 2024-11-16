@@ -82,6 +82,8 @@ public class HomeController : Controller
             };
             await _repo.SaveAsync(user);
         }
+        
+        user = await _repo.Query<DecksterUser>().SingleAsync(u => string.Equals(u.Name, input.Username, StringComparison.OrdinalIgnoreCase));
 
         if (input.Password != user.Password)
         {
@@ -98,8 +100,8 @@ public class HomeController : Controller
             ExpiresUtc = DateTimeOffset.UtcNow.AddDays(180),
             IsPersistent = true
         });
-
-        return StatusCode(200, new UserModel(user.Name, user.AccessToken));
+        
+        return StatusCode(200, new UserModel(user.Id, user.Name, user.AccessToken));
     }
 }
 
