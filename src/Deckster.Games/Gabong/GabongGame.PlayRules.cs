@@ -80,8 +80,6 @@ public partial class GabongGame
 
         ShufflePileIfNecessary();
 
-        var card = StockPile.Pop();
-        player.Cards.Add(card);
         var drawnCard = StockPile.Pop();
         player.Cards.Add(drawnCard);
         if (CardsToDraw == 0)

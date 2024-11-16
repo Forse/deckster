@@ -47,6 +47,7 @@ public class CrazyEightsGame : GameObject
     /// All the players
     /// </summary>
     public List<CrazyEightsPlayer> Players { get; init; } = [];
+    public List<CrazyEightsSpectator> Spectators { get; init; } = [];
 
     public Suit? NewSuit { get; set; }
     public Card TopOfPile => DiscardPile.Peek();
@@ -418,4 +419,16 @@ public class CrazyEightsGame : GameObject
             PlayerViewOfGame = GetPlayerViewOfGame(CurrentPlayer)
         });
     }
+}
+
+public class CrazyEightsSpectator
+{
+    public Guid Id { get; init; }
+    public string Name { get; init; } = "";
+
+    public static readonly CrazyEightsSpectator Null = new()
+    {
+        Id = Guid.Parse("6D31A8DA-5766-458A-B113-8D0444BBEDBD"),
+        Name = "PST"
+    };
 }

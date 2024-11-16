@@ -240,7 +240,11 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
 
     [HttpGet("join/{connectionId:guid}/finish")]
     [RequireUser]
-    public async Task FinishJoin(Guid connectionId)
+    public Task FinishJoin(Guid connectionId)
+    {
+        return FinishHandshake(connectionId, true);
+    }
+    public async Task FinishHandshake(Guid connectionId, bool joinAsPlayer)
     {
         //HttpContext.Response.Headers.Connection = "close";
         if (!HttpContext.WebSockets.IsWebSocketRequest)
@@ -252,7 +256,7 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
         
         using var eventSocket = await HttpContext.WebSockets.AcceptWebSocketAsync(WebSocketDefaults.AcceptContext);
 
-        if (!await HostRegistry.FinishJoinAsync(connectionId, eventSocket))
+        if (!await HostRegistry.FinishJoinAsync(connectionId, eventSocket, joinAsPlayer))
         {
             if (!HttpContext.Response.HasStarted)
             {
@@ -260,6 +264,20 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
                 await HttpContext.Response.WriteAsJsonAsync(new ResponseMessage("Could not connect"));    
             }
         }
+    }
+    
+    [HttpGet("spectate/{gameName}")]
+    [RequireUser]
+    public Task Spectate(string gameName)
+    {
+        return Join(gameName);//same start of handshake
+    }
+
+    [HttpGet("spectate/{connectionId:guid}/finish")]
+    [RequireUser]
+    public Task FinishJoinAsSpectator(Guid connectionId)
+    {
+        return FinishHandshake(connectionId, false);
     }
 }
 

@@ -63,6 +63,7 @@ public partial class InMemoryChannel : IServerChannel
 {
     public event Action<IServerChannel, DisconnectReason>? Disconnected;
     public PlayerData Player { get; init; }
+    
 
     private Task _readRequestsTask;
     private readonly AsyncMessageQueue<byte[]> _notifications = new();

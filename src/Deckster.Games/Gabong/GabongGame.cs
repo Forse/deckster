@@ -272,6 +272,7 @@ public partial class GabongGame : GameObject
     private DateTime _lastPlayMadeAt = DateTime.UtcNow;
 
 
+    private string prevTurnMsg = "";
     public override async Task StartAsync()
     {
         _playIsOngoing = new CancellationTokenSource();
@@ -289,6 +290,17 @@ public partial class GabongGame : GameObject
                         continue;
                     }
 
+                    var msg = $"Current player: {CurrentPlayer.Name}";
+                    if(msg!=prevTurnMsg)
+                    {
+                        Console.WriteLine(msg);
+                        prevTurnMsg = msg;
+                    }
+                    else
+                    {
+                        Console.Write(".");
+                    }
+                    
                     if (State == GameState.Running && LastPlay == GabongPlay.RoundStarted && _lastPlayMadeAt <
                         DateTime.UtcNow.AddSeconds(-MAX_SECONDS_BEFORE_STARTING_ROUND))
                     {
