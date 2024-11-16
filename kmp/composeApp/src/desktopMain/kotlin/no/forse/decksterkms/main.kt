@@ -1,8 +1,8 @@
 package no.forse.decksterkms
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -36,7 +36,7 @@ fun main() = application {
             navController = navController,
             startDestination = "login",
 
-        ) {
+            ) {
             composable("login") {
                 LoginScreen(
                     LoginViewModel(ChatRepository, AppRepository()),
@@ -60,34 +60,34 @@ fun main() = application {
                         Text("uno")
                     }
                     Button(onClick = {
-                        navController.navigate("chatroom")
+                        navController.navigate("chatGameList")
                     }) {
-                        Text("chatroom")
+                        Text("chatRoom")
                     }
                 }
             }
-            composable("chatroom") {
-               /* val chatViewModel = viewModel(
-                    modelClass = ChatViewModel::class.java,
-                    factory = ChatViewModel.Factory()
-                )*/
-                val viewModel = ChatViewModel(ChatRepository)
-                Chat(id = null, viewModel = viewModel, onBackpressed = {
-                    navController.popBackStack()
+
+            composable("chatGameList") {
+                val chatRoomViewModel = viewModel(
+                    modelClass = ChatRoomsViewModel::class,
+                    factory = ChatRoomsViewModel.Factory()
+                )
+                GameRoom(chatRoomViewModel, onEnter = { gameId ->
+                    navController.navigate(
+                        "chat/$gameId"
+                    )
                 })
             }
 
-            composable("gameRoom") {
-                /*val chatRoomViewModel = viewModel(
-
-                    modelClass = ChatRoomsViewModel::class.java,
-                    factory = ChatRoomsViewModel.Factory()
+            composable("chat/{gameId}") { backstack ->
+                val gameId = backstack.arguments?.getString("gameId")
+                val chatViewModel = viewModel(
+                    modelClass = ChatViewModel::class,
+                    factory = ChatViewModel.Factory()
                 )
-                GameRoom(viewModel = chatRoomViewModel, onEnter = { id ->
-                    navController.navigate(
-                        "gameRoom/$id"
-                    )
-                })*/
+                Chat(id = gameId, viewModel = chatViewModel, onBackpressed = {
+                    navController.popBackStack()
+                })
             }
 
             composable("crazyeight") {

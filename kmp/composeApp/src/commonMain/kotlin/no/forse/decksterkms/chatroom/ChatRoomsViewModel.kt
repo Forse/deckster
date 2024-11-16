@@ -1,12 +1,13 @@
 package no.forse.decksterandroid.chatroom
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import androidx.lifecycle.viewmodel.CreationExtras
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import no.forse.decksterkms.ChatRepository
 import no.forse.decksterlib.model.controllers.GameVm
 import kotlin.concurrent.timer
+import kotlin.reflect.KClass
 
 sealed interface ChatRoomUiState {
     data class ChatRoom(val games: List<GameVm>) :
@@ -29,6 +30,12 @@ class ChatRoomsViewModel(private val decksterRepository: ChatRepository) : ViewM
         viewModelScope.launch {
             val games = decksterRepository.getGameList()
             _uiState.update { ChatRoomUiState.ChatRoom(games) }
+        }
+    }
+
+    class Factory : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: KClass<T>, extras: CreationExtras): T {
+            return ChatRoomsViewModel(ChatRepository) as T
         }
     }
 }
