@@ -28,7 +28,6 @@ fun main() = application {
     ) {
 
         var lastDecksterServer: DecksterServer? = null
-        var lastUserModel: UserModel? = null
 
         val navController = rememberNavController()
 
@@ -40,9 +39,8 @@ fun main() = application {
             composable("login") {
                 LoginScreen(
                     LoginViewModel(ChatRepository, AppRepository()),
-                    onLoginSuccess = { decksterServer, userModel ->
+                    onLoginSuccess = { decksterServer ->
                         lastDecksterServer = decksterServer
-                        lastUserModel = userModel
                         navController.navigate(route = "gamelist")
                     }
                 )
@@ -50,9 +48,9 @@ fun main() = application {
             composable("gamelist") {
                 Column {
                     Button(onClick = {
-                        navController.navigate("crazyeight")
+                        navController.navigate("crazyeightLobby")
                     }) {
-                        Text("crazyeight")
+                        Text("Crazyeight")
                     }
                     Button(onClick = {
                         navController.navigate("uno")
@@ -90,8 +88,21 @@ fun main() = application {
                 })
             }
 
+
+            composable("crazyeightLobby") {
+                val chatRoomViewModel = viewModel(
+                    modelClass = ChatRoomsViewModel::class,
+                    factory = ChatRoomsViewModel.Factory()
+                )
+                GameRoom(chatRoomViewModel, onEnter = { gameId ->
+                    navController.navigate(
+                        "chat/$gameId"
+                    )
+                })
+            }
+
             composable("crazyeight") {
-                val viewModel = CrazyEightViewModel(CrazyEightsClient(lastDecksterServer!!), lastUserModel: UserModel)
+                val viewModel = CrazyEightViewModel(CrazyEightsClient(lastDecksterServer!!))
                 CrazyEightScreen(viewModel)
             }
         }

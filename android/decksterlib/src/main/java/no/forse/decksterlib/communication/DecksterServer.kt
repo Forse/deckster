@@ -20,7 +20,7 @@ import java.io.IOException
 class DecksterServer(
     private val hostAddress: String,
 ) {
-    private var accessToken: String? = null
+    var accessToken: String? = null
     val okHttpClient = OkHttpClient.Builder().addInterceptor(
         HttpLoggingInterceptor().setLevel(
             HttpLoggingInterceptor.Level.BODY
