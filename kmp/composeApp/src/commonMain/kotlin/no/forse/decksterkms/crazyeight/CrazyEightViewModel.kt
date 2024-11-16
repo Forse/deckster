@@ -108,6 +108,10 @@ class CrazyEightViewModel(
         Pair(suit, count)
     }.maxByOrNull { it.second }?.first
 
+    fun leave() {
+        crazyEightsClient.leaveGame()
+    }
+
     class Factory(private val gameId: String, private val spectateMode: Boolean, private val server: DecksterServer) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: KClass<T>, extras: CreationExtras): T {
             return CrazyEightViewModel(gameId, spectateMode, server) as T

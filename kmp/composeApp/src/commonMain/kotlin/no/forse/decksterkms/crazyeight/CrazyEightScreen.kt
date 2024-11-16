@@ -1,5 +1,6 @@
 package no.forse.decksterkms.crazyeight
 
+import BaseScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -65,15 +66,19 @@ import no.forse.decksterlib.model.common.Suit
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun CrazyEightScreen(viewModel: CrazyEightViewModel) {
-    LaunchedEffect(Unit) {
-        viewModel.initialize()
+fun CrazyEightScreen(viewModel: CrazyEightViewModel, onBackpressed: () -> Unit) {
+    BaseScreen(topBarTitle = "Crazy Eights", onBackPressed = {
+        viewModel.leave()
+        onBackpressed.invoke()
+    }) {
+        LaunchedEffect(Unit) {
+            viewModel.initialize()
+        }
+        Text("You are")
+
+        val state = viewModel.uiState.collectAsState().value
+        CrazyEightContent(state)
     }
-
-    Text("You are")
-
-    val state = viewModel.uiState.collectAsState().value
-    CrazyEightContent(state)
 }
 
 @Composable

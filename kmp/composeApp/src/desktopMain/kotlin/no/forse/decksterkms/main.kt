@@ -110,7 +110,7 @@ fun main() = application {
                     modelClass = CrazyEightViewModel::class,
                     factory = CrazyEightViewModel.Factory(gameId, appState.doSpectate, appState.loggedInDecksterServer!!)
                 )
-                CrazyEightScreen(viewModel)
+                CrazyEightScreen(viewModel, onBackpressed = navController::popBackStack)
             }
         }
     }

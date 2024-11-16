@@ -78,6 +78,7 @@ abstract class GameClientBase(
     }
 
     fun leaveGame() {
+        println("Atteming to leave game $this")
         notifFlowJob?.cancel()
         joinedGame?.leave() ?: throw IllegalStateException("Not connected")
         onGameLeft()
