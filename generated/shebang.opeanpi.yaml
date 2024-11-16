@@ -362,6 +362,33 @@ paths:
       responses:
         '200':
           description: OK
+  '/chatroom/spectate/{gameName}':
+    get:
+      tags:
+        - ChatRoom
+      parameters:
+        - name: gameName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  '/chatroom/spectate/{connectionId}/finish':
+    get:
+      tags:
+        - ChatRoom
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
   /crazyeights/description:
     get:
       tags:
@@ -721,6 +748,33 @@ paths:
       responses:
         '200':
           description: OK
+  '/crazyeights/spectate/{gameName}':
+    get:
+      tags:
+        - CrazyEights
+      parameters:
+        - name: gameName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  '/crazyeights/spectate/{connectionId}/finish':
+    get:
+      tags:
+        - CrazyEights
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
   /gabong/description:
     get:
       tags:
@@ -1067,6 +1121,33 @@ paths:
         '200':
           description: OK
   '/gabong/join/{connectionId}/finish':
+    get:
+      tags:
+        - Gabong
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  '/gabong/spectate/{gameName}':
+    get:
+      tags:
+        - Gabong
+      parameters:
+        - name: gameName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  '/gabong/spectate/{connectionId}/finish':
     get:
       tags:
         - Gabong
@@ -1470,10 +1551,423 @@ paths:
       responses:
         '200':
           description: OK
+  '/idiot/spectate/{gameName}':
+    get:
+      tags:
+        - Idiot
+      parameters:
+        - name: gameName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  '/idiot/spectate/{connectionId}/finish':
+    get:
+      tags:
+        - Idiot
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
   /meta/messages:
     get:
       tags:
         - Meta
+      responses:
+        '200':
+          description: OK
+  /texasholdem/description:
+    get:
+      tags:
+        - TexasHoldEm
+      responses:
+        '200':
+          description: OK
+  /texasholdem/metadata:
+    get:
+      tags:
+        - TexasHoldEm
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Meta.GameMeta'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meta.GameMeta'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Meta.GameMeta'
+  /texasholdem:
+    get:
+      tags:
+        - TexasHoldEm
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
+  /texasholdem/games:
+    get:
+      tags:
+        - TexasHoldEm
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Controllers.GameVm'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Controllers.GameVm'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Controllers.GameVm'
+  '/texasholdem/games/{name}':
+    get:
+      tags:
+        - TexasHoldEm
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameVm'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameVm'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameVm'
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+    delete:
+      tags:
+        - TexasHoldEm
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameVm'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameVm'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameVm'
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+  '/texasholdem/games/{name}/bot':
+    post:
+      tags:
+        - TexasHoldEm
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+  /texasholdem/previousgames:
+    get:
+      tags:
+        - TexasHoldEm
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TexasHoldEm.TexasHoldEmGame'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TexasHoldEm.TexasHoldEmGame'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TexasHoldEm.TexasHoldEmGame'
+  '/texasholdem/previousgames/{id}':
+    get:
+      tags:
+        - TexasHoldEm
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Data.HistoricTexasHoldEmGame'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Data.HistoricTexasHoldEmGame'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Data.HistoricTexasHoldEmGame'
+  '/texasholdem/previousgames/{id}/{version}':
+    get:
+      tags:
+        - TexasHoldEm
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Data.HistoricTexasHoldEmGame'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Data.HistoricTexasHoldEmGame'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Data.HistoricTexasHoldEmGame'
+  '/texasholdem/create/{name}':
+    post:
+      tags:
+        - TexasHoldEm
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Core.GameInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core.GameInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Core.GameInfo'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+  /texasholdem/create:
+    post:
+      tags:
+        - TexasHoldEm
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Core.GameInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core.GameInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Core.GameInfo'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+  '/texasholdem/games/{name}/start':
+    post:
+      tags:
+        - TexasHoldEm
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Core.GameInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core.GameInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Core.GameInfo'
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+  '/texasholdem/join/{gameName}':
+    get:
+      tags:
+        - TexasHoldEm
+      parameters:
+        - name: gameName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  '/texasholdem/join/{connectionId}/finish':
+    get:
+      tags:
+        - TexasHoldEm
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  '/texasholdem/spectate/{gameName}':
+    get:
+      tags:
+        - TexasHoldEm
+      parameters:
+        - name: gameName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  '/texasholdem/spectate/{connectionId}/finish':
+    get:
+      tags:
+        - TexasHoldEm
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
       responses:
         '200':
           description: OK
@@ -1823,6 +2317,33 @@ paths:
         '200':
           description: OK
   '/uno/join/{connectionId}/finish':
+    get:
+      tags:
+        - Uno
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  '/uno/spectate/{gameName}':
+    get:
+      tags:
+        - Uno
+      parameters:
+        - name: gameName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  '/uno/spectate/{connectionId}/finish':
     get:
       tags:
         - Uno
@@ -2202,6 +2723,33 @@ paths:
       responses:
         '200':
           description: OK
+  '/yaniv/spectate/{gameName}':
+    get:
+      tags:
+        - Yaniv
+      parameters:
+        - name: gameName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  '/yaniv/spectate/{connectionId}/finish':
+    get:
+      tags:
+        - Yaniv
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
 components:
   schemas:
     ChatRoom.ChatNotification:
@@ -2373,6 +2921,7 @@ components:
             - donePlayers
             - initialCardsPerPlayer
             - players
+            - spectators
             - stockPile
             - topOfPile
           type: object
@@ -2406,6 +2955,10 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/CrazyEights.CrazyEightsPlayer'
+            spectators:
+              type: array
+              items:
+                $ref: '#/components/schemas/CrazyEights.CrazyEightsSpectator'
             newSuit:
               $ref: '#/components/schemas/Common.Suit'
             topOfPile:
@@ -2431,6 +2984,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Common.Card'
+      additionalProperties: false
+    CrazyEights.CrazyEightsSpectator:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
       additionalProperties: false
     CrazyEights.DiscardPileShuffledNotification:
       allOf:
@@ -2682,6 +3247,12 @@ components:
       properties:
         game:
           $ref: '#/components/schemas/Idiot.IdiotGame'
+      additionalProperties: false
+    Data.HistoricTexasHoldEmGame:
+      type: object
+      properties:
+        game:
+          $ref: '#/components/schemas/TexasHoldEm.TexasHoldEmGame'
       additionalProperties: false
     Data.HistoricUnoGame:
       type: object
@@ -4181,13 +4752,22 @@ components:
     TexasHoldEm.RoundEndedNotification:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterNotification'
-        - type: object
+        - required:
+            - winnerId
+            - winnings
+          type: object
+          properties:
+            winnerId:
+              type: string
+              format: uuid
+            winnings:
+              type: integer
+              format: int32
           additionalProperties: false
     TexasHoldEm.TexasHoldEmGame:
       allOf:
         - $ref: '#/components/schemas/Games.GameObject'
         - required:
-            - allCards
             - cardsInPlay
             - currentBigBlind
             - currentPlayer
@@ -4224,10 +4804,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/TexasHoldEm.TexasHoldEmPlayer'
-            allCards:
-              type: array
-              items:
-                $ref: '#/components/schemas/Common.Card'
             isStarted:
               type: boolean
               readOnly: true

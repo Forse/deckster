@@ -244,7 +244,8 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
     {
         return FinishHandshake(connectionId, true);
     }
-    public async Task FinishHandshake(Guid connectionId, bool joinAsPlayer)
+    
+    private async Task FinishHandshake(Guid connectionId, bool joinAsPlayer)
     {
         //HttpContext.Response.Headers.Connection = "close";
         if (!HttpContext.WebSockets.IsWebSocketRequest)
@@ -272,7 +273,7 @@ public abstract class GameController<TGameHost, TGame> : Controller, IGameContro
     {
         return Join(gameName);//same start of handshake
     }
-
+    
     [HttpGet("spectate/{connectionId:guid}/finish")]
     [RequireUser]
     public Task FinishJoinAsSpectator(Guid connectionId)

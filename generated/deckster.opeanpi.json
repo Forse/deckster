@@ -1610,7 +1610,17 @@
             "$ref": "#/components/schemas/Protocol.DecksterNotification"
           },
           {
-            "type": "object"
+            "type": "object",
+            "properties": {
+              "winnerId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "winnings": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
           }
         ]
       },

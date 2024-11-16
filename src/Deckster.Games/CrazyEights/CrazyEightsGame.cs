@@ -263,9 +263,23 @@ public class CrazyEightsGame : GameObject
         IncrementSeed();
         var playerId = request.PlayerId;
         EmptyResponse response;
-        if (!TryGetCurrentPlayer(playerId, out _))
+        if (!TryGetCurrentPlayer(playerId, out var player))
         {
             response = new EmptyResponse("It is not your turn");
+            await RespondAsync(playerId, response);
+            return response;
+        }
+
+        if (player.Cards.Any(CanPut))
+        {
+            response = new EmptyResponse("You must play one of your cards");
+            await RespondAsync(playerId, response);
+            return response;
+        }
+
+        if (CardsDrawn < 3)
+        {
+            response = new EmptyResponse("You must draw a card");
             await RespondAsync(playerId, response);
             return response;
         }
