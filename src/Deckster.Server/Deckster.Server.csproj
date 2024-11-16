@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Deckster.Bullshit.SampleClient\Deckster.Bullshit.SampleClient.csproj" />
       <ProjectReference Include="..\Deckster.ChatRoom.SampleClient\Deckster.ChatRoom.SampleClient.csproj" />
       <ProjectReference Include="..\Deckster.Client\Deckster.Client.csproj" />
       <ProjectReference Include="..\Deckster.Core\Deckster.Core.csproj" />

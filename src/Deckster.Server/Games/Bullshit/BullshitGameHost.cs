@@ -1,14 +1,17 @@
 using System.Diagnostics.CodeAnalysis;
-using Deckster.Core.Games.Bullshit;
+using Deckster.Bullshit.SampleClient;
+using Deckster.Client.Games.Bullshit;
+using Deckster.Core.Games.Common;
 using Deckster.Games.Bullshit;
-using Deckster.Server.Controllers;
 using Deckster.Server.Data;
+using Deckster.Server.Games.Common.Fakes;
 
 namespace Deckster.Server.Games.Bullshit;
 
 public class BullshitGameHost : StandardGameHost<BullshitGame>
 {
     public override string GameType => "Bullshit";
+    private readonly List<BullshitPoorAi> _bots = new();
     
     public BullshitGameHost(IRepo repo, ILoggerFactory loggerFactory) : base(repo, loggerFactory, new BullshitProjection(), 6)
     {
@@ -16,42 +19,16 @@ public class BullshitGameHost : StandardGameHost<BullshitGame>
     
     public override bool TryAddBot([MaybeNullWhen(true)] out string error)
     {
-        error = "Bots not supported";
-        return false;
-    }
-}
-
-public class BullshitProjection : GameProjection<BullshitGame>
-{
-    public BullshitGame Create(BullshitCreatedEvent e)
-    {
-        var game = new BullshitGame
+        var channel = new InMemoryChannel
         {
-            Id = e.Id,
-            Name = e.Name,
-            Seed = e.InitialSeed,
-            StartedTime = e.StartedTime
+            Player = new PlayerData
+            { 
+                Id = Guid.NewGuid(),
+                Name = TestUserNames.Random()
+            }
         };
-        game.Deal();
-        
-        return game;
+        var bot = new BullshitPoorAi(new BullshitClient(channel));
+        _bots.Add(bot);
+        return TryAddPlayer(channel, out error);
     }
-    
-    public override (BullshitGame game, object startEvent) Create(IGameHost host)
-    {
-        var e = new BullshitCreatedEvent
-        {
-            Id = Guid.NewGuid(),
-            Name = host.Name,
-            StartedTime = DateTimeOffset.UtcNow,
-            InitialSeed = new Random().Next(0, int.MaxValue)
-        };
-        var game = Create(e);
-        return (game, e);
-    }
-
-    Task Apply(PutCardRequest @event, BullshitGame game) => game.PutCard(@event);
-    Task Apply(DrawCardRequest @event, BullshitGame game) => game.DrawCard(@event);
-    Task Pass(PassRequest @event, BullshitGame game) => game.Pass(@event);
-    Task CallBullshit(BullshitRequest @event, BullshitGame game) => game.CallBullshit(@event);
 }
