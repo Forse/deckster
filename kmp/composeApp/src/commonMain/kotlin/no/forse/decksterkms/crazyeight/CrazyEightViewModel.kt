@@ -1,7 +1,6 @@
 package no.forse.decksterkms.crazyeight
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
@@ -28,6 +27,8 @@ class CrazyEightViewModel(
             Card(1, Suit.Hearts),
             isYourTurn = false,
             topCardIsYours = false,
+            error = null,
+            doSuitQuestion = false,
         )
     )
     val uiState: StateFlow<CrazyEightUiState> = _uiState.asStateFlow()
@@ -39,6 +40,9 @@ class CrazyEightViewModel(
     private fun List<Card>.getSuit(suit: Suit) = this.firstOrNull { it.suit == suit }
     private fun List<Card>.getRank(rank: Int) = this.firstOrNull { it.rank == rank }
     private fun List<Card>.findEight() = this.firstOrNull { it.rank == 8 }
+
+    private var eightSelectedForPlay: Card? = null
+    private var lockCardPlay = false
 
     private fun determineCardToPut(topOfPile: Card, currentSuit: Suit, cards: List<Card>): Card? {
         return cards.getSuit(currentSuit)
@@ -136,9 +140,14 @@ class CrazyEightViewModel(
             return null
         }
 
-        val drawnCard = crazyEightsClient.drawCard()
-        return if (drawnCard.card.suit == playerView.currentSuit || drawnCard.card.rank == playerView.topOfPile.rank) {
-            drawnCard.card
+        val drawResponse = crazyEightsClient.drawCard()
+        _uiState.update {
+            it.copy(playerHand = drawResponse.playerViewOfGame.cards)
+        }
+        delay(200) // Take 200 ms to decide after having drawn card and allow the UI to update
+        val drawnCard = drawResponse.drawnCard
+        return if (drawnCard.suit == playerView.currentSuit || drawnCard.rank == playerView.topOfPile.rank) {
+            drawnCard
         } else {
             drawCard(numberOfCardsToDraw - 1, playerView)
         }
@@ -151,6 +160,83 @@ class CrazyEightViewModel(
 
     fun leave() {
         crazyEightsClient.leaveGame()
+    }
+
+    fun onCardClicked(card: Card) {
+        _uiState.update {
+            it.copy(error = null)
+        }
+
+        if (asbot) return
+        if (!_uiState.value.isYourTurn) {
+            println("Attempted to play card while not your turn")
+            return
+        }
+        if (!_uiState.value.canPlayCard) return
+
+        if (!lockCardPlay) {
+            lockCardPlay = true
+            tryUserAction {
+                playCard(card)
+                lockCardPlay = false
+            }
+        }
+    }
+
+    suspend fun playCard(card: Card) {
+        if (card.rank == 8) {
+            println("Asking for player to selecte suite for eight...")
+            eightSelectedForPlay = card
+            _uiState.update {
+                it.copy(doSuitQuestion = true)
+            }
+        } else  {
+            println("Player putting card: $card")
+            crazyEightsClient.putCard(card)
+        }
+    }
+
+    fun onSuitSelected(suit: Suit) {
+        tryUserAction {
+            println("Playing Eight with suit: $suit, card: $eightSelectedForPlay")
+            _uiState.update {
+                it.copy(
+                    error = null,
+                    doSuitQuestion = false,
+                )
+            }
+            crazyEightsClient.putEight(eightSelectedForPlay!!, suit)
+            eightSelectedForPlay = null
+        }
+    }
+
+    fun onDrawCard() {
+        tryUserAction {
+            val newState = crazyEightsClient.drawCard()
+            _uiState.update { it.copy(playerHand = newState.playerViewOfGame.cards) }
+        }
+    }
+
+    fun onPass() {
+        tryUserAction {
+            crazyEightsClient.passTurn()
+            _uiState.update { it.copy(isYourTurn = false) }
+        }
+    }
+
+    private fun tryUserAction( action: suspend () -> Unit) {
+        viewModelScope.launch {
+            try {
+                lockCardPlay = true
+                action.invoke()
+            } catch (ex: Exception) {
+                _uiState.update {
+                    it.copy(error = ex.message)
+                }
+            } finally {
+                lockCardPlay = false
+            }
+        }
     }
 
     class Factory(private val gameId: String,

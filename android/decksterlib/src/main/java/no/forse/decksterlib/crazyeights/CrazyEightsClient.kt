@@ -76,11 +76,15 @@ class CrazyEightsClient(decksterServer: DecksterServer) :
         return sendAndReceive<EmptyResponse>(typedMessage)
     }
 
-    suspend fun drawCard(): CardResponse {
+    suspend fun drawCard(): DrawnCardData {
         guardNotSpectateMode()
         val playerId = joinedGameOrThrow.userUuid
         val typedMessage = DrawCardRequest(dtoType(DrawCardRequest::class), playerId)
-        return sendAndReceive<CardResponse>(typedMessage)
+        return sendAndReceive<CardResponse>(typedMessage).let {
+            val curState = currentState!!
+            currentState = curState.copy(cards = curState.cards + listOf(it.card))
+            DrawnCardData(it.card, currentState!!)
+        }
     }
 
     suspend fun putCard(card: Card): PlayerViewOfGame {
@@ -100,4 +104,9 @@ class CrazyEightsClient(decksterServer: DecksterServer) :
             this.currentState = it
         }
     }
+
+    data class DrawnCardData(
+        val drawnCard: Card,
+        val playerViewOfGame: PlayerViewOfGame,
+    )
 }

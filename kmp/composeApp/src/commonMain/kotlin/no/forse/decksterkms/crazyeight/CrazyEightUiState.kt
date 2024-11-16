@@ -7,4 +7,10 @@ data class CrazyEightUiState(
     val topOfPile: Card,
     val isYourTurn: Boolean,
     val topCardIsYours: Boolean,
-)
+    val error: String?,
+    /** When 8 is played, ask for suit */
+    val doSuitQuestion: Boolean,
+) {
+    val canPlayCard: Boolean
+        get() = isYourTurn && !doSuitQuestion
+}

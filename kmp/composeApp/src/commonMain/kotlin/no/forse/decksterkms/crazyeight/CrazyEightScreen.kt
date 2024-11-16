@@ -3,13 +3,16 @@ package no.forse.decksterkms.crazyeight
 import BaseScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import decksterkms.composeapp.generated.resources.Res
 import decksterkms.composeapp.generated.resources.clubs_10_150
 import decksterkms.composeapp.generated.resources.clubs_2_150
@@ -84,37 +87,90 @@ fun CrazyEightScreen(viewModel: CrazyEightViewModel, onBackpressed: () -> Unit) 
         }
 
         val state = viewModel.uiState.collectAsState().value
-        CrazyEightContent(state)
+        CrazyEightContent(
+            state,
+            onCardClicked = viewModel::onCardClicked,
+            onSuitSelected = viewModel::onSuitSelected,
+            onDrawCard = viewModel::onDrawCard,
+            onPass = viewModel::onPass,
+        )
     }
 }
 
 @Composable
-fun CrazyEightContent(crazyEightUiState: CrazyEightUiState) {
-
-    Column {
-        if (crazyEightUiState.isYourTurn) {
-            Text("It's your turn!")
-        } else {
-            Text("Waiting for other player to make a move...")
+fun CrazyEightContent(
+    crazyEightUiState: CrazyEightUiState,
+    onCardClicked: (card: Card) -> Unit,
+    onSuitSelected: (Suit) -> Unit,
+    onDrawCard: () -> Unit,
+    onPass: () -> Unit,
+) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.weight(.8F)) {
+                Text("Status: ", fontSize = 22.sp)
+                if (crazyEightUiState.isYourTurn) {
+                    if (crazyEightUiState.error == null) {
+                        Text("It's your turn!", fontSize = 22.sp)
+                    } else {
+                        Text(crazyEightUiState.error, fontSize = 22.sp, color = Color.Red)
+                    }
+                } else {
+                    Text("Waiting for other player to make a move...", fontSize = 22.sp)
+                }
+            }
+            Column(modifier = Modifier.weight(.2F)) {
+                Button(onClick = onDrawCard, modifier = Modifier.width(120.dp)) {
+                    Text("Draw card")
+                }
+                Spacer(modifier = Modifier.padding(vertical = 4.dp))
+                Button(onClick = onPass, modifier = Modifier.width(120.dp)) {
+                    Text("Pass")
+                }
+            }
         }
         Spacer(Modifier.padding(16.dp))
 
         // top of pile
-        GameCardIcon(crazyEightUiState.topOfPile)
+        GameCardIcon(crazyEightUiState.topOfPile, null)
 
         Spacer(Modifier.padding(8.dp))
-        Text("Your cards:", fontSize = 20.sp)
-        Spacer(Modifier.padding(8.dp))
-        Row {
-            // hand
-            showHand(crazyEightUiState.playerHand)
+
+        if (crazyEightUiState.doSuitQuestion) {
+            SuitQuestion(onSuitSelected)
+        } else {
+            Hand(crazyEightUiState, onCardClicked)
         }
     }
 }
 
 @Composable
-fun GameCardIcon(card: Card) {
+fun SuitQuestion(onSuitSelected: (Suit) -> Unit) {
+    Text("Choose suit to change to:", modifier = Modifier.padding(16.dp), color = Color.Blue, fontSize = 24.sp)
+    Row {
+        GameCardIcon(Card(1, Suit.Spades), { onSuitSelected(Suit.Spades) } )
+        Spacer(Modifier.padding(horizontal = 4.dp))
+        GameCardIcon(Card(1, Suit.Hearts), { onSuitSelected(Suit.Hearts) } )
+        Spacer(Modifier.padding(horizontal = 4.dp))
+        GameCardIcon(Card(1, Suit.Clubs), { onSuitSelected(Suit.Clubs) } )
+        Spacer(Modifier.padding(horizontal = 4.dp))
+        GameCardIcon(Card(1, Suit.Diamonds), { onSuitSelected(Suit.Diamonds) } )
 
+    }
+}
+
+@Composable
+fun Hand(crazyEightUiState: CrazyEightUiState, onCardClicked: (Card) -> Unit) {
+    Text("Your cards:", fontSize = 20.sp)
+    Spacer(Modifier.padding(8.dp))
+    Row {
+        // hand
+        showHand(crazyEightUiState.playerHand, onCardClicked)
+    }
+}
+
+@Composable
+fun GameCardIcon(card: Card, onCardClicked: ((card: Card) -> Unit)?) {
     val res = when(card) {
         Card(1, Suit.Clubs) -> Res.drawable.clubs_a_150
         Card(2, Suit.Clubs) -> Res.drawable.clubs_2_150
@@ -171,10 +227,19 @@ fun GameCardIcon(card: Card) {
         else -> null
     }
 
-    Image(
-        painter = painterResource(resource = res!!),
-        contentDescription = "card"
-    )
+    if (onCardClicked != null) {
+        Button(onClick = { onCardClicked(card) }) {
+            Image(
+                painter = painterResource(resource = res!!),
+                contentDescription = "card"
+            )
+        }
+    } else {
+        Image(
+            painter = painterResource(resource = res!!),
+            contentDescription = "card"
+        )
+    }
 }
 
 private fun suitToIconName(suit: Suit) = when (suit) {
@@ -202,8 +267,8 @@ private fun rankToIconName(rank: Int) = when (rank) {
 }
 
 @Composable
-fun showHand(playerHand: List<Card>) {
+fun showHand(playerHand: List<Card>, onCardClicked: ((card: Card) -> Unit)?) {
     for (card in playerHand) {
-        GameCardIcon(card)
+        GameCardIcon(card, onCardClicked)
     }
 }
