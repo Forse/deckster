@@ -8,11 +8,11 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import decksterkms.composeapp.generated.resources.Res
 import decksterkms.composeapp.generated.resources.clubs_10_150
 import decksterkms.composeapp.generated.resources.clubs_2_150
@@ -116,7 +116,12 @@ fun CrazyEightContent(
                         Text(crazyEightUiState.error, fontSize = 22.sp, color = Color.Red)
                     }
                 } else {
-                    Text("Waiting for other player to make a move...", fontSize = 22.sp)
+                    val text = when (crazyEightUiState.gameState) {
+                        GameState.WAITING -> "Game not started"
+                        GameState.STARTED -> "Waiting for other player to make a move..."
+                        GameState.ENDED -> "Game ended"
+                    }
+                    Text(text, fontSize = 22.sp)
                 }
             }
             Column(modifier = Modifier.weight(.2F)) {
@@ -131,15 +136,23 @@ fun CrazyEightContent(
         }
         Spacer(Modifier.padding(16.dp))
 
-        // top of pile
-        GameCardIcon(crazyEightUiState.topOfPile, null)
+        if (crazyEightUiState.gameState == GameState.STARTED) {
+            // top of pile
+            GameCardIcon(crazyEightUiState.topOfPile, null)
+            Text("Current suit: ${crazyEightUiState.currentSuit}", modifier = Modifier.padding(top = 8.dp), fontSize = 22.sp)
 
-        Spacer(Modifier.padding(8.dp))
+            Spacer(Modifier.padding(8.dp))
 
-        if (crazyEightUiState.doSuitQuestion) {
-            SuitQuestion(onSuitSelected)
-        } else {
-            Hand(crazyEightUiState, onCardClicked)
+            if (crazyEightUiState.doSuitQuestion) {
+                SuitQuestion(onSuitSelected)
+            } else {
+                Hand(crazyEightUiState, onCardClicked)
+            }
+        }
+        if (crazyEightUiState.gameState == GameState.ENDED) {
+            Spacer(Modifier.padding(8.dp))
+            Text("LOSER:", modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally), fontSize = 32.sp)
+            Text(crazyEightUiState.loseName ?: "?", modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally), fontSize = 32.sp)
         }
     }
 }

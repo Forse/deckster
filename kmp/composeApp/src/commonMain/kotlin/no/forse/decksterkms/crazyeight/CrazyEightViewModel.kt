@@ -28,6 +28,8 @@ class CrazyEightViewModel(
             isYourTurn = false,
             topCardIsYours = false,
             error = null,
+            currentSuit = Suit.Hearts,
+            gameState = GameState.WAITING,
             doSuitQuestion = false,
         )
     )
@@ -60,13 +62,27 @@ class CrazyEightViewModel(
         }
 
         threadpoolScope.launch {
-            crazyEightsClient.crazyEightsNotifications?.collect {
-                when (it) {
+            crazyEightsClient.crazyEightsNotifications?.collect { event ->
+                when (event) {
                     is PlayerPutCardNotification, is PlayerPutEightNotification -> _uiState.update {
                         it.copy(
                             crazyEightsClient.currentState!!.cards,
                             crazyEightsClient.currentState!!.topOfPile,
+                            currentSuit = crazyEightsClient.currentState!!.currentSuit,
                             topCardIsYours = false,
+                        )
+                    }
+                    is GameEndedNotification -> _uiState.update {
+                        it.copy(
+                            gameState = GameState.ENDED,
+                            loseName = event.loserName
+                        )
+                    }
+                    is GameStartedNotification -> _uiState.update {
+                        it.copy(
+                            gameState = GameState.STARTED,
+                            playerHand = event.playerViewOfGame.cards,
+                            currentSuit = event.playerViewOfGame.currentSuit
                         )
                     }
                 }
@@ -81,19 +97,18 @@ class CrazyEightViewModel(
     }
 
     private suspend fun onYourTurn(playerView: PlayerViewOfGame) {
-        println("XXX my turn")
         _uiState.update {
             it.copy(
                 playerHand = playerView.cards,
                 topOfPile = playerView.topOfPile,
                 topCardIsYours = false,
+                currentSuit = playerView.currentSuit,
+                error = null,
                 isYourTurn = true,
             )
         }
         if (asbot) {
             yourTurnAsBot(playerView)
-        } else {
-            // todo logic to process card selection from player
         }
     }
 
@@ -193,6 +208,7 @@ class CrazyEightViewModel(
         } else  {
             println("Player putting card: $card")
             crazyEightsClient.putCard(card)
+           // _uiState.update {  it.copy(currentSuit = card.suit) }
         }
     }
 
@@ -203,6 +219,7 @@ class CrazyEightViewModel(
                 it.copy(
                     error = null,
                     doSuitQuestion = false,
+                    currentSuit = suit,
                 )
             }
             crazyEightsClient.putEight(eightSelectedForPlay!!, suit)
