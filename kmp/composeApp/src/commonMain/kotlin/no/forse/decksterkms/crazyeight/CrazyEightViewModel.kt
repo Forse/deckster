@@ -14,7 +14,7 @@ class CrazyEightViewModel(private val crazyEightsClient: CrazyEightsClient){
 
 
     private companion object {
-        const val GAME_ID = "ubeslutsom flatulens"
+        const val GAME_ID = "ensom eske"
     }
 
     private fun List<Card>.getSuit(suit: Suit) = this.firstOrNull { it.suit == suit }
@@ -31,6 +31,12 @@ class CrazyEightViewModel(private val crazyEightsClient: CrazyEightsClient){
         crazyEightsClient.joinGame(crazyEightsClient.decksterServer.accessToken!!, GAME_ID)
 
         threadpoolScope.launch {
+            crazyEightsClient.crazyEightsNotifications?.collect {
+                println(it.type)
+            }
+        }
+
+        threadpoolScope.launch {
             crazyEightsClient.yourTurnFlow.collect { playerView ->
                 println("my turn")
 
@@ -39,7 +45,7 @@ class CrazyEightViewModel(private val crazyEightsClient: CrazyEightsClient){
                     if (cardToPut.rank == 8) {
                         determineSuiteToRequest(playerView.cards)?.let { suit ->
                             crazyEightsClient.putEight(cardToPut, suit)
-                        }
+                        } ?: crazyEightsClient.passTurn()
                     } else {
                         crazyEightsClient.putCard(cardToPut)
                     }
@@ -47,18 +53,12 @@ class CrazyEightViewModel(private val crazyEightsClient: CrazyEightsClient){
                     val drawnCard = crazyEightsClient.drawCard()
                     if (drawnCard.card.suit == playerView.currentSuit || drawnCard.card.rank == playerView.topOfPile.rank) {
                         crazyEightsClient.putCard(drawnCard.card)
+                    } else {
+                        crazyEightsClient.passTurn()
                     }
                 }
-
-                //getBotAction(threeViewsOfAPlayer.topOfPile, threeViewsOfAPlayer.cards)
-
-
             }
         }
-        //println("pre start game")
-        //val foo = crazyEightsClient.startGame(GAME_ID)
-        //println("post start game: $foo")
-
     }
 
     private fun determineSuiteToRequest(cards: List<Card>) = Suit.entries.map { suit ->
