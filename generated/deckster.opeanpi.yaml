@@ -110,6 +110,24 @@ components:
           ChatRoom.SendChatRequest: '#/components/schemas/ChatRoom.SendChatRequest'
           ChatRoom.ChatNotification: '#/components/schemas/ChatRoom.ChatNotification'
           ChatRoom.ChatResponse: '#/components/schemas/ChatRoom.ChatResponse'
+          Bullshit.PutCardRequest: '#/components/schemas/Bullshit.PutCardRequest'
+          Bullshit.PlayerPutCardNotification: '#/components/schemas/Bullshit.PlayerPutCardNotification'
+          Bullshit.BullshitRequest: '#/components/schemas/Bullshit.BullshitRequest'
+          Bullshit.BullshitResponse: '#/components/schemas/Bullshit.BullshitResponse'
+          Bullshit.DrawCardRequest: '#/components/schemas/Bullshit.DrawCardRequest'
+          Bullshit.PassRequest: '#/components/schemas/Bullshit.PassRequest'
+          Bullshit.CardResponse: '#/components/schemas/Bullshit.CardResponse'
+          Bullshit.PlayerDrewCardNotification: '#/components/schemas/Bullshit.PlayerDrewCardNotification'
+          Bullshit.PlayerPassedNotification: '#/components/schemas/Bullshit.PlayerPassedNotification'
+          Bullshit.ItsYourTurnNotification: '#/components/schemas/Bullshit.ItsYourTurnNotification'
+          Bullshit.FalseBullshitCallNotification: '#/components/schemas/Bullshit.FalseBullshitCallNotification'
+          Bullshit.ItsPlayersTurnNotification: '#/components/schemas/Bullshit.ItsPlayersTurnNotification'
+          Bullshit.GameStartedNotification: '#/components/schemas/Bullshit.GameStartedNotification'
+          Bullshit.GameEndedNotification: '#/components/schemas/Bullshit.GameEndedNotification'
+          Bullshit.PlayerIsDoneNotification: '#/components/schemas/Bullshit.PlayerIsDoneNotification'
+          Bullshit.DiscardPileShuffledNotification: '#/components/schemas/Bullshit.DiscardPileShuffledNotification'
+          Bullshit.BullshitBroadcastNotification: '#/components/schemas/Bullshit.BullshitBroadcastNotification'
+          Bullshit.BullshitPlayerNotification: '#/components/schemas/Bullshit.BullshitPlayerNotification'
           Handshake.HelloSuccessMessage: '#/components/schemas/Handshake.HelloSuccessMessage'
           Handshake.ConnectSuccessMessage: '#/components/schemas/Handshake.ConnectSuccessMessage'
           Handshake.ConnectFailureMessage: '#/components/schemas/Handshake.ConnectFailureMessage'
@@ -166,6 +184,10 @@ components:
           CrazyEights.DrawCardRequest: '#/components/schemas/CrazyEights.DrawCardRequest'
           CrazyEights.PassRequest: '#/components/schemas/CrazyEights.PassRequest'
           ChatRoom.SendChatRequest: '#/components/schemas/ChatRoom.SendChatRequest'
+          Bullshit.PutCardRequest: '#/components/schemas/Bullshit.PutCardRequest'
+          Bullshit.BullshitRequest: '#/components/schemas/Bullshit.BullshitRequest'
+          Bullshit.DrawCardRequest: '#/components/schemas/Bullshit.DrawCardRequest'
+          Bullshit.PassRequest: '#/components/schemas/Bullshit.PassRequest'
           Gabong.PutCardRequest: '#/components/schemas/Gabong.PutCardRequest'
           Gabong.DrawCardRequest: '#/components/schemas/Gabong.DrawCardRequest'
           Gabong.PassRequest: '#/components/schemas/Gabong.PassRequest'
@@ -231,6 +253,18 @@ components:
           CrazyEights.PlayerIsDoneNotification: '#/components/schemas/CrazyEights.PlayerIsDoneNotification'
           CrazyEights.DiscardPileShuffledNotification: '#/components/schemas/CrazyEights.DiscardPileShuffledNotification'
           ChatRoom.ChatNotification: '#/components/schemas/ChatRoom.ChatNotification'
+          Bullshit.PlayerPutCardNotification: '#/components/schemas/Bullshit.PlayerPutCardNotification'
+          Bullshit.PlayerDrewCardNotification: '#/components/schemas/Bullshit.PlayerDrewCardNotification'
+          Bullshit.PlayerPassedNotification: '#/components/schemas/Bullshit.PlayerPassedNotification'
+          Bullshit.ItsYourTurnNotification: '#/components/schemas/Bullshit.ItsYourTurnNotification'
+          Bullshit.FalseBullshitCallNotification: '#/components/schemas/Bullshit.FalseBullshitCallNotification'
+          Bullshit.ItsPlayersTurnNotification: '#/components/schemas/Bullshit.ItsPlayersTurnNotification'
+          Bullshit.GameStartedNotification: '#/components/schemas/Bullshit.GameStartedNotification'
+          Bullshit.GameEndedNotification: '#/components/schemas/Bullshit.GameEndedNotification'
+          Bullshit.PlayerIsDoneNotification: '#/components/schemas/Bullshit.PlayerIsDoneNotification'
+          Bullshit.DiscardPileShuffledNotification: '#/components/schemas/Bullshit.DiscardPileShuffledNotification'
+          Bullshit.BullshitBroadcastNotification: '#/components/schemas/Bullshit.BullshitBroadcastNotification'
+          Bullshit.BullshitPlayerNotification: '#/components/schemas/Bullshit.BullshitPlayerNotification'
           Gabong.GameStartedNotification: '#/components/schemas/Gabong.GameStartedNotification'
           Gabong.GameEndedNotification: '#/components/schemas/Gabong.GameEndedNotification'
           Gabong.RoundStartedNotification: '#/components/schemas/Gabong.RoundStartedNotification'
@@ -266,6 +300,8 @@ components:
           CrazyEights.PlayerViewOfGame: '#/components/schemas/CrazyEights.PlayerViewOfGame'
           Common.EmptyResponse: '#/components/schemas/Common.EmptyResponse'
           ChatRoom.ChatResponse: '#/components/schemas/ChatRoom.ChatResponse'
+          Bullshit.BullshitResponse: '#/components/schemas/Bullshit.BullshitResponse'
+          Bullshit.CardResponse: '#/components/schemas/Bullshit.CardResponse'
           Gabong.PlayerViewOfGame: '#/components/schemas/Gabong.PlayerViewOfGame'
           Gabong.GabongCardResponse: '#/components/schemas/Gabong.GabongCardResponse'
     Handshake.ConnectMessage:
@@ -319,6 +355,7 @@ components:
           format: int32
         suit:
           type: string
+      nullable: true
     Gabong.GabongRequest:
       type: object
       allOf:
@@ -1762,6 +1799,278 @@ components:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterResponse'
         - type: object
+    Bullshit.PutCardRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+          properties:
+            actualCard:
+              type: object
+              properties:
+                rank:
+                  type: integer
+                  format: int32
+                suit:
+                  type: string
+            claimedToBeCard:
+              type: object
+              properties:
+                rank:
+                  type: integer
+                  format: int32
+                suit:
+                  type: string
+    Bullshit.PlayerPutCardNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+            claimedToBeCard:
+              type: object
+              properties:
+                rank:
+                  type: integer
+                  format: int32
+                suit:
+                  type: string
+    Bullshit.BullshitRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+    Bullshit.BullshitResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - type: object
+          properties:
+            punishmentCards:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.Card'
+    Bullshit.DrawCardRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+    Bullshit.PassRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+    Bullshit.CardResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - type: object
+          properties:
+            card:
+              type: object
+              properties:
+                rank:
+                  type: integer
+                  format: int32
+                suit:
+                  type: string
+    Bullshit.PlayerDrewCardNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+    Bullshit.PlayerPassedNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+    Bullshit.ItsYourTurnNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+    Bullshit.FalseBullshitCallNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+            punishmentCardCount:
+              type: integer
+              format: int32
+    Bullshit.ItsPlayersTurnNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+    Bullshit.GameStartedNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          properties:
+            gameId:
+              type: string
+              format: uuid
+            playerViewOfGame:
+              type: object
+              properties:
+                cards:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Common.Card'
+                claimedTopOfPile:
+                  type: object
+                  properties:
+                    rank:
+                      type: integer
+                      format: int32
+                    suit:
+                      type: string
+                  nullable: true
+                stockPileCount:
+                  type: integer
+                  format: int32
+                discardPileCount:
+                  type: integer
+                  format: int32
+                otherPlayers:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Bullshit.OtherBullshitPlayer'
+    Bullshit.PlayerViewOfGame:
+      type: object
+      properties:
+        cards:
+          type: array
+          items:
+            $ref: '#/components/schemas/Common.Card'
+        claimedTopOfPile:
+          type: object
+          properties:
+            rank:
+              type: integer
+              format: int32
+            suit:
+              type: string
+          nullable: true
+        stockPileCount:
+          type: integer
+          format: int32
+        discardPileCount:
+          type: integer
+          format: int32
+        otherPlayers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bullshit.OtherBullshitPlayer'
+    Bullshit.OtherBullshitPlayer:
+      type: object
+      properties:
+        playerId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        numberOfCards:
+          type: integer
+          format: int32
+    Bullshit.GameEndedNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          properties:
+            players:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.PlayerData'
+            loserId:
+              type: string
+              format: uuid
+            loserName:
+              type: string
+    Bullshit.PlayerIsDoneNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+    Bullshit.DiscardPileShuffledNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+    Bullshit.BullshitBroadcastNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+            claimedToBeCard:
+              type: object
+              properties:
+                rank:
+                  type: integer
+                  format: int32
+                suit:
+                  type: string
+              nullable: true
+            actualCard:
+              type: object
+              properties:
+                rank:
+                  type: integer
+                  format: int32
+                suit:
+                  type: string
+              nullable: true
+    Bullshit.BullshitPlayerNotification:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          properties:
+            calledByPlayerId:
+              type: string
+              format: uuid
+            card:
+              type: object
+              properties:
+                rank:
+                  type: integer
+                  format: int32
+                suit:
+                  type: string
+              nullable: true
+            punishmentCards:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.Card'
     Handshake.HelloSuccessMessage:
       type: object
       allOf:
@@ -1845,6 +2154,7 @@ components:
                           format: int32
                         suit:
                           type: string
+                      nullable: true
                     currentSuit:
                       type: string
                     stockPileCount:
@@ -1893,6 +2203,7 @@ components:
                   format: int32
                 suit:
                   type: string
+              nullable: true
             currentSuit:
               type: string
             stockPileCount:
@@ -1955,6 +2266,7 @@ components:
                   format: int32
                 suit:
                   type: string
+              nullable: true
     Gabong.PutCardRequest:
       type: object
       allOf:
@@ -1969,6 +2281,7 @@ components:
                   format: int32
                 suit:
                   type: string
+              nullable: true
             newSuit:
               type: string
     Gabong.DrawCardRequest:
@@ -2005,6 +2318,7 @@ components:
                   format: int32
                 suit:
                   type: string
+              nullable: true
             newSuit:
               type: string
     Gabong.PlayerDrewCardNotification:

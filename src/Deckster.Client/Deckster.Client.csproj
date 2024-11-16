@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <LangVersion>default</LangVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>1.2.11</Version>
+        <Version>1.2.12</Version>
 
         <PackageId>Deckster.Client</PackageId>
         <Authors>Really, really eager small hamsters</Authors>

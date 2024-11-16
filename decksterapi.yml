@@ -3,6 +3,392 @@ info:
   title: Deckster.Server
   version: '1.0'
 paths:
+  /bullshit/description:
+    get:
+      tags:
+        - Bullshit
+      responses:
+        '200':
+          description: OK
+  /bullshit/metadata:
+    get:
+      tags:
+        - Bullshit
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Meta.GameMeta'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meta.GameMeta'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Meta.GameMeta'
+  /bullshit:
+    get:
+      tags:
+        - Bullshit
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameOverviewVm'
+  /bullshit/games:
+    get:
+      tags:
+        - Bullshit
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Controllers.GameVm'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Controllers.GameVm'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Controllers.GameVm'
+  '/bullshit/games/{name}':
+    get:
+      tags:
+        - Bullshit
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameVm'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameVm'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameVm'
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+    delete:
+      tags:
+        - Bullshit
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameVm'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameVm'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.GameVm'
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+  '/bullshit/games/{name}/bot':
+    post:
+      tags:
+        - Bullshit
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+  /bullshit/previousgames:
+    get:
+      tags:
+        - Bullshit
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bullshit.BullshitGame'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bullshit.BullshitGame'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bullshit.BullshitGame'
+  '/bullshit/previousgames/{id}':
+    get:
+      tags:
+        - Bullshit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Data.HistoricBullshitGame'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Data.HistoricBullshitGame'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Data.HistoricBullshitGame'
+  '/bullshit/previousgames/{id}/{version}':
+    get:
+      tags:
+        - Bullshit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Data.HistoricBullshitGame'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Data.HistoricBullshitGame'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Data.HistoricBullshitGame'
+  '/bullshit/create/{name}':
+    post:
+      tags:
+        - Bullshit
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Core.GameInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core.GameInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Core.GameInfo'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+  /bullshit/create:
+    post:
+      tags:
+        - Bullshit
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Core.GameInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core.GameInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Core.GameInfo'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+  '/bullshit/games/{name}/start':
+    post:
+      tags:
+        - Bullshit
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Core.GameInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Core.GameInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Core.GameInfo'
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Controllers.ResponseMessage'
+  '/bullshit/join/{gameName}':
+    get:
+      tags:
+        - Bullshit
+      parameters:
+        - name: gameName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  '/bullshit/join/{connectionId}/finish':
+    get:
+      tags:
+        - Bullshit
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  '/bullshit/spectate/{gameName}':
+    get:
+      tags:
+        - Bullshit
+      parameters:
+        - name: gameName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  '/bullshit/spectate/{connectionId}/finish':
+    get:
+      tags:
+        - Bullshit
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
   /chatroom/description:
     get:
       tags:
@@ -2752,6 +3138,327 @@ paths:
           description: OK
 components:
   schemas:
+    Bullshit.BullshitBroadcastNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - actualCard
+            - claimedToBeCard
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+            claimedToBeCard:
+              $ref: '#/components/schemas/Common.Card'
+            actualCard:
+              $ref: '#/components/schemas/Common.Card'
+          additionalProperties: false
+    Bullshit.BullshitGame:
+      allOf:
+        - $ref: '#/components/schemas/Games.GameObject'
+        - required:
+            - cardsDrawn
+            - currentPlayer
+            - currentPlayerIndex
+            - deck
+            - discardPile
+            - donePlayers
+            - players
+            - stockPile
+          type: object
+          properties:
+            deck:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.Card'
+            stockPile:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.Card'
+            discardPile:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.Card'
+            players:
+              type: array
+              items:
+                $ref: '#/components/schemas/Bullshit.BullshitPlayer'
+            donePlayers:
+              type: array
+              items:
+                $ref: '#/components/schemas/Bullshit.BullshitPlayer'
+            currentPlayerIndex:
+              type: integer
+              format: int32
+            claimedTopOfPile:
+              $ref: '#/components/schemas/Common.Card'
+            actualTopOfPile:
+              $ref: '#/components/schemas/Common.Card'
+            cardsDrawn:
+              type: integer
+              format: int32
+            potentialBullshit:
+              $ref: '#/components/schemas/Bullshit.PotentialBullshit'
+            currentPlayer:
+              $ref: '#/components/schemas/Bullshit.BullshitPlayer'
+          additionalProperties: false
+    Bullshit.BullshitPlayer:
+      required:
+        - cards
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        cards:
+          type: array
+          items:
+            $ref: '#/components/schemas/Common.Card'
+      additionalProperties: false
+    Bullshit.BullshitPlayerNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - calledByPlayerId
+            - card
+            - punishmentCards
+          type: object
+          properties:
+            calledByPlayerId:
+              type: string
+              format: uuid
+            card:
+              $ref: '#/components/schemas/Common.Card'
+            punishmentCards:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.Card'
+          additionalProperties: false
+    Bullshit.BullshitRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+          additionalProperties: false
+    Bullshit.BullshitResponse:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - required:
+            - punishmentCards
+          type: object
+          properties:
+            punishmentCards:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.Card'
+          additionalProperties: false
+    Bullshit.CardResponse:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterResponse'
+        - required:
+            - card
+          type: object
+          properties:
+            card:
+              $ref: '#/components/schemas/Common.Card'
+          additionalProperties: false
+    Bullshit.DiscardPileShuffledNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          additionalProperties: false
+    Bullshit.DrawCardRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+          additionalProperties: false
+    Bullshit.FalseBullshitCallNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerId
+            - punishmentCardCount
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+            punishmentCardCount:
+              type: integer
+              format: int32
+          additionalProperties: false
+    Bullshit.GameEndedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - loserId
+            - loserName
+            - players
+          type: object
+          properties:
+            players:
+              type: array
+              items:
+                $ref: '#/components/schemas/Common.PlayerData'
+            loserId:
+              type: string
+              format: uuid
+            loserName:
+              type: string
+          additionalProperties: false
+    Bullshit.GameStartedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - gameId
+            - playerViewOfGame
+          type: object
+          properties:
+            gameId:
+              type: string
+              format: uuid
+            playerViewOfGame:
+              $ref: '#/components/schemas/Bullshit.PlayerViewOfGame'
+          additionalProperties: false
+    Bullshit.ItsPlayersTurnNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
+    Bullshit.ItsYourTurnNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - type: object
+          additionalProperties: false
+    Bullshit.OtherBullshitPlayer:
+      required:
+        - name
+        - numberOfCards
+        - playerId
+      type: object
+      properties:
+        playerId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        numberOfCards:
+          type: integer
+          format: int32
+      additionalProperties: false
+    Bullshit.PassRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - type: object
+          additionalProperties: false
+    Bullshit.PlayerDrewCardNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
+    Bullshit.PlayerIsDoneNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
+    Bullshit.PlayerPassedNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+          additionalProperties: false
+    Bullshit.PlayerPutCardNotification:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterNotification'
+        - required:
+            - claimedToBeCard
+            - playerId
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+            claimedToBeCard:
+              $ref: '#/components/schemas/Common.Card'
+          additionalProperties: false
+    Bullshit.PlayerViewOfGame:
+      required:
+        - cards
+        - discardPileCount
+        - otherPlayers
+        - stockPileCount
+      type: object
+      properties:
+        cards:
+          type: array
+          items:
+            $ref: '#/components/schemas/Common.Card'
+        claimedTopOfPile:
+          $ref: '#/components/schemas/Common.Card'
+        stockPileCount:
+          type: integer
+          format: int32
+        discardPileCount:
+          type: integer
+          format: int32
+        otherPlayers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bullshit.OtherBullshitPlayer'
+      additionalProperties: false
+    Bullshit.PotentialBullshit:
+      required:
+        - claimedToBeCard
+        - playerId
+      type: object
+      properties:
+        playerId:
+          type: string
+          format: uuid
+        claimedToBeCard:
+          $ref: '#/components/schemas/Common.Card'
+      additionalProperties: false
+    Bullshit.PutCardRequest:
+      allOf:
+        - $ref: '#/components/schemas/Protocol.DecksterRequest'
+        - required:
+            - actualCard
+            - claimedToBeCard
+          type: object
+          properties:
+            actualCard:
+              $ref: '#/components/schemas/Common.Card'
+            claimedToBeCard:
+              $ref: '#/components/schemas/Common.Card'
+          additionalProperties: false
     ChatRoom.ChatNotification:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterNotification'
@@ -3224,6 +3931,13 @@ components:
           Gabong.GabongGame: '#/components/schemas/Gabong.GabongGame'
           CrazyEights.CrazyEightsGame: '#/components/schemas/CrazyEights.CrazyEightsGame'
           ChatRoom.ChatRoom: '#/components/schemas/ChatRoom.ChatRoom'
+          Bullshit.BullshitGame: '#/components/schemas/Bullshit.BullshitGame'
+    Data.HistoricBullshitGame:
+      type: object
+      properties:
+        game:
+          $ref: '#/components/schemas/Bullshit.BullshitGame'
+      additionalProperties: false
     Data.HistoricChatRoom:
       type: object
       properties:
@@ -3722,6 +4436,7 @@ components:
               Gabong.GabongGame: '#/components/schemas/Gabong.GabongGame'
               CrazyEights.CrazyEightsGame: '#/components/schemas/CrazyEights.CrazyEightsGame'
               ChatRoom.ChatRoom: '#/components/schemas/ChatRoom.ChatRoom'
+              Bullshit.BullshitGame: '#/components/schemas/Bullshit.BullshitGame'
     Games.GameState:
       enum:
         - Waiting
@@ -4366,6 +5081,24 @@ components:
           ChatRoom.SendChatRequest: '#/components/schemas/ChatRoom.SendChatRequest'
           ChatRoom.ChatNotification: '#/components/schemas/ChatRoom.ChatNotification'
           ChatRoom.ChatResponse: '#/components/schemas/ChatRoom.ChatResponse'
+          Bullshit.PutCardRequest: '#/components/schemas/Bullshit.PutCardRequest'
+          Bullshit.PlayerPutCardNotification: '#/components/schemas/Bullshit.PlayerPutCardNotification'
+          Bullshit.BullshitRequest: '#/components/schemas/Bullshit.BullshitRequest'
+          Bullshit.BullshitResponse: '#/components/schemas/Bullshit.BullshitResponse'
+          Bullshit.DrawCardRequest: '#/components/schemas/Bullshit.DrawCardRequest'
+          Bullshit.PassRequest: '#/components/schemas/Bullshit.PassRequest'
+          Bullshit.CardResponse: '#/components/schemas/Bullshit.CardResponse'
+          Bullshit.PlayerDrewCardNotification: '#/components/schemas/Bullshit.PlayerDrewCardNotification'
+          Bullshit.PlayerPassedNotification: '#/components/schemas/Bullshit.PlayerPassedNotification'
+          Bullshit.ItsYourTurnNotification: '#/components/schemas/Bullshit.ItsYourTurnNotification'
+          Bullshit.FalseBullshitCallNotification: '#/components/schemas/Bullshit.FalseBullshitCallNotification'
+          Bullshit.ItsPlayersTurnNotification: '#/components/schemas/Bullshit.ItsPlayersTurnNotification'
+          Bullshit.GameStartedNotification: '#/components/schemas/Bullshit.GameStartedNotification'
+          Bullshit.GameEndedNotification: '#/components/schemas/Bullshit.GameEndedNotification'
+          Bullshit.PlayerIsDoneNotification: '#/components/schemas/Bullshit.PlayerIsDoneNotification'
+          Bullshit.DiscardPileShuffledNotification: '#/components/schemas/Bullshit.DiscardPileShuffledNotification'
+          Bullshit.BullshitBroadcastNotification: '#/components/schemas/Bullshit.BullshitBroadcastNotification'
+          Bullshit.BullshitPlayerNotification: '#/components/schemas/Bullshit.BullshitPlayerNotification'
           Handshake.ConnectMessage: '#/components/schemas/Handshake.ConnectMessage'
           Handshake.HelloSuccessMessage: '#/components/schemas/Handshake.HelloSuccessMessage'
           Handshake.ConnectSuccessMessage: '#/components/schemas/Handshake.ConnectSuccessMessage'
@@ -4438,6 +5171,18 @@ components:
               CrazyEights.PlayerIsDoneNotification: '#/components/schemas/CrazyEights.PlayerIsDoneNotification'
               CrazyEights.DiscardPileShuffledNotification: '#/components/schemas/CrazyEights.DiscardPileShuffledNotification'
               ChatRoom.ChatNotification: '#/components/schemas/ChatRoom.ChatNotification'
+              Bullshit.PlayerPutCardNotification: '#/components/schemas/Bullshit.PlayerPutCardNotification'
+              Bullshit.PlayerDrewCardNotification: '#/components/schemas/Bullshit.PlayerDrewCardNotification'
+              Bullshit.PlayerPassedNotification: '#/components/schemas/Bullshit.PlayerPassedNotification'
+              Bullshit.ItsYourTurnNotification: '#/components/schemas/Bullshit.ItsYourTurnNotification'
+              Bullshit.FalseBullshitCallNotification: '#/components/schemas/Bullshit.FalseBullshitCallNotification'
+              Bullshit.ItsPlayersTurnNotification: '#/components/schemas/Bullshit.ItsPlayersTurnNotification'
+              Bullshit.GameStartedNotification: '#/components/schemas/Bullshit.GameStartedNotification'
+              Bullshit.GameEndedNotification: '#/components/schemas/Bullshit.GameEndedNotification'
+              Bullshit.PlayerIsDoneNotification: '#/components/schemas/Bullshit.PlayerIsDoneNotification'
+              Bullshit.DiscardPileShuffledNotification: '#/components/schemas/Bullshit.DiscardPileShuffledNotification'
+              Bullshit.BullshitBroadcastNotification: '#/components/schemas/Bullshit.BullshitBroadcastNotification'
+              Bullshit.BullshitPlayerNotification: '#/components/schemas/Bullshit.BullshitPlayerNotification'
     Protocol.DecksterRequest:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterMessage'
@@ -4483,6 +5228,10 @@ components:
               CrazyEights.DrawCardRequest: '#/components/schemas/CrazyEights.DrawCardRequest'
               CrazyEights.PassRequest: '#/components/schemas/CrazyEights.PassRequest'
               ChatRoom.SendChatRequest: '#/components/schemas/ChatRoom.SendChatRequest'
+              Bullshit.PutCardRequest: '#/components/schemas/Bullshit.PutCardRequest'
+              Bullshit.BullshitRequest: '#/components/schemas/Bullshit.BullshitRequest'
+              Bullshit.DrawCardRequest: '#/components/schemas/Bullshit.DrawCardRequest'
+              Bullshit.PassRequest: '#/components/schemas/Bullshit.PassRequest'
     Protocol.DecksterResponse:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterMessage'
@@ -4516,6 +5265,8 @@ components:
               CrazyEights.PlayerViewOfGame: '#/components/schemas/CrazyEights.PlayerViewOfGame'
               Common.EmptyResponse: '#/components/schemas/Common.EmptyResponse'
               ChatRoom.ChatResponse: '#/components/schemas/ChatRoom.ChatResponse'
+              Bullshit.BullshitResponse: '#/components/schemas/Bullshit.BullshitResponse'
+              Bullshit.CardResponse: '#/components/schemas/Bullshit.CardResponse'
     TexasHoldEm.BetRequest:
       allOf:
         - $ref: '#/components/schemas/Protocol.DecksterRequest'

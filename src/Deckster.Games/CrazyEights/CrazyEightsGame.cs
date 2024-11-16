@@ -139,7 +139,7 @@ public class CrazyEightsGame : GameObject
         response = GetPlayerViewOfGame(player);
         await RespondAsync(playerId, response);
 
-        await PlayerPutCard.InvokeOrDefault(new PlayerPutCardNotification {PlayerId = playerId, Card = card});
+        await PlayerPutCard.InvokeOrDefault(() => new PlayerPutCardNotification {PlayerId = playerId, Card = card});
 
         await MoveToNextPlayerOrFinishAsync();
         

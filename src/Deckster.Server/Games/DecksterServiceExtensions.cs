@@ -1,3 +1,4 @@
+using Deckster.Server.Games.Bullshit;
 using Deckster.Server.Games.ChatRoom;
 using Deckster.Server.Games.CrazyEights;
 using Deckster.Server.Games.Gabong;
@@ -12,6 +13,7 @@ public static class DecksterServiceExtensions
 {
     public static IServiceCollection AddDeckster(this IServiceCollection services)
     {
+        services.AddSingleton<BullshitGameHost>();
         services.AddSingleton<GameHostRegistry>();
         services.AddTransient<CrazyEightsGameHost>();
         services.AddTransient<TexasHoldEmGameHost>();
