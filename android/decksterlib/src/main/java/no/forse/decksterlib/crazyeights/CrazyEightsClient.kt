@@ -70,18 +70,21 @@ class CrazyEightsClient(decksterServer: DecksterServer) :
     }
 
     suspend fun passTurn(): EmptyResponse {
+        guardNotSpectateMode()
         val playerId = joinedGameOrThrow.userUuid
         val typedMessage = PassRequest(dtoType(PassRequest::class), playerId)
         return sendAndReceive<EmptyResponse>(typedMessage)
     }
 
     suspend fun drawCard(): CardResponse {
+        guardNotSpectateMode()
         val playerId = joinedGameOrThrow.userUuid
         val typedMessage = DrawCardRequest(dtoType(DrawCardRequest::class), playerId)
         return sendAndReceive<CardResponse>(typedMessage)
     }
 
     suspend fun putCard(card: Card): PlayerViewOfGame {
+        guardNotSpectateMode()
         val playerId = joinedGameOrThrow.userUuid
         val typedMessage = PutCardRequest(dtoType(PutCardRequest::class), playerId, card)
         return sendAndReceive<PlayerViewOfGame>(typedMessage).also {
@@ -90,6 +93,7 @@ class CrazyEightsClient(decksterServer: DecksterServer) :
     }
 
     suspend fun putEight(card: Card, suit: Suit): PlayerViewOfGame {
+        guardNotSpectateMode()
         val playerId = joinedGameOrThrow.userUuid
         val typedMessage = PutEightRequest(dtoType(PutEightRequest::class), playerId, card, suit)
         return sendAndReceive<PlayerViewOfGame>(typedMessage).also {

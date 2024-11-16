@@ -35,7 +35,8 @@ class ChatViewModel(
 
     fun load() = viewModelScope.launch {
         if (server.accessToken == null) throw IllegalStateException("Not logged in to server")
-        chatGame.joinGame(server.accessToken!!, gameName)
+        chatGame.prepareLoggedInGamme(server.accessToken!!)
+        chatGame.join(gameName)
         val chats = chatGame.playerSaid!!
         val initialGamelist = chatGame.getGameList()
         players = initialGamelist.find { it.name == gameName }?.players ?: emptyList()

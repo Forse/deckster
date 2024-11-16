@@ -18,6 +18,7 @@ import kotlin.reflect.KClass
 
 class CrazyEightViewModel(
     private val gameId: String,
+    private val spectateMode: Boolean,
     server: DecksterServer,
 ) : ViewModel() {
     private val crazyEightsClient = CrazyEightsClient(server)
@@ -40,7 +41,13 @@ class CrazyEightViewModel(
     }
 
     suspend fun initialize() {
-        crazyEightsClient.joinGame(crazyEightsClient.decksterServer.accessToken!!, gameId)
+        crazyEightsClient.prepareLoggedInGamme(crazyEightsClient.decksterServer.accessToken!!)
+        if (spectateMode) {
+            crazyEightsClient.spectate(gameId)
+
+        } else {
+            crazyEightsClient.join(gameId)
+        }
 
         threadpoolScope.launch {
             crazyEightsClient.crazyEightsNotifications?.collect {
@@ -100,9 +107,9 @@ class CrazyEightViewModel(
         Pair(suit, count)
     }.maxByOrNull { it.second }?.first
 
-    class Factory(private val gameId: String, private val server: DecksterServer) : ViewModelProvider.Factory {
+    class Factory(private val gameId: String, private val spectateMode: Boolean, private val server: DecksterServer) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: KClass<T>, extras: CreationExtras): T {
-            return CrazyEightViewModel(gameId, server) as T
+            return CrazyEightViewModel(gameId, spectateMode, server) as T
         }
     }
 }

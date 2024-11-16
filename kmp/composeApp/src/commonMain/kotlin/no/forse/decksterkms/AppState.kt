@@ -7,4 +7,5 @@ class AppState {
     var loggedInDecksterServer: DecksterServer? = null
     var connectedDecksterGame: ConnectedDecksterGame? = null
     var gameNameToJoin: String? = null
+    var doSpectate = false
 }
