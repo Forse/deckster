@@ -4,6 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import no.forse.decksterlib.DecksterServer
 import no.forse.decksterlib.crazyeights.CrazyEightsClient
@@ -17,6 +20,9 @@ class CrazyEightViewModel(
     server: DecksterServer,
 ) : ViewModel() {
     private val crazyEightsClient = CrazyEightsClient(server)
+
+    private val _uiState = MutableStateFlow(CrazyEightUiState(emptyList(), Card(1, Suit.Hearts)))
+    val uiState: StateFlow<CrazyEightUiState> = _uiState.asStateFlow()
 
     // 1. create game in browser add a bot
     // 2. join game in the compose app
