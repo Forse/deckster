@@ -17,8 +17,11 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun GameRoom(
     viewModel: ChatRoomsViewModel,
     onEnter: (String) -> Unit,
+    onBackpressed: () -> Unit,
 ) {
-    BaseScreen(topBarTitle = "Gaming Rooms") {
+    BaseScreen(topBarTitle = "Gaming Rooms", onBackPressed = {
+        onBackpressed.invoke()
+    }) {
         LaunchedEffect(key1 = true) {
             //Log.d("ChatRoom", "LaunchedEffect")
             viewModel.getGameList()
@@ -51,6 +54,6 @@ fun GameRoom(
 fun GameRoomsPreview() {
     MaterialTheme {
         val vm = ChatRoomsViewModel(ChatRepository)
-        GameRoom(vm, {})
+        GameRoom(vm, {}, {})
     }
 }

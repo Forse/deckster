@@ -1,14 +1,12 @@
 package no.forse.decksterkms
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material.*
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.*
 import no.forse.decksterandroid.chatroom.*
 import no.forse.decksterandroid.login.*
+import no.forse.decksterkms.gamebrowser.GameTypeSelector
 
 fun main() = application {
     Window(
@@ -27,31 +25,18 @@ fun main() = application {
                 LoginScreen(
                     LoginViewModel(ChatRepository, AppRepository()),
                     onLoginSuccess = {
-                        navController.navigate("gamelist")
+                        navController.navigate("gameTypeSelect")
                     }
                 )
             }
-            composable("gamelist") {
-                Column {
-                    Button(onClick = {
-                        navController.navigate("crazyeight")
-                    }) {
-                        Text("crazyeight")
-                    }
-                    Button(onClick = {
-                        navController.navigate("uno")
-                    }) {
-                        Text("uno")
-                    }
-                    Button(onClick = {
-                        navController.navigate("chatGameList")
-                    }) {
-                        Text("chatRoom")
-                    }
+
+            composable("gameTypeSelect") {
+                GameTypeSelector(onBackpressed = navController::popBackStack) { gameName ->
+                    navController.navigate(gameName)
                 }
             }
 
-            composable("chatGameList") {
+            composable("chatLobby") {
                 val chatRoomViewModel = viewModel(
                     modelClass = ChatRoomsViewModel::class,
                     factory = ChatRoomsViewModel.Factory()
@@ -60,7 +45,7 @@ fun main() = application {
                     navController.navigate(
                         "chat/$gameId"
                     )
-                })
+                }, onBackpressed = navController::popBackStack)
             }
 
             composable("chat/{gameId}") { backstack ->
