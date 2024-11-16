@@ -4,7 +4,8 @@ import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import no.forse.decksterkms.ChatRepository
+import no.forse.decksterlib.DecksterServer
+import no.forse.decksterlib.chatroom.ChatRoomClient
 import no.forse.decksterlib.model.chatroom.ChatNotification
 import no.forse.decksterlib.model.common.PlayerData
 import kotlin.reflect.KClass
@@ -13,12 +14,13 @@ data class ChatState(val chats: List<ChatMessage>, val users: List<PlayerData>)
 
 data class ChatMessage(val message: String, val sender: String)
 
-
 class ChatViewModel(
-    private val chatRepository: ChatRepository
+    private val gameName: String,
+    private val server: DecksterServer,
 ) : ViewModel() {
 
     private var players: List<PlayerData> = emptyList()
+    private val chatGame = ChatRoomClient(server)
 
     private val _chatState: MutableStateFlow<ChatState> = MutableStateFlow(
         value = ChatState(
@@ -28,13 +30,15 @@ class ChatViewModel(
     val chatState: StateFlow<ChatState> = _chatState.asStateFlow()
 
     fun sendMessage(message: String) = viewModelScope.launch {
-        chatRepository.sendMessage(message)
+        chatGame.chatAsync(message)
     }
 
-    fun getChat(chatId: String?) = viewModelScope.launch {
-        val chats = chatRepository.getChats()
-        val initialGamelist = chatRepository.getGameList()
-        players = initialGamelist.find { it.name == chatId }?.players ?: emptyList()
+    fun load() = viewModelScope.launch {
+        if (server.accessToken == null) throw IllegalStateException("Not logged in to server")
+        chatGame.joinGame(server.accessToken!!, gameName)
+        val chats = chatGame.playerSaid!!
+        val initialGamelist = chatGame.getGameList()
+        players = initialGamelist.find { it.name == gameName }?.players ?: emptyList()
         _chatState.update {
             ChatState(emptyList(), players)
         }
@@ -42,9 +46,9 @@ class ChatViewModel(
         chats.mapNotNull { it: ChatNotification ->
             println("q: $it")
             val (sender, message) = (it.sender to it.message)
-            val gameList = chatRepository.getGameList() // Since the name of the sender is not included in the notification we fetch it using the gamelist
+            val gameList = chatGame.getGameList() // Since the name of the sender is not included in the notification we fetch it using the gamelist
             players = gameList
-                .find { it.name == chatId }?.players ?: emptyList()
+                .find { it.name == gameName }?.players ?: emptyList()
             val senderName = players.find { it.id.toString() == sender }?.name
             if (senderName != null) ChatMessage(message, senderName) else null
         }.collect { chatMessage ->
@@ -54,13 +58,13 @@ class ChatViewModel(
     }
 
     fun leave() = viewModelScope.launch {
-        ChatRepository.leaveChat()
+        chatGame.leaveGame()
     }
 
 
-    class Factory : ViewModelProvider.Factory {
+    class Factory(private val gameId: String, private val server: DecksterServer) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: KClass<T>, extras: CreationExtras): T {
-            return ChatViewModel(ChatRepository) as T
+            return ChatViewModel(gameId, server) as T
         }
     }
 }

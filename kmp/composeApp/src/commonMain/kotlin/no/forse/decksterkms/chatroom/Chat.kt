@@ -9,9 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Chat(id: String?, viewModel: ChatViewModel, onBackpressed: () -> Unit) {
+fun Chat(viewModel: ChatViewModel, onBackpressed: () -> Unit) {
     LaunchedEffect(key1 = true) {
-        viewModel.getChat(id)
+        viewModel.load()
     }
 
     val chatState = viewModel.chatState.collectAsState().value

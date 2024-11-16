@@ -48,6 +48,11 @@ abstract class GameClientBase(
         }
     }
 
+    suspend fun joinGame(token: String, gameId: String): ConnectedDecksterGame {
+        game = DecksterGameInitiater(decksterServer, gameName, token)
+        return joinGame(gameId)
+    }
+
     private fun listenToBusinessNotifications() {
         notifFlowJob = CoroutineScope(Dispatchers.Default).launch {
             joinedGame!!.notificationFlow.collect { notif ->

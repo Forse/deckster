@@ -6,17 +6,15 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import no.forse.decksterandroid.chatroom.Chat
-import no.forse.decksterandroid.chatroom.ChatRoomsViewModel
-import no.forse.decksterandroid.chatroom.ChatViewModel
-import no.forse.decksterandroid.chatroom.GameRoom
+import no.forse.decksterandroid.chatroom.*
+import no.forse.decksterandroid.gamebrowser.GamesLobby
+import no.forse.decksterandroid.gamebrowser.GamesLobbyViewModel
 import no.forse.decksterandroid.login.AppRepository
 import no.forse.decksterandroid.login.LoginScreen
 import no.forse.decksterandroid.login.LoginViewModel
 import no.forse.decksterkms.crazyeight.CrazyEightScreen
 import no.forse.decksterkms.crazyeight.CrazyEightViewModel
 import no.forse.decksterkms.gamebrowser.GameTypeSelector
-import no.forse.decksterlib.DecksterServer
 import no.forse.decksterlib.crazyeights.CrazyEightsClient
 
 fun main() = application {
@@ -25,7 +23,7 @@ fun main() = application {
         title = "DecksterKMS",
     ) {
 
-        var lastDecksterServer: DecksterServer? = null
+        val appState = AppState()
 
         val navController = rememberNavController()
 
@@ -36,9 +34,9 @@ fun main() = application {
             ) {
             composable("login") {
                 LoginScreen(
-                    LoginViewModel(ChatRepository, AppRepository()),
+                    LoginViewModel(AppRepository()),
                     onLoginSuccess = { decksterServer ->
-                        lastDecksterServer = decksterServer
+                        appState.loggedInDecksterServer = decksterServer
                         navController.navigate(route = "gameTypeSelect")
                     }
                 )
@@ -51,13 +49,14 @@ fun main() = application {
             }
 
             composable("chatLobby") {
-                val chatRoomViewModel = viewModel(
-                    modelClass = ChatRoomsViewModel::class,
-                    factory = ChatRoomsViewModel.Factory()
+                val gameRoomVm = viewModel(
+                    modelClass = GamesLobbyViewModel::class,
+                    factory = GamesLobbyViewModel.Factory("chatroom", appState.loggedInDecksterServer!!)
                 )
-                GameRoom(chatRoomViewModel, onEnter = { gameId ->
+                GamesLobby(gameRoomVm, onEnterGameName = { gameName ->
+                    appState.gameNameToJoin = gameName
                     navController.navigate(
-                        "chat/$gameId"
+                        "chat/${gameName}"
                     )
                 }, onBackpressed = navController::popBackStack)
             }
@@ -66,30 +65,32 @@ fun main() = application {
                 val gameId = backstack.arguments?.getString("gameId")
                 val chatViewModel = viewModel(
                     modelClass = ChatViewModel::class,
-                    factory = ChatViewModel.Factory()
+                    factory = ChatViewModel.Factory(appState.gameNameToJoin!!, appState.loggedInDecksterServer!!)
                 )
-                Chat(id = gameId, viewModel = chatViewModel, onBackpressed = {
+                Chat(viewModel = chatViewModel, onBackpressed = {
                     navController.popBackStack()
                 })
             }
-
 
             composable("crazyeightLobby") {
-                val chatRoomViewModel = viewModel(
-                    modelClass = ChatRoomsViewModel::class,
-                    factory = ChatRoomsViewModel.Factory()
+                val gameRoomVm = viewModel(
+                    modelClass = GamesLobbyViewModel::class,
+                    factory = GamesLobbyViewModel.Factory("crazyeights", appState.loggedInDecksterServer!!)
                 )
-                GameRoom(chatRoomViewModel, onEnter = { gameId ->
+                GamesLobby(gameRoomVm, onEnterGameName = { gameName ->
+                    appState.gameNameToJoin = gameName
                     navController.navigate(
-                        "chat/$gameId"
+                        "crazyeight/$gameName"
                     )
-                }, onBackpressed = {
-                    navController.popBackStack()
-                })
+                }, onBackpressed = navController::popBackStack)
             }
 
-            composable("crazyeight") {
-                val viewModel = CrazyEightViewModel(CrazyEightsClient(lastDecksterServer!!))
+            composable("crazyeight/{gameName}") { backstack ->
+                val gameId = backstack.arguments?.getString("gameName")!!
+                val viewModel = viewModel(
+                    modelClass = CrazyEightViewModel::class,
+                    factory = CrazyEightViewModel.Factory(gameId, appState.loggedInDecksterServer!!)
+                )
                 CrazyEightScreen(viewModel)
             }
         }

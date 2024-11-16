@@ -1,22 +1,18 @@
-package no.forse.decksterandroid.chatroom
+package no.forse.decksterandroid.gamebrowser
 
 import BaseScreen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.unit.dp
-import no.forse.decksterandroid.gamebrowser.GameInfoCard
-import no.forse.decksterkms.ChatRepository
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun GameRoom(
-    viewModel: ChatRoomsViewModel,
-    onEnter: (String) -> Unit,
+fun GamesLobby(
+    viewModel: GamesLobbyViewModel,
+    onEnterGameName: (String) -> Unit,
     onBackpressed: () -> Unit,
 ) {
     BaseScreen(topBarTitle = "Gaming Rooms", onBackPressed = {
@@ -24,13 +20,13 @@ fun GameRoom(
     }) {
         LaunchedEffect(key1 = true) {
             //Log.d("ChatRoom", "LaunchedEffect")
-            viewModel.getGameList()
+            viewModel.pollGameList()
         }
 
         val chatRoomUiState = viewModel.uiState.collectAsState().value
 
          when (chatRoomUiState) {
-            is ChatRoomUiState.ChatRoom -> {
+            is GamesLobbyUiState.GameList -> {
                 LazyColumn(
                     contentPadding = PaddingValues(16.dp), verticalArrangement =
                     Arrangement.spacedBy(16.dp)
@@ -39,7 +35,7 @@ fun GameRoom(
                     items(chatRoomUiState.games) { game ->
                         GameInfoCard(game, onJoinGameClicked = {
                             viewModel.join(game.name) {
-                                onEnter(game.name)
+                                onEnterGameName(game.name)
                             }
                         })
                     }
@@ -49,11 +45,3 @@ fun GameRoom(
     }
 }
 
-@Preview
-@Composable
-fun GameRoomsPreview() {
-    MaterialTheme {
-        val vm = ChatRoomsViewModel(ChatRepository)
-        GameRoom(vm, {}, {})
-    }
-}

@@ -45,11 +45,6 @@ class CrazyEightsClient(decksterServer: DecksterServer) :
     val crazyEightsNotifications: Flow<DecksterNotification>?
         get() = joinedGame?.notificationFlow
 
-    suspend fun joinGame(token: String, gameId: String): ConnectedDecksterGame {
-        game = DecksterGameInitiater(decksterServer, gameName, token)
-        return joinGame(gameId)
-    }
-
     override fun onGameLeft() {
         currentState = null
         gameStarted = CompletableDeferred()
