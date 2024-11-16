@@ -11,14 +11,14 @@ import kotlin.reflect.KClass
 
 sealed interface ChatRoomUiState {
     data class ChatRoom(val games: List<GameVm>) :
-        ChatRoomUiState
+        GamesLobbyUiState
 }
 
 class ChatRoomsViewModel(private val decksterRepository: ChatRepository) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<ChatRoomUiState> =
-        MutableStateFlow(value = ChatRoomUiState.ChatRoom(emptyList()))
-    val uiState: StateFlow<ChatRoomUiState> = _uiState.asStateFlow()
+    private val _uiState: MutableStateFlow<GamesLobbyUiState> =
+        MutableStateFlow(value = GamesLobbyUiState.GameList(emptyList()))
+    val uiState: StateFlow<GamesLobbyUiState> = _uiState.asStateFlow()
 
 
     fun join(id: String, onDone: () -> Unit) = viewModelScope.launch {
@@ -29,13 +29,13 @@ class ChatRoomsViewModel(private val decksterRepository: ChatRepository) : ViewM
     fun getGameList() = timer("GetGameList", period = 1000) {
         viewModelScope.launch {
             val games = decksterRepository.getGameList()
-            _uiState.update { ChatRoomUiState.ChatRoom(games) }
+            _uiState.update { GamesLobbyUiState.GameList(games) }
         }
     }
 
     class Factory : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: KClass<T>, extras: CreationExtras): T {
-            return ChatRoomsViewModel(ChatRepository) as T
+            return GamesLobbyViewModel(ChatRepository) as T
         }
     }
 }

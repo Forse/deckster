@@ -4,6 +4,7 @@ package no.forse.decksterlib
 import kotlinx.coroutines.suspendCancellableCoroutine
 import no.forse.decksterlib.authentication.LoginModel
 import no.forse.decksterlib.authentication.UserModel
+import no.forse.decksterlib.comminapi.CommonGameApi
 import no.forse.decksterlib.communication.DecksterApi
 import no.forse.decksterlib.communication.DecksterGameInitiater
 import no.forse.decksterlib.communication.DecksterWebSocketListener
@@ -20,13 +21,24 @@ import java.io.IOException
 class DecksterServer(
     private val hostAddress: String,
 ) {
-    private var accessToken: String? = null
+    var accessToken: String? = null
     val okHttpClient = OkHttpClient.Builder().addInterceptor(
         HttpLoggingInterceptor().setLevel(
             HttpLoggingInterceptor.Level.BODY
         )
     ).build()
-    val hostBaseUrl = "http://$hostAddress"
+    val hostBaseUrl = "http://$hostAddress".let {
+        if (!hostAddress.contains(":")) "$it:13992" else it
+    }
+
+    fun getCommonApi() : CommonGameApi {
+        return Retrofit.Builder()
+            .baseUrl(hostBaseUrl)
+            .client(okHttpClient)
+            .addConverterFactory(JacksonConverterFactory.create(MessageSerializer.jackson))
+            .build()
+            .create(CommonGameApi::class.java)
+    }
 
     private val api = Retrofit.Builder()
         .baseUrl(hostBaseUrl)
