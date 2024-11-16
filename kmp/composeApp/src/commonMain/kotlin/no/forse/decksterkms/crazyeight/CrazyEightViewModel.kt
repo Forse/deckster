@@ -3,6 +3,7 @@ package no.forse.decksterkms.crazyeight
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import no.forse.decksterlib.DecksterServer
 import no.forse.decksterlib.crazyeights.CrazyEightsClient
@@ -43,6 +44,7 @@ class CrazyEightViewModel(
         threadpoolScope.launch {
             crazyEightsClient.yourTurnFlow.collect { playerView ->
                 println("XXX my turn")
+                delay(5000)
 
                 val cardToPut = determineCardToPut(playerView.topOfPile, playerView.currentSuit, playerView.cards)
                 if (cardToPut != null) {
