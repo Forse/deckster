@@ -53,6 +53,6 @@ public class TronderBot
         }
 
         using var reader = new StreamReader(stream);
-        return reader.ReadToEnd().Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
+        return reader.ReadToEnd().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
     }
 }
