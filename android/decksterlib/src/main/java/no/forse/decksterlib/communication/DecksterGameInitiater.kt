@@ -38,7 +38,7 @@ class DecksterGameInitiater(
         val request = decksterServer.getRequest("$name/join/$gameId", token)
         val connection = decksterServer.connectWebSocket(request)
         return suspendCancellableCoroutine<ConnectedDecksterGame> { cont ->
-            handleConnectionMessages(connection, cont)
+            handleConnectionMessages(connection, cont, "join")
         }
     }
 
@@ -46,24 +46,24 @@ class DecksterGameInitiater(
         val request = decksterServer.getRequest("$name/spectate/$gameId", token)
         val connection = decksterServer.connectWebSocket(request)
         return suspendCancellableCoroutine<ConnectedDecksterGame> { cont ->
-            handleConnectionMessages(connection, cont)
+            handleConnectionMessages(connection, cont, "spectate")
         }
     }
 
-    private fun handleConnectionMessages(connection: WebSocketConnection, cont: Continuation<ConnectedDecksterGame>) {
+    private fun handleConnectionMessages(connection: WebSocketConnection, cont: Continuation<ConnectedDecksterGame>, path: String) {
         handshakeJob = threadpoolScope.launch {
             connection.messageFlowOneReplay.collect { strMsg ->
-                handleHandshakePhase1(strMsg, connection, cont)
+                handleHandshakePhase1(strMsg, connection, path, cont)
             }
         }
     }
 
-    private suspend fun handleHandshakePhase1(strMsg: String, connection: WebSocketConnection, cont: Continuation<ConnectedDecksterGame>) {
+    private suspend fun handleHandshakePhase1(strMsg: String, connection: WebSocketConnection, path: String, cont: Continuation<ConnectedDecksterGame>) {
         println("-- handleHandshakePhase1 Message received:\n$strMsg")
         val typedMessage = serializer.tryDeserialize(strMsg, DecksterMessage::class.java)
         var handled = true
         when (typedMessage) {
-            is HelloSuccessMessage -> startJoinConfirm(connection, typedMessage, cont)
+            is HelloSuccessMessage -> startJoinConfirm(connection, typedMessage, path, cont)
             is ConnectFailureMessage -> cont.safeResumeWithException(
                 ConnectFailureException(typedMessage.errorMessage ?: "?")
             )
@@ -114,9 +114,9 @@ class DecksterGameInitiater(
         }
     }
 
-    suspend fun startJoinConfirm(actionConn: WebSocketConnection, helloSuccessMessage: HelloSuccessMessage, cont: Continuation<ConnectedDecksterGame>) {
+    suspend fun startJoinConfirm(actionConn: WebSocketConnection, helloSuccessMessage: HelloSuccessMessage, path: String, cont: Continuation<ConnectedDecksterGame>) {
         val conId = helloSuccessMessage.connectionId
-        val request = decksterServer.getRequest("$name/join/$conId/finish", token)
+        val request = decksterServer.getRequest("$name/$path/$conId/finish", token)
         println("Attempting finish join at : ${request.url}")
         val notificationConnection = decksterServer.connectWebSocket(request)
 

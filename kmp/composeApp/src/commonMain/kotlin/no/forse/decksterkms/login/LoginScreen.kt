@@ -18,8 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import no.forse.decksterlib.DecksterServer
-import no.forse.decksterlib.authentication.UserModel
-import org.jetbrains.skia.paragraph.DecorationStyle
 
 @Composable
 fun LoginScreen(
